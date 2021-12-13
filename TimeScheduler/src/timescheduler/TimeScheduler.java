@@ -16,7 +16,7 @@ public class TimeScheduler {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        System.out.println("Geht jetzt!");
+        System.out.println("Geht jetzt! mit LAM");
     }
     
 }
