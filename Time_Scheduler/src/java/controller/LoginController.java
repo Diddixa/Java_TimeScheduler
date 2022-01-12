@@ -1,23 +1,29 @@
 package controller;
 
-import controller.DBController;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 
-import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
-import java.net.URL;
 
-public class LoginController {
+public class LoginController implements Initializable {
+
+    @FXML
+    private Button signUpButton;
 
     @FXML
     private Label loginMsgLabel;
@@ -35,16 +41,28 @@ public class LoginController {
     @FXML
     private TextField usernameTxt;
 
-   /* @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
-        File brandingFile = new File("")
-    } */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    /**
+     * Function created to switch from Login Scene to Register (will be global later)
+     * @param e
+     * @throws IOException
+     */
+    public void switchToRegister(ActionEvent e) throws IOException {
+
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Register.fxml"));
+        Stage stage = (Stage) signUpButton.getScene().getWindow();
+        stage.setScene(new Scene(root, 520, 580));
+    }
 
     public void loginButtonOnAction(ActionEvent e) {
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()){
 
-            loginMsgLabel.setText("You succesfully logged in");
+            confirmLogin();
         } else {
             loginMsgLabel.setText("Please enter username and Password");
 
@@ -58,10 +76,10 @@ public class LoginController {
     }
 
     public void confirmLogin() {
-        DBController connect = new DBController();
-        Connection connectDB = connect.getConnection();
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
 
-        String verifyLogin = "SELECT count(3) FROM user WHERE username = '" + usernameTxt.getText() + "' AND password ='" + enterPassword.getText() + "'";
+        String verifyLogin = "SELECT count(1) FROM user WHERE username = '" + usernameTxt.getText() + "' AND password = '" + enterPassword.getText() + "'";
 
         try{
             Statement statement = connectDB.createStatement();
@@ -81,5 +99,6 @@ public class LoginController {
             e.getCause();
         }
     }
+
 
 }

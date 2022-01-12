@@ -16,7 +16,7 @@
          <children>
             <ImageView fitHeight="200.0" fitWidth="228.0" layoutX="21.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../../images/time.png" />
+                  <Image url="@../../../images/time.png" />
                </image>
             </ImageView>
          </children>
@@ -26,7 +26,7 @@
       <AnchorPane prefHeight="400.0" prefWidth="332.0" BorderPane.alignment="CENTER">
          <ImageView fitHeight="50.0" fitWidth="80.0" layoutX="121.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../../../../../../images/login.png" />
+               <Image url="@../../../images/login.png" />
             </image>
          </ImageView>
          <Label layoutX="20.0" layoutY="128.0" text="Username">
@@ -42,12 +42,12 @@
          </Label>
          <TextField layoutX="99.0" layoutY="187.0" prefHeight="26.0" prefWidth="173.0" promptText="Password" />
          <PasswordField fx:id="enterPassword" layoutX="99.0" layoutY="188.0" prefHeight="26.0" prefWidth="173.0" promptText="Password" />
-         <Button fx:id="loginButton" layoutX="21.0" layoutY="271.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-background-color: AA336A;" text="Login" textFill="WHITE">
+         <Button fx:id="loginButton" layoutX="21.0" layoutY="256.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-background-color: AA336A; -fx-cursor: hand;" text="Login" textFill="WHITE">
             <font>
                <Font name="Arial Black" size="14.0" />
             </font>
          </Button>
-         <Button fx:id="cancelButton" layoutX="21.0" layoutY="325.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-background-color: AA336A;" text="Cancel" textFill="WHITE">
+         <Button fx:id="cancelButton" layoutX="21.0" layoutY="313.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-background-color: AA336A; -fx-cursor: hand;" text="Cancel" textFill="WHITE">
             <font>
                <Font name="Arial Black" size="14.0" />
             </font>
@@ -57,6 +57,16 @@
                <Font size="14.0" />
             </font>
          </Label>
+         <Label layoutX="40.0" layoutY="367.0" text="Not registered yet?">
+            <font>
+               <Font size="14.0" />
+            </font>
+         </Label>
+         <Button fx:id="signUpButton" layoutX="159.0" layoutY="361.0" mnemonicParsing="false" onAction="#switchToRegister" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Sign up!" textFill="#9316c7" underline="true">
+            <font>
+               <Font name="Arial Black" size="14.0" />
+            </font>
+         </Button>
       </AnchorPane>
    </right>
 </BorderPane>
