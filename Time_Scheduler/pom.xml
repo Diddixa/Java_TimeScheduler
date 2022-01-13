@@ -59,6 +59,13 @@
             <version>11.10.1</version>
             <scope>compile</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.27</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -81,7 +88,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.javaproject.time_scheduler/com.javaproject.time_scheduler.HelloApplication
+                            <mainClass>com.javaproject.time_scheduler/com.javaproject.time_scheduler.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
