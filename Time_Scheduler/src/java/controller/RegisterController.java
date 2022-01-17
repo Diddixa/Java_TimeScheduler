@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import models.User;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -65,7 +66,10 @@ public class RegisterController{
 
     public void registerButton(ActionEvent e){
         if(setPWD.getText().equals(confirmPWD.getText())){
-            registerUser();
+
+            User user = new User(emailTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), usernameTxt.getText(), setPWD.getText());
+
+            Database.registerUser(user);
 
         }else{
             passwordLabel.setText("Password does not match");
@@ -73,35 +77,8 @@ public class RegisterController{
         registerLabel.setText("Thank you for your Registration :)");
     }
 
-    /**
-     * Function to add registered User to DB (will be global later in Database class)
-     */
-    public void registerUser() {
-        Database connectNow = new Database();
-        Connection connectDB = connectNow.getConnection();
-
-        String email = emailTxt.getText();
-        String firstname = firstnameTxt.getText();
-        String lastname = lastnameTxt.getText();
-        String username = usernameTxt.getText();
-        String password = setPWD.getText();
-
-        String InsertField = "INSERT INTO user(email, firstname, lastname, username, password) VALUES ('";
-        String InsertValues = email + "','" + firstname + "','" + lastname + "','" + username + "','" + password + "')";
-        String InsertRegister = InsertField + InsertValues;
-
-        try{
-            Statement statement = connectDB.createStatement();
-            statement.executeUpdate(InsertRegister);
-            registerLabel.setText("Thank you for your Registration :)");
-
-        }catch (Exception e) {
-            e.printStackTrace();
-            e.getCause();
-        }
 
 
-    }
 
 
 
