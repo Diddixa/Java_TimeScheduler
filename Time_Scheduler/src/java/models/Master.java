@@ -10,15 +10,15 @@ public class Master {
     private SimpleStringProperty userFirstName;
     private SimpleStringProperty userLastName;
     private SimpleStringProperty userEmail;
-    private LocalDate userBirthday;
+    private SimpleStringProperty userPassword;
 
-    public Master(String userID, String username, String userFirstName, String userLastName, String userEmail, LocalDate userBirthday) {
+    public Master(String userID, String username, String userFirstName, String userLastName, String userEmail, String userPassword) {
         this.userID = new SimpleStringProperty(userID);
         this.username = new SimpleStringProperty(username);
         this.userFirstName = new SimpleStringProperty(userFirstName);
         this.userLastName = new SimpleStringProperty(userLastName);
         this.userEmail = new SimpleStringProperty(userEmail);
-        this.userBirthday = userBirthday;
+        this.userPassword = new SimpleStringProperty(userPassword);
     }
 
     public String getUserID() {
@@ -61,11 +61,11 @@ public class Master {
         this.userEmail = new SimpleStringProperty(userEmail);
     }
 
-    public LocalDate getUserBirthday() {
-        return userBirthday;
+    public String getUserPassword() {
+        return userPassword.get();
     }
 
-    public void setUserBirthday(LocalDate userBirthday) {
-        this.userBirthday = userBirthday;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = new SimpleStringProperty(userPassword);
     }
 }

@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import com.calendarfx.view.CalendarView;
 import javafx.stage.StageStyle;
 
 public class Main extends Application {
@@ -18,6 +17,10 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(new Scene(root, 520, 520));
+
+        /* Style sheet for Admin GUI */
+        //scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
+
         stage.show();
     }
 
