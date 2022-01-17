@@ -13,8 +13,6 @@ import models.Master;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.ResourceBundle;
 
 public class MasterController implements Initializable {
@@ -25,7 +23,7 @@ public class MasterController implements Initializable {
     public TableColumn<Master, String> colFirstName;
     public TableColumn<Master, String> colLastName;
     public TableColumn<Master, String> colEmail;
-    public TableColumn<Master, LocalDate> colBirthday;
+    public TableColumn<Master, String> colPassword;
 
     public Button closeButton;
     public TextField textFieldID;
@@ -33,7 +31,7 @@ public class MasterController implements Initializable {
     public TextField textFieldFirstName;
     public TextField textFieldLastName;
     public TextField textFieldEmail;
-    public DatePicker datePickerBirthday;
+    public TextField textFieldPassword;
 
     @FXML
     public void handleCloseButtonAction(ActionEvent event) throws IOException {
@@ -51,7 +49,7 @@ public class MasterController implements Initializable {
         colFirstName.setCellValueFactory(new PropertyValueFactory<>("UserFirstName"));
         colLastName.setCellValueFactory(new PropertyValueFactory<>("UserLastName"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("UserEmail"));
-        colBirthday.setCellValueFactory(new PropertyValueFactory<>("UserBirthday"));
+        colPassword.setCellValueFactory(new PropertyValueFactory<>("UserPassword"));
 
         // Load dummy data
         tableView.setItems(observableList);
@@ -62,21 +60,23 @@ public class MasterController implements Initializable {
         colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
         colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
         colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
+        colPassword.setCellFactory(TextFieldTableCell.forTableColumn());
+
     }
 
     /*
     This method will return an ObservableList of Master objects.
      */
     ObservableList<Master> observableList = FXCollections.observableArrayList(
-            new Master("123", "Diddi", "Djidde", "Saengsawad", "diddi@mail.de", LocalDate.of(1995, Month.JULY, 8)),
-            new Master("456", "Lami", "Lam", "Dao Ngoc", "lami@mail.de", LocalDate.of(1999, Month.JUNE, 2))
+            new Master("123", "Diddi", "Djidde", "Saengsawad", "diddi@mail.de", "Aroy"),
+            new Master("456", "Lami", "Lam", "Dao Ngoc", "lami@mail.de", "PhoDacBiet")
     );
 
     /*
     This method will add a new Master.
      */
     public void buttonAdd(ActionEvent event) {
-        Master master = new Master(textFieldID.getText(), textFieldUsername.getText(), textFieldFirstName.getText(), textFieldLastName.getText(), textFieldEmail.getText(), datePickerBirthday.getValue());
+        Master master = new Master(textFieldID.getText(), textFieldUsername.getText(), textFieldFirstName.getText(), textFieldLastName.getText(), textFieldEmail.getText(), textFieldPassword.getText());
         tableView.getItems().add(master);
     }
 
@@ -105,6 +105,6 @@ public class MasterController implements Initializable {
         master.setUserFirstName(userStringCellEditEvent.getNewValue());
         master.setUserLastName(userStringCellEditEvent.getNewValue());
         master.setUserEmail(userStringCellEditEvent.getNewValue());
+        master.setUserPassword(userStringCellEditEvent.getNewValue());
     }
-
 }
