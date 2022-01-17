@@ -10,4 +10,6 @@ module com.javaproject.time_scheduler {
     exports com.javaproject.time_scheduler;
     exports controller;
     opens controller to javafx.fxml;
+    exports models;
+    opens models to javafx.fxml;
 }
