@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
+import models.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -60,45 +61,22 @@ public class LoginController implements Initializable {
 
     public void loginButtonOnAction(ActionEvent e) {
 
-        if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()){
+        if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
 
-            confirmLogin();
-        } else {
-            loginMsgLabel.setText("Please enter username and Password");
-
+            if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
+                loginMsgLabel.setText("Successfully logged in :)");
+            } else {
+                loginMsgLabel.setText("Sadly invalid, maybe try to register?");
+            }
         }
-
-        }
+    }
 
     public void cancelButtonOnAction(ActionEvent e) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
-    public void confirmLogin() {
-        Database connectNow = new Database();
-        Connection connectDB = connectNow.getConnection();
 
-        String verifyLogin = "SELECT count(1) FROM user WHERE username = '" + usernameTxt.getText() + "' AND password = '" + enterPassword.getText() + "'";
-
-        try{
-            Statement statement = connectDB.createStatement();
-            ResultSet queryResult = statement.executeQuery(verifyLogin);
-
-            while(queryResult.next()){
-                if(queryResult.getInt(1) == 1){ //if field 1 is equal to 1 the actual label is used
-                loginMsgLabel.setText("You did it!");
-                } else
-                    {
-                        loginMsgLabel.setText("Sadly invalid, try again");
-                    }
-                }
-
-        }catch (Exception e){
-            e.printStackTrace();
-            e.getCause();
-        }
-    }
 
 
 }
