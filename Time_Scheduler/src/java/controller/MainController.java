@@ -46,7 +46,7 @@ public class MainController implements Initializable {
         Parent root = null;
 
         try {
-             root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+             root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));
         } catch (IOException e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
         }
