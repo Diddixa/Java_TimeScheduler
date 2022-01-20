@@ -23,6 +23,10 @@ public class MainController implements Initializable {
     private BorderPane bp;
 
     @FXML
+    /**
+     * Function created to show the button "home" on anchorPane
+     * @param event
+     */
     void home(MouseEvent event) {
         bp.setCenter(ap);
     }
@@ -42,21 +46,28 @@ public class MainController implements Initializable {
         loadingPage("page3");
     }
 
-    private void loadingPage(String page) {
-        Parent root = null;
-
-        try {
-             root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
-        } catch (IOException e) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
-        }
-
-        bp.setCenter(root);
-
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
+
+    /**
+     * Function created to switch between the pages on anchorPane
+     * @param page
+     * @throws IOException
+     */
+    private void loadingPage(String page) {
+        Parent root = null;
+
+        try {
+             root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));
+        } catch (IOException e) {
+           System.out.println("No page found" + page + "please check FXMLLoader");
+        }
+
+        bp.setCenter(root); //makes the switches possible on borderPane
+
+    }
+
+
 }

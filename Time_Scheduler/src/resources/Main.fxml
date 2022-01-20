@@ -7,7 +7,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <BorderPane fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <left>
       <VBox prefHeight="400.0" prefWidth="118.0" style="-fx-background-color: #0D1824;" BorderPane.alignment="CENTER">
@@ -38,9 +37,9 @@
    <center>
       <AnchorPane fx:id="ap" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #142428;" BorderPane.alignment="CENTER">
          <children>
-            <Text fill="RED" layoutX="197.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home">
+            <Text fill="RED" layoutX="190.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home">
                <font>
-                  <Font size="33.0" />
+                  <Font size="29.0" />
                </font>
             </Text>
          </children>
