@@ -59,12 +59,18 @@ public class LoginController implements Initializable {
         stage.setScene(new Scene(root, 520, 580));
     }
 
-    public void loginButtonOnAction(ActionEvent e) {
+    public void loginButtonOnAction(ActionEvent e) throws IOException {
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
 
             if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
-                loginMsgLabel.setText("Successfully logged in :)");
+
+                Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+                Stage stage = (Stage) signUpButton.getScene().getWindow();
+                stage.setScene(new Scene(root, 1800, 850));
+                stage.setMaximized(true);
+
+
             } else {
                 loginMsgLabel.setText("Sadly invalid, maybe try to register?");
             }
