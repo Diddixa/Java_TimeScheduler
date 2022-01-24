@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.User;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -64,17 +65,28 @@ public class RegisterController{
         stage.setScene(new Scene(root, 520, 560));
     }
 
-    public void registerButton(ActionEvent e){
+    public void registerButton(ActionEvent e) throws IOException {
+
+        if(usernameTxt.getText().isBlank() || firstnameTxt.getText().isBlank() || lastnameTxt.getText().isBlank() || setPWD.getText().isBlank() || emailTxt.getText().isBlank())
+        {
+            registerLabel.setText("One of the required fields is missing!");
+        }
+        else{
         if(setPWD.getText().equals(confirmPWD.getText())){
 
-            User user = new User(emailTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), usernameTxt.getText(), setPWD.getText());
-
+            String encryptPass = PasswordEncryption.createHash(setPWD.getText());
+            User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
             Database.registerUser(user);
+
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+            Stage stage = (Stage) registerButton.getScene().getWindow();
+            stage.setScene(new Scene(root, 1800, 850));
+            stage.setMaximized(true);
 
         }else{
             passwordLabel.setText("Password does not match");
-        }
-        registerLabel.setText("Thank you for your Registration :)");
+        }}
+
     }
 
 
