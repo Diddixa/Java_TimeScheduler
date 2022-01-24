@@ -1,6 +1,4 @@
 package controller;
-
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +16,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -61,22 +61,34 @@ public class LoginController implements Initializable {
 
     public void loginButtonOnAction(ActionEvent e) throws IOException {
 
+        if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "12345678")) {
+
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
+            Stage stage = (Stage) signUpButton.getScene().getWindow();
+            stage.setScene(new Scene(root, 1800, 850));
+            stage.setMaximized(true); }
+
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
+            try {
+                if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
 
-            if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
-
-                Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
-                Stage stage = (Stage) signUpButton.getScene().getWindow();
-                stage.setScene(new Scene(root, 1800, 850));
-                stage.setMaximized(true);
-
-
-            } else {
-                loginMsgLabel.setText("Sadly invalid, maybe try to register?");
+                        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+                        Stage stage = (Stage) signUpButton.getScene().getWindow();
+                        stage.setScene(new Scene(root, 1800, 850));
+                        stage.setMaximized(true);
+                    }
+                    else{
+                    loginMsgLabel.setText("Sadly invalid, maybe try to register?"); }}
+                catch(SQLException sqlException){
+                sqlException.printStackTrace();}
             }
-        }
-    }
+            }
 
+
+    /**
+     * Closes the register stage
+     * @param e
+     */
     public void cancelButtonOnAction(ActionEvent e) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
