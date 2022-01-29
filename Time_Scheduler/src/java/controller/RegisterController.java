@@ -12,7 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import models.User;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -63,45 +66,32 @@ public class RegisterController{
         stage.setScene(new Scene(root, 520, 560));
     }
 
-    public void registerButton(ActionEvent e){
+    public void registerButton(ActionEvent e) throws IOException {
+
+        if(usernameTxt.getText().isBlank() || firstnameTxt.getText().isBlank() || lastnameTxt.getText().isBlank() || setPWD.getText().isBlank() || emailTxt.getText().isBlank())
+        {
+            registerLabel.setText("One of the required fields is missing!");
+        }
+        else{
         if(setPWD.getText().equals(confirmPWD.getText())){
-            registerUser();
+
+            String encryptPass = PasswordEncryption.createHash(setPWD.getText());
+            User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
+            Database.registerUser(user);
+
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
+            Stage stage = (Stage) registerButton.getScene().getWindow();
+            stage.setScene(new Scene(root, 950, 600));
+            stage.setMaximized(true);
 
         }else{
             passwordLabel.setText("Password does not match");
-        }
-        registerLabel.setText("Thank you for your Registration :)");
-    }
-
-    /**
-     * Function to add registered User to DB (will be global later in Database class)
-     */
-    public void registerUser() {
-        Database connectNow = new Database();
-        Connection connectDB = connectNow.getConnection();
-
-        String email = emailTxt.getText();
-        String firstname = firstnameTxt.getText();
-        String lastname = lastnameTxt.getText();
-        String username = usernameTxt.getText();
-        String password = setPWD.getText();
-
-        String InsertField = "INSERT INTO user(email, firstname, lastname, username, password) VALUES ('";
-        String InsertValues = email + "','" + firstname + "','" + lastname + "','" + username + "','" + password + "')";
-        String InsertRegister = InsertField + InsertValues;
-
-        try{
-            Statement statement = connectDB.createStatement();
-            statement.executeUpdate(InsertRegister);
-            registerLabel.setText("Thank you for your Registration :)");
-
-        }catch (Exception e) {
-            e.printStackTrace();
-            e.getCause();
-        }
-
+        }}
 
     }
+
+
+
 
 
 
