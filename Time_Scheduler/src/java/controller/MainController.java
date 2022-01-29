@@ -1,12 +1,16 @@
 package controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -23,10 +27,22 @@ public class MainController implements Initializable {
     private BorderPane bp;
 
     @FXML
+    private Button logout;
+
+    public void logoutToLogin(ActionEvent e) throws IOException {
+
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
+        Stage stage = (Stage) logout.getScene().getWindow();
+        stage.setScene(new Scene(root, 520, 580));
+        stage.centerOnScreen();
+    }
+
     /**
-     * Function created to show the button "home" on anchorPane
+     * Function created to show the button "home" on anchorpane
+>>>>>>> main
      * @param event
      */
+    @FXML
     void home(MouseEvent event) {
         bp.setCenter(ap);
     }
@@ -48,21 +64,31 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 
     /**
-     * Function created to switch between the pages on anchorPane
+     * Function created to switch from Register Scene to Login
+     * @param e
+     * @throws Exception
+     */
+
+
+
+    /**
+     * Function created to switch between the pages
      * @param page
      * @throws IOException
      */
-    private void loadingPage(String page) {
+
+
+        private void loadingPage(String page) {
         Parent root = null;
 
         try {
              root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));
         } catch (IOException e) {
-           System.out.println("No page found" + page + "please check FXMLLoader");
+
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
         }
 
         bp.setCenter(root); //makes the switches possible on borderPane
@@ -70,4 +96,9 @@ public class MainController implements Initializable {
     }
 
 
-}
+        }
+
+
+
+
+
