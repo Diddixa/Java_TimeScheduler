@@ -57,6 +57,7 @@ public class LoginController implements Initializable {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Register.fxml"));
         Stage stage = (Stage) signUpButton.getScene().getWindow();
         stage.setScene(new Scene(root, 520, 580));
+        stage.centerOnScreen();
     }
 
     public void loginButtonOnAction(ActionEvent e) throws IOException {
@@ -65,17 +66,19 @@ public class LoginController implements Initializable {
 
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
             Stage stage = (Stage) signUpButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 1800, 850));
-            stage.setMaximized(true); }
+            stage.setScene(new Scene(root, 950, 600));
+            stage.centerOnScreen();
+        }
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
             try {
                 if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
 
-                        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
                         Stage stage = (Stage) signUpButton.getScene().getWindow();
-                        stage.setScene(new Scene(root, 1800, 850));
-                        stage.setMaximized(true);
+                        stage.setScene(new Scene(root, 950, 600));
+                        stage.centerOnScreen();
+                    ;
                     }
                     else{
                     loginMsgLabel.setText("Sadly invalid, maybe try to register?"); }}

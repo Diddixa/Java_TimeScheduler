@@ -78,7 +78,7 @@ public class RegisterController{
             User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
             Database.registerUser(user);
 
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
             Stage stage = (Stage) registerButton.getScene().getWindow();
             stage.setScene(new Scene(root, 1800, 850));
             stage.setMaximized(true);
