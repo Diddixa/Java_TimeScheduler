@@ -65,11 +65,16 @@ public class RegisterController{
         stage.setScene(new Scene(root, 520, 560));
     }
 
+    /**
+     * Function to register the user and check whether the password corresonds and all entries are available
+     * @param e
+     * @throws IOException
+     */
     public void registerButton(ActionEvent e) throws IOException {
 
         if(usernameTxt.getText().isBlank() || firstnameTxt.getText().isBlank() || lastnameTxt.getText().isBlank() || setPWD.getText().isBlank() || emailTxt.getText().isBlank())
         {
-            registerLabel.setText("One of the required fields is missing!");
+            registerLabel.setText("*one of the required fields is missing");
         }
         else{
         if(setPWD.getText().equals(confirmPWD.getText())){
@@ -80,11 +85,11 @@ public class RegisterController{
 
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
             Stage stage = (Stage) registerButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 1800, 850));
-            stage.setMaximized(true);
+            stage.setScene(new Scene(root, 950, 600));
+
 
         }else{
-            passwordLabel.setText("Password does not match");
+            passwordLabel.setText("*password does not match");
         }}
 
     }

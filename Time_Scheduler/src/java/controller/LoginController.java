@@ -65,8 +65,9 @@ public class LoginController implements Initializable {
 
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
             Stage stage = (Stage) signUpButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 1800, 850));
-            stage.setMaximized(true); }
+            stage.setScene(new Scene(root, 950, 600));
+            stage.centerOnScreen();
+            }
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
             try {
