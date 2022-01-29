@@ -1,12 +1,16 @@
 package controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +25,9 @@ public class MainController implements Initializable {
 
     @FXML
     private BorderPane bp;
+
+    @FXML
+    private Button logout;
 
     @FXML
     void home(MouseEvent event) {
@@ -40,6 +47,15 @@ public class MainController implements Initializable {
     @FXML
     void page3(MouseEvent event) {
         loadingPage("page3");
+    }
+
+    public void logoutToLogin(ActionEvent e) throws IOException {
+
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("LoginHash.fxml"));
+        Stage stage = (Stage) logout.getScene().getWindow();
+        stage.setScene(new Scene(root, 520, 580));
+        stage.centerOnScreen();
+
     }
 
     private void loadingPage(String page) {
