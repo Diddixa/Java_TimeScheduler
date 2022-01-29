@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import models.User;
 
 import java.io.IOException;
@@ -79,9 +78,9 @@ public class RegisterController{
             User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
             Database.registerUser(user);
 
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
             Stage stage = (Stage) registerButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 950, 600));
+            stage.setScene(new Scene(root, 1800, 850));
             stage.setMaximized(true);
 
         }else{

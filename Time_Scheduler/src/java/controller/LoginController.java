@@ -10,7 +10,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
-import javafx.stage.StageStyle;
 import models.User;
 
 import java.io.IOException;
@@ -66,17 +65,17 @@ public class LoginController implements Initializable {
 
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
             Stage stage = (Stage) signUpButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 950, 600));
-            }
+            stage.setScene(new Scene(root, 1800, 850));
+            stage.setMaximized(true); }
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
             try {
                 if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
 
-                        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
+                        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Main.fxml"));
                         Stage stage = (Stage) signUpButton.getScene().getWindow();
-                        stage.setScene(new Scene(root, 950, 600));
-                        stage.centerOnScreen();
+                        stage.setScene(new Scene(root, 1800, 850));
+                        stage.setMaximized(true);
                     }
                     else{
                     loginMsgLabel.setText("Sadly invalid, maybe try to register?"); }}
