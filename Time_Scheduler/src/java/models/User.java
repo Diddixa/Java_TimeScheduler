@@ -27,6 +27,14 @@ public class User {
     private String email;
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -67,12 +75,20 @@ public class User {
         this.email = email;
     }
 
-    public User(String username, String firstname, String lastname, String password, String email) {
+    public User(String firstname, String lastname, String username, String password, String email) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
         this.password = password;
         this.email = email;
     }
-}
 
+    public User(int id, String firstname, String lastname, String username, String password, String email) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+}

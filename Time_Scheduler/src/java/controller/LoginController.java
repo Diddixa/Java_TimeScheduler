@@ -59,7 +59,21 @@ public class LoginController implements Initializable {
         stage.setScene(new Scene(root, 520, 580));
     }
 
+<<<<<<< Updated upstream
     public void loginButtonOnAction(ActionEvent e) {
+=======
+    public void loginButtonOnAction(ActionEvent e) throws IOException {
+
+        if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "12345678")) {
+
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
+            Stage stage = (Stage) signUpButton.getScene().getWindow();
+            Scene scene = new Scene(root, 950, 600);
+            scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
+            stage.setScene(scene);
+            stage.centerOnScreen();
+        }
+>>>>>>> Stashed changes
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
 

@@ -2,18 +2,15 @@ package models;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import java.time.LocalDate;
 
 public class Master {
-    private SimpleStringProperty userID;
     private SimpleStringProperty username;
     private SimpleStringProperty userFirstName;
     private SimpleStringProperty userLastName;
     private SimpleStringProperty userEmail;
     private SimpleStringProperty userPassword;
 
-    public Master(String userID, String username, String userFirstName, String userLastName, String userEmail, String userPassword) {
-        this.userID = new SimpleStringProperty(userID);
+    public Master(String username, String userFirstName, String userLastName, String userEmail, String userPassword) {
         this.username = new SimpleStringProperty(username);
         this.userFirstName = new SimpleStringProperty(userFirstName);
         this.userLastName = new SimpleStringProperty(userLastName);
@@ -21,13 +18,6 @@ public class Master {
         this.userPassword = new SimpleStringProperty(userPassword);
     }
 
-    public String getUserID() {
-        return userID.get();
-    }
-
-    public void setUserID(String userID) {
-        this.userID = new SimpleStringProperty(userID);
-    }
 
     public String getUsername() {
         return username.get();
