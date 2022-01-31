@@ -137,5 +137,63 @@ public class Database {
         return 10;
     }
 
-}
+    /**
+     * Edits a user in the database with the parameter user.
+     *
+     * @param user This user's attribute values are taken to edit the user in the DB
+     *             with the same id
+     *
+     * @return <code>true</code>, if successful
+     */
+    public static boolean editUser(User user) {
+        String sql = "UPDATE User SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
 
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+        try {
+            PreparedStatement edit = connectDB.prepareStatement(sql);
+            edit.setString(1, user.getFirstname());
+            edit.setString(2, user.getLastname());
+            edit.setString(3, user.getUsername());
+            edit.setString(4, user.getEmail());
+            edit.setString(5, user.getPassword());
+
+            edit.executeUpdate();
+            edit.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        System.out.println("Updated user.");
+        return true;
+    }
+
+    /** Delete user in the user table and user's corresponding entries
+     in table Location and table User_Event.
+
+     @param id - id of user to delete
+     @return true if deletion was successful
+     */
+
+    public static boolean deleteUser(int id) {
+        String sql =" DELETE FROM User WHERE user_id = ?";
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+
+        System.out.println("User Id:" + id);
+
+        try {
+            PreparedStatement delete = connectDB.prepareStatement(sql);
+            delete.setInt(1,id);
+            delete.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+}
