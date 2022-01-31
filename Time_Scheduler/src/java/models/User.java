@@ -75,7 +75,7 @@ public class User {
         this.email = email;
     }
 
-    public User(String firstname, String lastname, String username, String password, String email) {
+    public User(String username, String firstname, String lastname, String password, String email) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -83,11 +83,11 @@ public class User {
         this.email = email;
     }
 
-    public User(int id, String firstname, String lastname, String username, String password, String email) {
+    public User(int id, String username, String firstname, String lastname, String password, String email) {
         this.id = id;
+        this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.username = username;
         this.password = password;
         this.email = email;
     }

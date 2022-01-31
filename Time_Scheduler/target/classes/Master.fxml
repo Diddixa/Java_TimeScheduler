@@ -37,7 +37,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-              <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleCloseButtonAction" prefHeight="50.0" prefWidth="150.0" text="Logout" textFill="WHITE">
+              <Button fx:id="closeButton" mnemonicParsing="false" onAction="#buttonClose" prefHeight="50.0" prefWidth="150.0" text="Logout" textFill="WHITE">
                <font>
                   <Font name="Roboto Medium" size="16.0" />
                </font>
@@ -59,9 +59,9 @@
               <TableView fx:id="tableView" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="950.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <columns>
                       <TableColumn fx:id="colID" maxWidth="50.0" prefWidth="40.0" text="ID" />
+                      <TableColumn fx:id="colUsername" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Username" />
                       <TableColumn fx:id="colFirstName" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="First Name" />
                       <TableColumn fx:id="colLastName" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Last Name" />
-                      <TableColumn fx:id="colUsername" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Username" />
                       <TableColumn fx:id="colPassword" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Password" />
                       <TableColumn fx:id="colEmail" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Email Address" />
                   </columns>
@@ -74,9 +74,9 @@
          <children>
             <HBox alignment="CENTER" prefHeight="17.0" prefWidth="830.0" spacing="20.0">
                <children>
+                  <TextField fx:id="textFieldUsername" prefWidth="150.0" promptText="Username" />
                  <TextField fx:id="textFieldFirstName" prefWidth="150.0" promptText="First Name" />
                  <TextField fx:id="textFieldLastName" prefWidth="150.0" promptText="Last Name" />
-                  <TextField fx:id="textFieldUsername" prefWidth="150.0" promptText="Username" />
                   <TextField fx:id="textFieldPassword" prefWidth="150.0" promptText="Password" />
                  <TextField fx:id="textFieldEmail" prefWidth="150.0" promptText="Email" />
                </children>
