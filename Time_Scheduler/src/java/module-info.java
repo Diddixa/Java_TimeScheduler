@@ -4,13 +4,10 @@ module com.javaproject.time_scheduler {
     requires org.controlsfx.controls;
     requires org.kordamp.ikonli.javafx;
     requires java.sql;
-<<<<<<< Updated upstream
-=======
     requires com.calendarfx.view;
     requires java.logging;
     requires activation;
     requires javax.mail.api;
->>>>>>> Stashed changes
 
     opens com.javaproject.time_scheduler to javafx.fxml;
     exports com.javaproject.time_scheduler;
