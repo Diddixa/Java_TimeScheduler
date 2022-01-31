@@ -1,6 +1,4 @@
 package controller;
-
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +16,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -57,34 +57,41 @@ public class LoginController implements Initializable {
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Register.fxml"));
         Stage stage = (Stage) signUpButton.getScene().getWindow();
         stage.setScene(new Scene(root, 520, 580));
+        stage.centerOnScreen();
     }
 
-<<<<<<< Updated upstream
-    public void loginButtonOnAction(ActionEvent e) {
-=======
     public void loginButtonOnAction(ActionEvent e) throws IOException {
 
         if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "12345678")) {
 
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
             Stage stage = (Stage) signUpButton.getScene().getWindow();
-            Scene scene = new Scene(root, 950, 600);
-            scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
-            stage.setScene(scene);
+            stage.setScene(new Scene(root, 950, 600));
             stage.centerOnScreen();
         }
->>>>>>> Stashed changes
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
+            try {
+                if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
 
-            if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
-                loginMsgLabel.setText("Successfully logged in :)");
-            } else {
-                loginMsgLabel.setText("Sadly invalid, maybe try to register?");
+                        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
+                        Stage stage = (Stage) signUpButton.getScene().getWindow();
+                        stage.setScene(new Scene(root, 950, 600));
+                        stage.centerOnScreen();
+                    ;
+                    }
+                    else{
+                    loginMsgLabel.setText("Sadly invalid, maybe try to register?"); }}
+                catch(SQLException sqlException){
+                sqlException.printStackTrace();}
             }
-        }
-    }
+            }
 
+
+    /**
+     * Closes the register stage
+     * @param e
+     */
     public void cancelButtonOnAction(ActionEvent e) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
