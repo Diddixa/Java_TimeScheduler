@@ -66,7 +66,9 @@ public class LoginController implements Initializable {
 
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
             Stage stage = (Stage) signUpButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 950, 600));
+            Scene scene = new Scene(root, 950, 600);
+            scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
+            stage.setScene(scene);
             stage.centerOnScreen();
         }
 

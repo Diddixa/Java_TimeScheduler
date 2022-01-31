@@ -18,9 +18,6 @@ public class Main extends Application {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setScene(new Scene(root, 520, 520));
 
-        /* Style sheet for Admin GUI */
-        //scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
-
         stage.show();
     }
 
