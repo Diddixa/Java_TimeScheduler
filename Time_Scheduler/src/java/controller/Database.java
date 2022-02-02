@@ -1,5 +1,6 @@
 package controller;
 
+import models.Event;
 import models.User;
 
 import java.sql.*;
@@ -69,6 +70,40 @@ public class Database {
     }
 
     /**
+     * Query a username and return the corresponding User object from its table
+     * entry. Used to search the user table.
+     *
+     * @param key - String of username or Int of userid
+     * @return User object on successful query, else <code>null</code>
+     */
+
+    public static <S> User getUser(S key) throws SQLException {
+        Connection connection = getConnection();
+
+        ResultSet result = fetchUserData(connection, key);
+        if (result == null) {
+            return null;
+        }
+
+        try {
+            int id = result.getInt("user_id");
+            String username = result.getString("username");
+            String email = result.getString("email");
+            String firstname = result.getString("firstname");
+            String lastname = result.getString("lastname");
+
+           /* ArrayList<Event> events = getEventsFromUser(id); */
+            User user = new User(id, username, firstname, lastname, email);
+
+            System.out.println("Fetched user.");
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Function to create a new user in the database, used for registration and for the admin
      * @param user
      */
@@ -89,6 +124,66 @@ public class Database {
             e.getCause();
         }
     }
+
+    /**
+     * Edits a user in the database with the parameter user.
+     *
+     * @param user This user's attribute values are taken to edit the user in the DB
+     *             with the same id
+     *
+     * @return <code>true</code>, if successful
+     */
+    public static boolean editUser(User user) {
+        String sql = "UPDATE User SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
+
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+        try {
+            PreparedStatement edit = connectDB.prepareStatement(sql);
+            edit.setString(1, user.getFirstname());
+            edit.setString(2, user.getLastname());
+            edit.setString(3, user.getUsername());
+            edit.setString(4, user.getEmail());
+            edit.setString(5, user.getPassword());
+
+            edit.executeUpdate();
+            edit.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        System.out.println("Updated user.");
+        return true;
+    }
+
+    /** Delete user in the user table and user's corresponding entries
+     in table Location and table User_Event.
+     @param id - id of user to delete
+     @return true if deletion was successful
+     */
+
+    public static boolean deleteUser(int id) {
+        String sql =" DELETE FROM User WHERE user_id = ?";
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+
+        System.out.println("User Id:" + id);
+
+        try {
+            PreparedStatement delete = connectDB.prepareStatement(sql);
+            delete.setInt(1,id);
+            delete.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+}
 
 
     /**
@@ -136,64 +231,107 @@ public class Database {
         }
         return 10;
     }
-
     /**
-     * Edits a user in the database with the parameter user.
+     * Check if username or email is already taken.
      *
-     * @param user This user's attribute values are taken to edit the user in the DB
-     *             with the same id
-     *
-     * @return <code>true</code>, if successful
+     * @param user - User data
+     * @return true if user data is available
      */
-    public static boolean editUser(User user) {
-        String sql = "UPDATE User SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
+    public static boolean isAvailable(User user) {
+        String sql = "SELECT * FROM user WHERE username = ? OR email=?";
 
-        Database connectNow = new Database();
-        Connection connectDB = connectNow.getConnection();
+        Connection connection = getConnection();
         try {
-            PreparedStatement edit = connectDB.prepareStatement(sql);
-            edit.setString(1, user.getFirstname());
-            edit.setString(2, user.getLastname());
-            edit.setString(3, user.getUsername());
-            edit.setString(4, user.getEmail());
-            edit.setString(5, user.getPassword());
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getEmail());
 
-            edit.executeUpdate();
-            edit.close();
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                if (result.getInt("user_id") != user.getId()) {
+                    return false;
+                }
+            }
+            statement.close();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            return false;
-        }
-
-        System.out.println("Updated user.");
-        return true;
-    }
-
-    /** Delete user in the user table and user's corresponding entries
-     in table Location and table User_Event.
-
-     @param id - id of user to delete
-     @return true if deletion was successful
-     */
-
-    public static boolean deleteUser(int id) {
-        String sql =" DELETE FROM User WHERE user_id = ?";
-        Database connectNow = new Database();
-        Connection connectDB = connectNow.getConnection();
-
-        System.out.println("User Id:" + id);
-
-        try {
-            PreparedStatement delete = connectDB.prepareStatement(sql);
-            delete.setInt(1,id);
-            delete.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+
             return false;
+        }
+
+    }
+    /**
+     * Create table entry of new event in database.
+     *
+     * @param event Object of new entry.
+     * @return event ID on successful creation, return -1 on failed creation
+     */
+    public static int storeEvent(Event event) {
+        String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = getConnection();
+        int eventId;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1, event.getEventHostId());
+            statement.setString(2, event.getName());
+            statement.setDate(3, Date.valueOf(event.getDate()));
+            statement.setTime(4, Time.valueOf(event.getStartTime()));
+            statement.setTime(5, Time.valueOf(event.getEndTime()));
+            statement.setString(6, event.getLocation());
+            statement.setString(7, event.getReminder().name());
+            statement.setString(8, event.getPriority().name());
+
+            statement.executeUpdate();
+
+            ResultSet generatedKey = statement.getGeneratedKeys();
+
+            if (generatedKey.next()) {
+                eventId = generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+
+            statement.close();
+
+            return eventId;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 
+    /**
+     * Creates an entry in the User_Event table in the Database.
+     *
+     * @param userId the user id of the according user
+     * @param eventId the event id of the according event
+     * @return true when insertion was successful, false when insertion had an
+     *         exception.
+     */
+    public static boolean createUserEvents(int userId, int eventId) {
+        String sql = "INSERT INTO user_Events (user_id , event_id) " + "VALUES(?, ?)";
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, eventId);
+
+            ps.executeUpdate();
+
+            ps.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
 }
