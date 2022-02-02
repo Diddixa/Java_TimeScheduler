@@ -61,7 +61,7 @@ public class MasterController implements Initializable {
         colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
 
     }
-    
+
     /*
     This method will return an ObservableList of User objects.
      */

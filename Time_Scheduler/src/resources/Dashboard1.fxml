@@ -39,7 +39,7 @@
                      </image>
                   </ImageView>
                </children></Pane>
-            <Button mnemonicParsing="false" onMouseClicked="#home" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee;" text="Home">
+            <Button mnemonicParsing="false" onMouseClicked="#home" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee; -fx-cursor: hand;" text="Home">
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font>
@@ -47,7 +47,7 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Button>
-            <Button layoutX="10.0" layoutY="210.0" mnemonicParsing="false" onMouseClicked="#page1" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee;" text="Page1">
+            <Button layoutX="10.0" layoutY="210.0" mnemonicParsing="false" onMouseClicked="#page1" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee; -fx-cursor: hand;" text="Schedule Event">
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font>
@@ -55,7 +55,7 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Button>
-            <Button layoutX="10.0" layoutY="279.0" mnemonicParsing="false" onMouseClicked="#page2" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee;" text="Page2">
+            <Button layoutX="10.0" layoutY="279.0" mnemonicParsing="false" onMouseClicked="#page2" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee; -fx-cursor: hand;" text="Page2">
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font>
@@ -63,7 +63,7 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Button>
-            <Button layoutX="10.0" layoutY="348.0" mnemonicParsing="false" onMouseClicked="#page3" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee;" text="Page3">
+            <Button layoutX="10.0" layoutY="348.0" mnemonicParsing="false" onMouseClicked="#page3" prefHeight="69.0" prefWidth="255.0" style="-fx-background-color: #eeeeee; -fx-cursor: hand;" text="Page3">
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font>
