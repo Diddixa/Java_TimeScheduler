@@ -6,6 +6,7 @@ import models.User;
 import java.sql.*;
 
 public class Database {
+
     public static Connection databaseLink;
 
     public static Connection getConnection() {
@@ -26,6 +27,21 @@ public class Database {
         }
         return databaseLink;
     }
+
+    /**
+     * Close an existing connection to the database. Functions is used to avoid max_user in sql
+     */
+    public static void closeDatabase() {
+        try {
+            if (databaseLink != null) {
+                databaseLink.close();
+                databaseLink = null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Fetch user data from database. This is only called by other user related DB
@@ -96,6 +112,7 @@ public class Database {
             User user = new User(id, username, firstname, lastname, email);
 
             System.out.println("Fetched user.");
+            closeDatabase();
             return user;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -183,8 +200,6 @@ public class Database {
         }
     }
 
-}
-
 
     /**
      *  Verifies whether password and username are in the database and decrypts the password
@@ -231,6 +246,7 @@ public class Database {
         }
         return 10;
     }
+
     /**
      * Check if username or email is already taken.
      *
@@ -262,6 +278,7 @@ public class Database {
         }
 
     }
+
     /**
      * Create table entry of new event in database.
      *
@@ -297,6 +314,7 @@ public class Database {
             }
 
             statement.close();
+            closeDatabase();
 
             return eventId;
 
