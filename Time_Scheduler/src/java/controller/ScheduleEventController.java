@@ -153,6 +153,10 @@ public class ScheduleEventController implements Initializable {
 
     }
 
+    /**
+     * initialize event object and create event 
+     * @param e
+     */
     @FXML
     public void createEvent(ActionEvent e) {
         event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder);

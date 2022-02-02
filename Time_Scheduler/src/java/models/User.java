@@ -26,6 +26,7 @@ public class User {
     private ArrayList<Event> events = new ArrayList<Event>();
 
 
+
     public String getUsername() {
         return username;
     }
@@ -90,8 +91,7 @@ public class User {
         this.email = email;
     }
 
-    public User() {
-
+    public User(int user_id, String username, String firstname, String lastname, String password, String email) {
     }
 
     /**
