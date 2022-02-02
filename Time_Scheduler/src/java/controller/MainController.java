@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,13 +8,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import models.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,39 +37,82 @@ public class MainController implements Initializable {
     private Button logout;
 
     @FXML
+    private Label username;
+
+    @FXML
+    private Label test;
+
+    @FXML
+    private Label time;
+    private final boolean stop = false;
+
+    /** currently registered user */
+    private User user;
+
+    /**
+     * function to retrieve the user from LoginController
+     * @param user
+     */
+    public void retrieveUser(User user){
+
+        this.user  = user;
+        username.setText(this.user.getUsername());
+
+    }
+
+
+    @FXML
     void home(MouseEvent event) {
         bp.setCenter(ap);
     }
 
     @FXML
-    void page1(MouseEvent event) {
+    void page1(MouseEvent event) throws IOException {
         loadingPage("page1");
     }
 
     @FXML
-    void page2(MouseEvent event) {
+    void page2(MouseEvent event) throws IOException {
         loadingPage("page2");
     }
 
     @FXML
-    void page3(MouseEvent event) {
+    void page3(MouseEvent event) throws IOException {
         loadingPage("page3");
     }
 
     public void logoutToLogin(ActionEvent e) throws IOException {
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("LoginHash.fxml"));
-        Stage stage = (Stage) logout.getScene().getWindow();
-        stage.setScene(new Scene(root, 520, 580));
-        stage.centerOnScreen();
+        JavaFxUtil.sceneSwitcher("Login.fxml", logout, 520, 580 );
 
     }
 
-    private void loadingPage(String page) {
+    @FXML
+    void Test(ActionEvent event) {
+
+        test.setText(user.getUsername());
+    }
+
+
+
+    private void loadingPage(String page) throws IOException {
         Parent root = null;
 
         try {
-             root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));
+            if(Objects.equals(page, "page1"))
+            {
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
+                root = loader.load();
+                /*Stage stage = new Stage();
+                stage.setScene(new Scene(root));*/
+               ScheduleEventController controller = loader.getController();
+               controller.retrieveUser(this.user);
+               //stage.show();
+            }
+            else{
+             root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));}
+
         } catch (IOException e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -71,8 +121,33 @@ public class MainController implements Initializable {
 
     }
 
+    /**
+     * method to show realtime
+     */
+    private void timeNow(){
+
+        Thread thread = new Thread( () ->{
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+            while(!stop) {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                String timenow = sdf.format(new Date());
+                Platform.runLater(() -> {
+                    time.setText(timenow);
+                });
+            }
+        });
+        thread.start();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    timeNow();
+}
 
-    }
+
+
 }

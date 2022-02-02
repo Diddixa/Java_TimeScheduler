@@ -60,9 +60,8 @@ public class RegisterController{
      */
     public void switchToLogin(ActionEvent e) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.setScene(new Scene(root, 520, 560));
+        JavaFxUtil.sceneSwitcher("Login.fxml", closeButton, 520, 560);
+
     }
 
     public void registerButton(ActionEvent e) throws IOException {
@@ -76,22 +75,22 @@ public class RegisterController{
 
             String encryptPass = PasswordEncryption.createHash(setPWD.getText());
             User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
+
+            if(!Database.isAvailable(user))
+            {
+                registerLabel.setText("*username or email already taken!");
+                return;
+            }
             Database.registerUser(user);
 
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
-            Stage stage = (Stage) registerButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 1800, 850));
-            stage.setMaximized(true);
+            JavaFxUtil.sceneSwitcher("Dashboard1.fxml", registerButton, 950, 600);
+
 
         }else{
             passwordLabel.setText("Password does not match");
         }}
 
     }
-
-
-
-
 
 
 

@@ -54,31 +54,34 @@ public class LoginController implements Initializable {
      */
     public void switchToRegister(ActionEvent e) throws IOException {
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Register.fxml"));
-        Stage stage = (Stage) signUpButton.getScene().getWindow();
-        stage.setScene(new Scene(root, 520, 580));
-        stage.centerOnScreen();
+        JavaFxUtil.sceneSwitcher("Register.fxml", signUpButton, 520, 560);
+
     }
 
     public void loginButtonOnAction(ActionEvent e) throws IOException {
 
         if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "12345678")) {
 
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Master.fxml"));
-            Stage stage = (Stage) signUpButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 950, 600));
-            stage.centerOnScreen();
+            JavaFxUtil.sceneSwitcher("Master.fxml", signUpButton, 950, 600);
         }
 
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
             try {
                 if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
 
-                        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
-                        Stage stage = (Stage) signUpButton.getScene().getWindow();
-                        stage.setScene(new Scene(root, 950, 600));
-                        stage.centerOnScreen();
-                    ;
+                    User currentUser = Database.getUser(usernameTxt.getText());
+
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getClassLoader().getResource("Dashboard1.fxml"));
+                    Parent root = loader.load();
+                    Scene scene = new Scene(root, 950, 600);
+                    MainController controller = loader.getController();
+                    controller.retrieveUser(currentUser);
+
+                    Stage stage = (Stage) signUpButton.getScene().getWindow();
+                    stage.setScene(scene);
+                    stage.centerOnScreen();
+
                     }
                     else{
                     loginMsgLabel.setText("Sadly invalid, maybe try to register?"); }}

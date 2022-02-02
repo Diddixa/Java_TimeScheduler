@@ -1,5 +1,6 @@
 package controller;
 
+import models.Event;
 import models.User;
 
 import java.sql.*;
@@ -64,6 +65,40 @@ public class Database {
         } catch(SQLException e){
             e.printStackTrace();
             System.out.println(e);
+            return null;
+        }
+    }
+
+    /**
+     * Query a username and return the corresponding User object from its table
+     * entry. Used to search the user table.
+     *
+     * @param key - String of username or Int of userid
+     * @return User object on successful query, else <code>null</code>
+     */
+
+    public static <S> User getUser(S key) throws SQLException {
+        Connection connection = getConnection();
+
+        ResultSet result = fetchUserData(connection, key);
+        if (result == null) {
+            return null;
+        }
+
+        try {
+            int id = result.getInt("user_id");
+            String username = result.getString("username");
+            String email = result.getString("email");
+            String firstname = result.getString("firstname");
+            String lastname = result.getString("lastname");
+
+           /* ArrayList<Event> events = getEventsFromUser(id); */
+            User user = new User(id, username, firstname, lastname, email);
+
+            System.out.println("Fetched user.");
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -136,6 +171,107 @@ public class Database {
         }
         return 10;
     }
+    /**
+     * Check if username or email is already taken.
+     *
+     * @param user - User data
+     * @return true if user data is available
+     */
+    public static boolean isAvailable(User user) {
+        String sql = "SELECT * FROM user WHERE username = ? OR email=?";
 
+        Connection connection = getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getEmail());
+
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                if (result.getInt("user_id") != user.getId()) {
+                    return false;
+                }
+            }
+            statement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+    }
+    /**
+     * Create table entry of new event in database.
+     *
+     * @param event Object of new entry.
+     * @return event ID on successful creation, return -1 on failed creation
+     */
+    public static int storeEvent(Event event) {
+        String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = getConnection();
+        int eventId;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1, event.getEventHostId());
+            statement.setString(2, event.getName());
+            statement.setDate(3, Date.valueOf(event.getDate()));
+            statement.setTime(4, Time.valueOf(event.getStartTime()));
+            statement.setTime(5, Time.valueOf(event.getEndTime()));
+            statement.setString(6, event.getLocation());
+            statement.setString(7, event.getReminder().name());
+            statement.setString(8, event.getPriority().name());
+
+            statement.executeUpdate();
+
+            ResultSet generatedKey = statement.getGeneratedKeys();
+
+            if (generatedKey.next()) {
+                eventId = generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+
+            statement.close();
+
+            return eventId;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * Creates an entry in the User_Event table in the Database.
+     *
+     * @param userId the user id of the according user
+     * @param eventId the event id of the according event
+     * @return true when insertion was successful, false when insertion had an
+     *         exception.
+     */
+    public static boolean createUserEvents(int userId, int eventId) {
+        String sql = "INSERT INTO user_Events (user_id , event_id) " + "VALUES(?, ?)";
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, eventId);
+
+            ps.executeUpdate();
+
+            ps.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
 }
-
