@@ -45,6 +45,7 @@ public class Event {
     private Priority priority;
     private Reminder reminder;
 
+
     public int getId() {
         return id;
     }
@@ -124,6 +125,20 @@ public class Event {
     public void setName(String name) {
         this.name = name;
     }
+
+
+    public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.participants = participants;
+        this.priority = priority;
+        this.reminder = reminder;
+    }
+
 
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, Reminder reminder, Priority priority) {
         this.name = name;
