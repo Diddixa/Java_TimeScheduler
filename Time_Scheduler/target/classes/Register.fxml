@@ -71,14 +71,14 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <PasswordField fx:id="setPWD" layoutX="82.0" layoutY="334.0" prefHeight="25.0" prefWidth="336.0" />
-      <PasswordField fx:id="confirmPWD" layoutX="82.0" layoutY="388.0" prefHeight="25.0" prefWidth="336.0" />
+      <PasswordField fx:id="setPWD" layoutX="82.0" layoutY="334.0" prefHeight="25.0" prefWidth="336.0" promptText="Password" />
+      <PasswordField fx:id="confirmPWD" layoutX="82.0" layoutY="388.0" prefHeight="25.0" prefWidth="336.0" promptText="Confirm Password" />
       <Label fx:id="passwordLabel" layoutX="181.0" layoutY="313.0" prefHeight="22.0" prefWidth="240.0" textFill="#b90000">
          <font>
             <Font name="Arial Black" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="registerLabel" layoutX="82.0" layoutY="425.0" prefHeight="22.0" prefWidth="336.0" textFill="#02ab1c">
+      <Label fx:id="registerLabel" layoutX="82.0" layoutY="425.0" prefHeight="22.0" prefWidth="336.0" textFill="#ab0303">
          <font>
             <Font name="Arial Black" size="14.0" />
          </font>

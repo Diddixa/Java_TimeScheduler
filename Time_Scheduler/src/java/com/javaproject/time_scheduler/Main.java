@@ -16,12 +16,18 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.setScene(new Scene(root, 520, 520));
-
-        /* Style sheet for Admin GUI */
-        //scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
-
+        Scene scene = (new Scene(root, 520, 520));
+        scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
+        stage.setScene(scene);
         stage.show();
+
+       /* Parent root = FXMLLoader.load(JavaFxUtil.class.getClassLoader().getResource(fxml));
+        Stage stage = (Stage) button.getScene().getWindow();
+        Scene scene = new Scene(root, v, v1);
+        scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
+        stage.setScene(scene);
+        stage.centerOnScreen(); */
+
     }
 
     public static void main(String[] args) {

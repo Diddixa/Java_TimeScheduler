@@ -1,13 +1,20 @@
 package controller;
 
+import models.Event;
+import models.Priority;
+import models.Reminder;
 import models.User;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class Database {
-    public Connection databaseLink;
 
-    public Connection getConnection() {
+    public static Connection databaseLink;
+
+    public static Connection getConnection() {
 
         /** Database Username*/
         String databaseUser = "ummyxpjqfaflxgpt";
@@ -24,6 +31,98 @@ public class Database {
             e.printStackTrace();
         }
         return databaseLink;
+    }
+
+    /**
+     * Close an existing connection to the database. Functions is used to avoid max_user in sql
+     */
+    public static void closeDatabase() {
+        try {
+            if (databaseLink != null) {
+                databaseLink.close();
+                databaseLink = null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Fetch user data from database. This is only called by other user related DB
+     * functions.
+     *
+     * @param connection - SQL jdbc connection object, connection to DB
+     * @param key        - used to find a certain user ()
+     * @return SQL result of data entry or <code>null</code> if user doesn't exist
+     */
+    private static <S> ResultSet fetchUserData(Connection connection, S key) throws SQLException {
+        String sqlColumn = "";
+
+        if(key instanceof String)
+        {
+            sqlColumn = "username";
+        }else{ sqlColumn = "user_id";}
+
+        String getValues = "SELECT * FROM user WHERE " + sqlColumn + " = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(getValues);
+            if (key instanceof String) {
+                String username = key.toString();
+                statement.setString(1, username);
+
+            } else if (key instanceof Integer) {
+                int userId = ((Integer) key).intValue();
+                statement.setInt(1, userId);
+            }
+            ResultSet result = statement.executeQuery();
+
+            if (result.next()) {
+                System.out.println("Successful");
+                return result;
+            }
+            return null;
+        } catch(SQLException e){
+            e.printStackTrace();
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    /**
+     * Query a username and return the corresponding User object from its table
+     * entry. Used to search the user table.
+     *
+     * @param key - String of username or Int of userid
+     * @return User object on successful query, else <code>null</code>
+     */
+
+    public static <S> User getUser(S key) throws SQLException {
+        Connection connection = getConnection();
+
+        ResultSet result = fetchUserData(connection, key);
+        if (result == null) {
+            return null;
+        }
+
+        try {
+            int id = result.getInt("user_id");
+            String username = result.getString("username");
+            String email = result.getString("email");
+            String firstname = result.getString("firstname");
+            String lastname = result.getString("lastname");
+
+            ArrayList<Event> events = getEventsFromUser(id);
+            User user = new User(id, username, firstname, lastname, email, events);
+
+            System.out.println("Fetched user.");
+            closeDatabase();
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -49,16 +148,89 @@ public class Database {
     }
 
     /**
-     * Verify fi the username and the password exist in our database (verification)
-     * @param username
-     * @param password
-     * @return
+     * Edits a user in the database with the parameter user.
+     *
+     * @param user This user's attribute values are taken to edit the user in the DB
+     *             with the same id
+     *
+     * @return <code>true</code>, if successful
      */
-    public static int confirmLogin(String username, String password) {
+    public static boolean editUser(User user) {
+        String sql = "UPDATE User SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
+
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+        try {
+            PreparedStatement edit = connectDB.prepareStatement(sql);
+            edit.setString(1, user.getFirstname());
+            edit.setString(2, user.getLastname());
+            edit.setString(3, user.getUsername());
+            edit.setString(4, user.getEmail());
+            edit.setString(5, user.getPassword());
+
+            edit.executeUpdate();
+            edit.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        System.out.println("Updated user.");
+        return true;
+    }
+
+    /** Delete user in the user table and user's corresponding entries
+     in table Location and table User_Event.
+     @param id - id of user to delete
+     @return true if deletion was successful
+     */
+
+    public static boolean deleteUser(int id) {
+        String sql =" DELETE FROM ser WHERE user_id = ?";
         Database connectNow = new Database();
         Connection connectDB = connectNow.getConnection();
 
-        String verifyLogin = "SELECT count(1) FROM user WHERE username = '" + username + "' AND password = '" + password + "'";
+        System.out.println("User Id:" + id);
+
+        try {
+            PreparedStatement delete = connectDB.prepareStatement(sql);
+            delete.setInt(1,id);
+            delete.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    /**
+     *  Verifies whether password and username are in the database and decrypts the password
+     * @param username
+     * @param password
+     * @return
+     * @throws SQLException
+     */
+
+    public static int confirmLogin(String username, String password) throws SQLException {
+
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+        ResultSet userData = fetchUserData(connectDB, username);
+
+        if(userData == null)
+        {
+            System.out.println("No user found");
+            return 0;
+        }
+
+        String hash;
+        hash = userData.getString("password");
+        String pwd_encrypted = PasswordEncryption.verify(password, hash);
+
+        String verifyLogin = "SELECT count(1) FROM user WHERE username = '" + username + "' AND password = '" + pwd_encrypted + "'";
 
         try{
             Statement statement = connectDB.createStatement();
@@ -80,5 +252,192 @@ public class Database {
         return 10;
     }
 
-}
+    /**
+     * Check if username or email is already taken.
+     *
+     * @param user - User data
+     * @return true if user data is available
+     */
+    public static boolean isAvailable(User user) {
+        String sql = "SELECT * FROM user WHERE username = ? OR email=?";
 
+        Connection connection = getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getEmail());
+
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                if (result.getInt("user_id") != user.getId()) {
+                    return false;
+                }
+            }
+            statement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+    }
+
+    /**
+     * Create table entry of new event in database.
+     *
+     * @param event Object of new entry.
+     * @return event ID on successful creation, return -1 on failed creation
+     */
+    public static int storeEvent(Event event) {
+        String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = getConnection();
+        int eventId;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1, event.getEventHostId());
+            statement.setString(2, event.getName());
+            statement.setDate(3, Date.valueOf(event.getDate()));
+            statement.setTime(4, Time.valueOf(event.getStartTime()));
+            statement.setTime(5, Time.valueOf(event.getEndTime()));
+            statement.setString(6, event.getLocation());
+            statement.setString(7, event.getReminder().name());
+            statement.setString(8, event.getPriority().name());
+
+            statement.executeUpdate();
+
+            ResultSet generatedKey = statement.getGeneratedKeys();
+
+            if (generatedKey.next()) {
+                eventId = generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+
+            statement.close();
+            closeDatabase();
+
+            return eventId;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * Creates an entry in the User_Event table in the Database.
+     *
+     * @param userId the user id of the according user
+     * @param eventId the event id of the according event
+     * @return true when insertion was successful, false when insertion had an
+     *         exception.
+     */
+    public static boolean createUserEvents(int userId, int eventId) {
+        String sql = "INSERT INTO user_Events (user_id , event_id) " + "VALUES(?, ?)";
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, eventId);
+
+            ps.executeUpdate();
+
+            ps.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+    /**
+     * Gets all events from User with help of the userId.
+     *
+     * @param userId is used to find the relative data
+     * @return a list of all events a user is part of.
+     */
+    public static ArrayList<Event> getEventsFromUser(int userId) {
+        String sql = "SELECT * FROM events " + "LEFT JOIN user_Events " + "ON user_Events.event_id = events.id_events "
+                + "WHERE user_Events.user_id = ?";
+
+        Connection connection = getConnection();
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int eventId = rs.getInt("event_id");
+                String name = rs.getString("name");
+                LocalDate date = rs.getDate("date").toLocalDate();
+                LocalTime startTime = rs.getTime("startTime").toLocalTime();
+                LocalTime endTime = rs.getTime("endTime").toLocalTime();
+                String location = rs.getString("location");
+                Reminder reminder = Enum.valueOf(Reminder.class, rs.getString("reminder"));
+                Priority priority = Enum.valueOf(Priority.class, rs.getString("priority"));
+
+                int host_id = rs.getInt("eventhost_id");
+
+                Event event = new Event(eventId, name, date, startTime, endTime, location, getParticipants(eventId), priority, reminder);
+
+                event.setId(eventId);
+                event.setEventHostId(host_id);
+                events.add(event);
+            }
+
+            rs.close();
+            ps.close();
+            return events;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * Gets a list of participants for an event.
+     *
+     * @param eventId eventid of the event you want the participants from
+     * @return the participants
+     */
+    private static ArrayList<User> getParticipants(int eventId) {
+        String sql = "SELECT * FROM user " + "LEFT JOIN user_Events "
+                + "ON user_Events.user_id = user.user_id WHERE user_Events.event_id = ? ";
+
+        Connection connection = getConnection();
+        ArrayList<User> participants = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, eventId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User u = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("firstname"),
+                        rs.getString("lastName"), rs.getString("email"));
+
+                participants.add(u);
+            }
+            rs.close();
+            ps.close();
+            return participants;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
