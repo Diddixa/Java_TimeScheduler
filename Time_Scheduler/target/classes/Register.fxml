@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="547.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
+<AnchorPane id="register" prefHeight="547.0" prefWidth="520.0" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
    <children>
-      <AnchorPane prefHeight="82.0" prefWidth="520.0" style="-fx-background-color: AA336A;">
+      <AnchorPane prefHeight="82.0" prefWidth="520.0" style="-fx-background-color: AA336A;" styleClass="header">
          <children>
             <ImageView fx:id="shieldImageView" fitHeight="42.0" fitWidth="69.0" layoutX="14.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -61,12 +61,12 @@
          </font>
       </Label>
       <TextField fx:id="confirmPasswordTxt" layoutX="82.0" layoutY="388.0" prefHeight="25.0" prefWidth="336.0" promptText="Confirm Password" />
-      <Button fx:id="registerButton" layoutX="78.0" layoutY="457.0" mnemonicParsing="false" onAction="#registerButton" prefHeight="25.0" prefWidth="342.0" style="-fx-background-color: AA336A; -fx-cursor: hand;" text="Register" textFill="WHITE">
+      <Button fx:id="registerButton" layoutX="78.0" layoutY="457.0" mnemonicParsing="false" onAction="#registerButton" prefHeight="25.0" prefWidth="342.0" style="-fx-cursor: hand;" text="Register" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="closeButton" layoutX="79.0" layoutY="503.0" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="25.0" prefWidth="342.0" style="-fx-background-color: AA336A; -fx-cursor: hand;" text="Back" textFill="WHITE">
+      <Button fx:id="closeButton" layoutX="79.0" layoutY="503.0" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="25.0" prefWidth="342.0" style="-fx-cursor: hand;" text="Back" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>

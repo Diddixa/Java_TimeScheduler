@@ -188,11 +188,11 @@ public class Database {
      */
 
     public static boolean deleteUser(int id) {
-        String sql =" DELETE FROM ser WHERE user_id = ?";
+        String sql =" DELETE FROM user WHERE user_id = ?";
         Database connectNow = new Database();
         Connection connectDB = connectNow.getConnection();
 
-        System.out.println("User Id:" + id);
+        System.out.println("User Id: " + id);
 
         try {
             PreparedStatement delete = connectDB.prepareStatement(sql);
