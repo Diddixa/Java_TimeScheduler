@@ -117,25 +117,24 @@ public class StartMailSender {
                 "        <td style=\"padding:30px; background-color:#ffffff;\">\n" +
                 "         <h1 style=\"margin-top:0; margin-bottom:16px; font-size:26px; line-height:32px; font-weight:bold; color: #7c1f4f;\">Don't forget your event!</h1>\n" +
                 "         <p>This is a kindly reminder for your upcoming event:</p>\n" +
-                "         <h2 style=\"font-size:20px; font-weight:bold; color: #2c2c2c;\">\" + event.getName() + \"</h2>\n" +
+                "         <h2 style=\"font-size:20px; font-weight:bold; color: #2c2c2c;\">" + event.getName() + "</h2>\n" +
                 "         <table>\n" +
                 "          <tr style=\"vertical-align: baseline;\">\n" +
                 "           <td style=\"color: #acacac\">Date:</td>\n" +
-                "           <td style=\"padding: 0 0 0 10px;\">\" + event.getDate() + \"</td>\n" +
+                "           <td style=\"padding: 0 0 0 10px;\">" + event.getDate() + "</td>\n" +
                 "          </tr>\n" +
                 "          <tr style=\"vertical-align: baseline;\">\n" +
                 "           <td style=\"color: #acacac\">Time:</td>\n" +
-                "           <td style=\"padding: 0 0 0 10px;\">\" + event.getStartTime() + \" - \" + event.getEndTime() + \"</td>\n" +
+                "           <td style=\"padding: 0 0 0 10px;\">" + event.getStartTime() + " - " + event.getEndTime() + "</td>\n" +
                 "          </tr>\n" +
                 "          <tr style=\"vertical-align: baseline;\">\n" +
                 "           <td style=\"color: #acacac\">Location:</td>\n" +
-                "           <td style=\"padding: 0 0 0 10px;\">\" + event.getLocation() + \"</td>\n" +
+                "           <td style=\"padding: 0 0 0 10px;\">" + event.getLocation() + "</td>\n" +
                 "          </tr>\n" +
                 "          <tr style=\"vertical-align: baseline;\">\n" +
                 "           <td style=\"color: #acacac\">Participants:</td>\n" +
                 "           <td>\n" +
-                "            <ul style=\"padding: 0 0 0 10px;\">\n" +
-                "             +allParticipants(event)+\n" +
+                "            <ul style=\"padding: 0 0 0 10px;\">\n" + allParticipants(event) +
                 "            </ul>\n" +
                 "           </td>\n" +
                 "          </tr>\n" +
