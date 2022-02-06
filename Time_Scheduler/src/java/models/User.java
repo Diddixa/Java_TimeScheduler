@@ -101,7 +101,13 @@ public class User {
         this.events = events;
     }
 
-    public User(int user_id, String username, String firstname, String lastname, String password, String email) {
+    public User(int id, String username, String firstname, String lastname, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.password = password;
+        this.email = email;
     }
 
 
