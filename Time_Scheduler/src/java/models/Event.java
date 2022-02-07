@@ -1,5 +1,6 @@
 package models;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -35,16 +36,20 @@ public class Event {
      * Event host id of event
      */
     private int eventHostId;
-    /**
-     * List of participants of an event
-     */
+    /*** List of participants of an event*/
     private ArrayList<User> participants;
-    /**
-     * Priority of event
-     */
+    private ArrayList<File> attachments;
+    /** Priority of event*/
     private Priority priority;
     private Reminder reminder;
 
+    public ArrayList<File> getAttachments() {
+        return attachments;
+        }
+
+    public void setAttachments(ArrayList<File> attachments) {
+        this.attachments = attachments;
+    }
 
     public int getId() {
         return id;
@@ -159,6 +164,18 @@ public class Event {
         this.participants = participants;
         this.priority = priority;
         this.reminder = reminder;
+    }
+
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, ArrayList<File> attachments) {
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.participants = participants;
+        this.priority = priority;
+        this.reminder = reminder;
+        this.attachments = attachments;
     }
 
 }

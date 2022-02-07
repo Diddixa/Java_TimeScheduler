@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import models.User;
@@ -84,6 +85,7 @@ public class LoginController implements Initializable {
 
                     }
                     else{
+                    loginMsgLabel.setTextFill(Color.RED);
                     loginMsgLabel.setText("Sadly invalid, maybe try to register?"); }}
                 catch(SQLException sqlException){
                 sqlException.printStackTrace();}

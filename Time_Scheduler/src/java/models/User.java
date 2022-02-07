@@ -101,7 +101,13 @@ public class User {
         this.events = events;
     }
 
-    public User(int user_id, String username, String firstname, String lastname, String password, String email) {
+    public User(int id, String username, String firstname, String lastname, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.password = password;
+        this.email = email;
     }
 
 
@@ -115,7 +121,7 @@ public class User {
     }
 
     /**
-     * Copy constructor
+     * Copy constructor used to edit the user
      *
      * @param other - Other user to be copied from
      */
@@ -149,6 +155,7 @@ public class User {
         event.setEventHostId(this.getId());
         int eventId = Database.storeEvent(event);
         event.setId(eventId);
+        event.getAttachments().forEach(e -> Database.storeAttachment(e, event));
         this.addEvent(event);
 
         for (User participant : event.getParticipants()) {
