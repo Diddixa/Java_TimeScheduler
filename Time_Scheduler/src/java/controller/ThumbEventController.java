@@ -1,18 +1,11 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import models.Event;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class ThumbEventController {
     @FXML
@@ -20,17 +13,25 @@ public class ThumbEventController {
     @FXML
     public Pane priority;
     @FXML
-    public LocalDate eventDate;
+    public Label eventDate;
     @FXML
-    public LocalTime eventStartTime;
+    public Label eventStartTime;
     @FXML
-    public LocalTime eventEndTime;
+    public Label eventEndTime;
 
     public void loadEvent(Event event) {
         eventName.setText(event.getName());
         // Muss da nochmal schauen
         //priority.setBackground(new Background(new BackgroundFill(Color.web("#ff6363"))));
-        //eventDate.
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(("dd LLLL yyyy"));
+        String dateFormat = event.getDate().format(df);
+        eventDate.setText(dateFormat);
+
+        DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
+        String startTimeFormat = event.getStartTime().format(tf);
+        eventStartTime.setText(startTimeFormat);
+        String endTimeFormat = event.getStartTime().format(tf);
+        eventStartTime.setText(endTimeFormat);
 
     }
 

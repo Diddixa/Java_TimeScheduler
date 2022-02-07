@@ -54,22 +54,13 @@ public class MasterController implements Initializable {
          */
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        /**
-         * Set the cells in the table to editable
-         */
-        tableView.setEditable(true);
-        colUsername.setCellFactory(TextFieldTableCell.forTableColumn());
-        colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colPassword.setCellFactory(TextFieldTableCell.forTableColumn());
-        colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
-
     }
 
     /**
      * This method will return an ObservableList of User objects.
      */
     public void loadData() {
+
         try {
             Connection connection = Database.getConnection();
 
@@ -90,12 +81,13 @@ public class MasterController implements Initializable {
             Logger.getLogger(MasterController.class.getName()).log(Level.SEVERE, null, e);
         }
 
-            colID.setCellValueFactory(new PropertyValueFactory<>("id"));
-            colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
-            colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstname"));
-            colLastName.setCellValueFactory(new PropertyValueFactory<>("lastname"));
-            colPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
-            colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+        colLastName.setCellValueFactory(new PropertyValueFactory<>("lastname"));
+        colPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+
     }
 
     /**
@@ -116,21 +108,6 @@ public class MasterController implements Initializable {
     }
 
     /**
-     * Method to display the delete-a-user-dialog
-     * @param event
-     * @throws IOException
-     */
-    @FXML
-    public void buttonDeleteUser(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("DialogDeleteUser.fxml"));
-        Scene scene = new Scene(parent);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.show();
-    }
-
-    /**
      * Method to display the add-a-user-dialog
      * @param event
      * @throws IOException
@@ -146,18 +123,50 @@ public class MasterController implements Initializable {
     }
 
     /**
-     * Method to set the currently selected field of the table editable
-     * @param userStringCellEditEvent
+     * Method to reuse the add-a-user-dialog to edit user's information
+     * @param event
+     * @throws IOException
+     */
+    public void buttonUpdateUser(ActionEvent event) throws IOException {
+        User user = tableView.getSelectionModel().getSelectedItem();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DialogAddUser.fxml"));
+        Parent root = loader.load();
+
+        DialogAddUserController addUserController = loader.getController();
+        addUserController.setUpdate(true);
+        addUserController.setTextField(
+                user.getId(),
+                user.getUsername(),
+                user.getFirstname(),
+                user.getLastname(),
+                user.getPassword(),
+                user.getEmail()
+                );
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    /**
+     * Method to display the delete-a-user-dialog
+     * @param event
+     * @throws IOException
      */
     @FXML
-    public void onEditChange(TableColumn.CellEditEvent<User, String> userStringCellEditEvent) {
+    public void buttonDeleteUser(ActionEvent event) throws IOException {
         User user = tableView.getSelectionModel().getSelectedItem();
-        user.setUsername(userStringCellEditEvent.getNewValue());
-        user.setFirstname(userStringCellEditEvent.getNewValue());
-        user.setLastname(userStringCellEditEvent.getNewValue());
-        user.setPassword(userStringCellEditEvent.getNewValue());
-        user.setEmail(userStringCellEditEvent.getNewValue());
-        //Database.editUser(user);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DialogDeleteUser.fxml"));
+        Parent root = loader.load();
+
+        DialogDeleteUserController deleteUserController = loader.getController();
+        deleteUserController.setTextField(user.getId());
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     /**
@@ -169,5 +178,4 @@ public class MasterController implements Initializable {
     public void buttonLogout(ActionEvent event) throws IOException {
         JavaFxUtil.sceneSwitcher("Login.fxml", logoutButton, 520, 580 );
     }
-
 }

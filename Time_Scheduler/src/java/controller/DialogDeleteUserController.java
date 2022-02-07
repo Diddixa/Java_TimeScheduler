@@ -16,6 +16,8 @@ public class DialogDeleteUserController {
     @FXML
     public Button buttonCancel;
 
+    int userID;
+
     /**
      * Deletes a certain user when clicked on the confirm button.
      * Needs to enter the user ID to delete the user.
@@ -49,6 +51,16 @@ public class DialogDeleteUserController {
                 textFieldID.clear();
             }
         });
+    }
+
+    /**
+     * Method to set the user ID into the textfield
+     * @param id
+     */
+    void setTextField(int id) {
+        userID = id;
+        String stringID = String.valueOf(userID);
+        textFieldID.setText(stringID);
     }
 
     /**
