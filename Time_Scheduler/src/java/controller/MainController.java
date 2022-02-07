@@ -25,7 +25,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class MainController implements Initializable {
+public class MainController implements Initializable  {
 
     @FXML
     private AnchorPane ap;
@@ -38,7 +38,8 @@ public class MainController implements Initializable {
 
     @FXML
     private Label username;
-
+    @FXML
+    private Label firstLastName;
 
     @FXML
     private Label time;
@@ -55,7 +56,7 @@ public class MainController implements Initializable {
 
         this.user  = user;
         username.setText(this.user.getUsername());
-
+        firstLastName.setText(this.user.getFirstname() + " " + this.user.getLastname());
     }
 
     @FXML
@@ -125,16 +126,21 @@ public class MainController implements Initializable {
         Parent root = null;
 
         try {
-          /*  if(Objects.equals(page, "page1"))
-            { */
+            if(Objects.equals(page, "page1"))
+            {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
                 root = loader.load();
                ScheduleEventController controller = loader.getController();
                controller.retrieveUser(this.user); // currently logged in user
-           /* }
-            else{
-             root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));}*/
+            }
+            else if(Objects.equals(page, "page2")){
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
+                root = loader.load();
+                CalendarController controller = loader.getController();
+                controller.retrieveUser(this.user); // currently logged in user
+            }
 
         } catch (IOException e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);

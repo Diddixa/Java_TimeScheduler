@@ -76,7 +76,7 @@ public class RegisterController{
             String encryptPass = PasswordEncryption.createHash(setPWD.getText());
             User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
 
-            if(!Database.isAvailable(user))
+            if(!Database.isTaken(user))
             {
                 registerLabel.setText("*username or email already taken!");
                 return;

@@ -39,13 +39,8 @@
             <Font name="Arial Black" size="20.0" />
          </font>
       </Label>
-      <DatePicker fx:id="eventDate" layoutX="60.0" layoutY="251.0" onAction="#scheduleDate" prefHeight="36.0" prefWidth="289.0" style="-fx-background-color: AA336A; -fx-background-color: #eeeeee;" />
-      <Label layoutX="59.0" layoutY="311.0" text="Start event">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="231.0" layoutY="311.0" text="End event">
+      <DatePicker fx:id="eventDate" layoutX="60.0" layoutY="251.0" onAction="#scheduleDate" prefHeight="36.0" prefWidth="289.0" promptText="DD/MM/YYYY" style="-fx-background-color: AA336A; -fx-background-color: #eeeeee;" />
+      <Label layoutX="59.0" layoutY="311.0" text="Event duration">
          <font>
             <Font name="Arial Black" size="20.0" />
          </font>
@@ -67,22 +62,22 @@
          </font>
       </Label>
       <ChoiceBox fx:id="remindChoice" layoutX="388.0" layoutY="175.0" prefHeight="30.0" prefWidth="189.0" />
-      <Label alignment="TOP_LEFT" layoutX="388.0" layoutY="254.0" text="Priority">
+      <Label alignment="TOP_LEFT" layoutX="384.0" layoutY="228.0" text="Priority">
          <font>
             <Font name="Arial Black" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="highButton" layoutX="572.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#high" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: #e41515; -fx-cursor: hand;" text="High">
+      <Button fx:id="highButton" layoutX="577.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#high" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: #e41515; -fx-cursor: hand;" text="High">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="mediumButton" layoutX="480.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#medium" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: yellow; -fx-cursor: hand;" text="medium">
+      <Button fx:id="mediumButton" layoutX="483.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#medium" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: yellow; -fx-cursor: hand;" text="medium">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font>
       </Button>
-      <Button fx:id="lowButton" layoutX="386.0" layoutY="299.0" mnemonicParsing="false" onMouseClicked="#low" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: green; -fx-cursor: hand;" text="low">
+      <Button fx:id="lowButton" layoutX="386.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#low" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: green; -fx-cursor: hand;" text="low">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font>
@@ -96,7 +91,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button layoutX="420.0" layoutY="450.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="156.0" prefWidth="217.0" style="-fx-background-color: ffff; -fx-cursor: hand;">
+      <Button layoutX="429.0" layoutY="509.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="126.0" prefWidth="189.0" style="-fx-background-color: ffff; -fx-cursor: hand;">
          <graphic>
             <ImageView fitHeight="156.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -104,7 +99,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Label layoutX="431.0" layoutY="427.0" text="Schedule event">
+      <Label layoutX="423.0" layoutY="480.0" text="Schedule event">
          <font>
             <Font name="Arial Black" size="23.0" />
          </font>
@@ -112,6 +107,26 @@
       <TimeField fx:id="startTime" layoutX="69.0" layoutY="344.0" />
       <TimeField fx:id="endTime" layoutX="237.0" layoutY="344.0" />
       <Label fx:id="addedUsers" layoutX="58.0" layoutY="572.0" prefHeight="29.0" prefWidth="270.0">
+         <font>
+            <Font name="Arial Black" size="12.0" />
+         </font>
+      </Label>
+      <Label alignment="TOP_LEFT" layoutX="382.0" layoutY="325.0" prefHeight="29.0" prefWidth="306.0" text="Add attachments (optional)">
+         <font>
+            <Font name="Arial Black" size="20.0" />
+         </font>
+      </Label>
+      <TextField fx:id="attachmentText" layoutX="382.0" layoutY="369.0" prefHeight="30.0" prefWidth="242.0" promptText="Attachment file" style="-fx-background-color: #eeeeee;" />
+      <Button layoutX="615.0" layoutY="366.0" mnemonicParsing="false" onAction="#addFile" prefHeight="25.0" prefWidth="51.0" style="-fx-cursor: hand; -fx-background-color: ffff;">
+         <graphic>
+            <ImageView fitHeight="28.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/attachment.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Label fx:id="addedAtt" layoutX="385.0" layoutY="406.0" prefHeight="29.0" prefWidth="270.0">
          <font>
             <Font name="Arial Black" size="12.0" />
          </font>

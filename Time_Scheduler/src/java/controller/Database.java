@@ -5,11 +5,15 @@ import models.Priority;
 import models.Reminder;
 import models.User;
 
+import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * The database class deals with all queries on our Mysql DB, for better overview and reuasability
+ */
 public class Database {
 
     public static Connection databaseLink;
@@ -182,7 +186,7 @@ public class Database {
     }
 
     /** Delete user in the user table and user's corresponding entries
-     in table Location and table User_Event.
+     in table Location and table user_Events.
      @param id - id of user to delete
      @return true if deletion was successful
      */
@@ -258,7 +262,7 @@ public class Database {
      * @param user - User data
      * @return true if user data is available
      */
-    public static boolean isAvailable(User user) {
+    public static boolean isTaken(User user) {
         String sql = "SELECT * FROM user WHERE username = ? OR email=?";
 
         Connection connection = getConnection();
@@ -362,10 +366,10 @@ public class Database {
      * Gets all events from User with help of the userId.
      *
      * @param userId is used to find the relative data
-     * @return a list of all events a user is part of.
+     * @return a list of the events the user is in
      */
     public static ArrayList<Event> getEventsFromUser(int userId) {
-        String sql = "SELECT * FROM events " + "LEFT JOIN user_Events " + "ON user_Events.event_id = events.id_events "
+        String sql = "SELECT * FROM events " + "LEFT JOIN user_Events " + "ON user_Events.event_id = events.events_id "
                 + "WHERE user_Events.user_id = ?";
 
         Connection connection = getConnection();
@@ -386,13 +390,14 @@ public class Database {
                 String location = rs.getString("location");
                 Reminder reminder = Enum.valueOf(Reminder.class, rs.getString("reminder"));
                 Priority priority = Enum.valueOf(Priority.class, rs.getString("priority"));
-
+                ArrayList<File> attachments = getAttachmentsFromEvent(eventId);
                 int host_id = rs.getInt("eventhost_id");
 
                 Event event = new Event(eventId, name, date, startTime, endTime, location, getParticipants(eventId), priority, reminder);
 
                 event.setId(eventId);
                 event.setEventHostId(host_id);
+                event.setAttachments(attachments);
                 events.add(event);
             }
 
@@ -414,23 +419,23 @@ public class Database {
      * @return the participants
      */
     private static ArrayList<User> getParticipants(int eventId) {
-        String sql = "SELECT * FROM user " + "LEFT JOIN user_Events "
+        String queryParticipants = "SELECT * FROM user " + "LEFT JOIN user_Events "
                 + "ON user_Events.user_id = user.user_id WHERE user_Events.event_id = ? ";
 
         Connection connection = getConnection();
         ArrayList<User> participants = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(queryParticipants);
             ps.setInt(1, eventId);
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                User u = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("firstname"),
+                User user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("firstname"),
                         rs.getString("lastName"), rs.getString("email"));
 
-                participants.add(u);
+                participants.add(user);
             }
             rs.close();
             ps.close();
@@ -440,4 +445,117 @@ public class Database {
             return null;
         }
     }
+
+    /**
+     * Adds attachment entry into the Database.
+     *
+     * @param file File to be uploaded into the database
+     * @param event Event that the file belongs to
+     * @return -1 on failed creation, ID on successful creation
+     */
+    public static int storeAttachment(File file, Event event) {
+        String sql = "INSERT INTO attachments (attachment, eventID, attachmentName) VALUES ( ? , ? , ? )";
+        Connection connection = getConnection();
+        int attachmentId = -1;
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS);
+            FileInputStream input = new FileInputStream(file);
+            ps.setBinaryStream(1 , input);
+            ps.setInt(2 , event.getId());
+            ps.setString(3, file.getName());
+
+            ps.executeUpdate();
+            ResultSet generatedKey = ps.getGeneratedKeys();
+
+            if (generatedKey.next()) {
+                attachmentId = generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Couldn't store attachment.");
+            }
+
+            input.close();
+            ps.close();
+            closeDatabase();
+            System.out.println("Attachment stored.");
+            return attachmentId;
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            closeDatabase();
+            return attachmentId;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return attachmentId;
+        }
+    }
+
+    /**
+     * Gets the Attachments out of the Database.
+     *
+     * @param eventId Id of an event from which the attachments should be returned
+     * @return List of files
+     */
+    public static ArrayList<File> getAttachmentsFromEvent(int eventId){
+        String sql = "SELECT * FROM Attachment WHERE event_id = ?";
+        Connection connection = getConnection();
+        ArrayList<File> files = new ArrayList<>();
+        InputStream input = null;
+        FileOutputStream output = null;
+
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1 ,  eventId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                File tempFile = new File(rs.getString("name"));
+                output = new FileOutputStream(tempFile);
+                input = rs.getBinaryStream("file");
+
+                byte[] buffer = new byte[4096];
+                while (input.read(buffer) > 0){
+                    output.write(buffer);
+                }
+
+                files.add(tempFile);
+
+                input.close();
+                output.close();
+            }
+
+
+            return files;
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    /**
+     * Delete all Attachment entries in the Database.
+     *
+     * @param eventId Event which the entries should be deleted from.
+     */
+    public static void deleteAllAttachments(int eventId){
+        String sql = "DELETE FROM Attachment WHERE event_id = ?";
+
+        Connection connection = getConnection();
+
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt( 1, eventId);
+
+            ps.executeUpdate();
+
+            ps.close();
+            closeDatabase();
+        } catch(SQLException e){
+            e.printStackTrace();
+            closeDatabase();
+        }
+    }
+
+
 }

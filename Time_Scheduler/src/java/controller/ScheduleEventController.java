@@ -2,16 +2,19 @@ package controller;
 import com.calendarfx.view.TimeField;
 import javafx.scene.input.MouseEvent;
 
-
+import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import models.Event;
 import models.Priority;
 import models.Reminder;
 import models.User;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalTime;
@@ -40,6 +43,10 @@ public class ScheduleEventController implements Initializable {
     private TimeField endTime;
     @FXML
     private Label addedUsers;
+    @FXML
+    private TextField attachmentText;
+    @FXML
+    private Label addedAtt;
 
     /** currently registered user */
     private User user;
@@ -57,10 +64,16 @@ public class ScheduleEventController implements Initializable {
     private Event event;
     /** arraylist of event participants */
     private ArrayList<User> participants = new ArrayList<>();
+    /** arraylist of added files (attachments) */
+    private ArrayList<File> attachments = new ArrayList<File>();
+    FileChooser fileChooser = new FileChooser();
     boolean boolReminder;
 
 
     String username;
+
+
+
     /**
      * function to retrieve the logged in user from LoginController
      * @param user
@@ -154,11 +167,35 @@ public class ScheduleEventController implements Initializable {
 
         if (newUser == null)
         {
+            addedUsers.setTextFill(Color.RED);
             addedUsers.setText("*user couldn't be found");
         }
         else{
         participants.add(newUser);
+            addedUsers.setTextFill(Color.GREEN);
+
         addedUsers.setText("*" + newUser.getUsername() + " has been added to the event"); }
+
+    }
+
+
+    /**
+     * function to add a file to the Attachments array list
+     * @param e
+     * @throws SQLException
+     */
+    @FXML
+    public void addFile(ActionEvent e) throws SQLException {
+            Stage stage = new Stage();
+
+           /* FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.PDF", "*.pdf");
+            fileChooser.getExtensionFilters().add(extFilter);*/
+
+             File file =  fileChooser.showSaveDialog(stage);
+
+            attachments.add(file);
+
+            attachmentText.setText(attachments.size() + " " + "File(s) added");
 
     }
 
@@ -178,7 +215,7 @@ public class ScheduleEventController implements Initializable {
             errorAlert.showAndWait();
         }
        else{
-       event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder);
+       event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder, attachments);
        this.user.createEvent(event);
 
             Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -195,6 +232,7 @@ public class ScheduleEventController implements Initializable {
         remindChoice.setOnAction(this::getPriority);
         startTime.setOnMouseExited(this::getStartTime);
         endTime.setOnMouseExited(this::getEndTime);
+        fileChooser.setInitialDirectory(new File("C:\\Users\\Darka\\Desktop"));
 
     }
 }

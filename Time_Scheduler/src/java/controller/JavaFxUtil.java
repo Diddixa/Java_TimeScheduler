@@ -7,7 +7,9 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
+/**
+ * JavaFX utility class to make the code more readable and reusable
+ */
 public class JavaFxUtil {
 
 

@@ -1,23 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-/* LOGIN */
-#login .button-register {
-    -fx-background-color: transparent;
-    -fx-text-fill: #9316c7;
-}
-#login .button-register:hover {
-    -fx-background-color: transparent;
-    -fx-text-fill: #9316c7;
-    -fx-underline: true;
-}
-
-/* ADMIN VIEW */
-#register .header .label {
-    -fx-font-size: 24px;
-}
-
-
-/* ADMIN VIEW */
+/* GENERAL */
 .label {
     -fx-font-family: "Roboto";
     -fx-font-size: 14px;
@@ -35,6 +18,24 @@
     -fx-background-color: #CC3D80;
 }
 
+/* LOGIN */
+#login .button-register {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9316c7;
+}
+#login .button-register:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: #9316c7;
+    -fx-underline: true;
+}
+
+/* REGISTRATION */
+#register .header .label {
+    -fx-font-size: 24px;
+}
+
+
+/* ADMIN VIEW */
 .admin-topbar .button:hover {
 	-fx-border-color: white;
     -fx-border-width: 2px 0 0 0;
@@ -43,8 +44,6 @@
 .admin-topbar .button:hover .text{
 	-fx-translate-y: -1px;
 }
-
-
 
 .table-view {
 	-fx-background-color: #FFFFFF;

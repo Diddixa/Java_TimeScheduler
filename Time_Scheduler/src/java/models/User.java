@@ -121,7 +121,7 @@ public class User {
     }
 
     /**
-     * Copy constructor
+     * Copy constructor used to edit the user
      *
      * @param other - Other user to be copied from
      */
@@ -155,6 +155,7 @@ public class User {
         event.setEventHostId(this.getId());
         int eventId = Database.storeEvent(event);
         event.setId(eventId);
+        event.getAttachments().forEach(e -> Database.storeAttachment(e, event));
         this.addEvent(event);
 
         for (User participant : event.getParticipants()) {
