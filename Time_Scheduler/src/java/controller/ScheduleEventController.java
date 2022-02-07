@@ -23,20 +23,13 @@ import java.time.LocalDate;
 
 public class ScheduleEventController implements Initializable {
 
-    @FXML
-    private Button addEventButton;
+
     @FXML
     private DatePicker eventDate;
     @FXML
     private TextField eventName;
     @FXML
-    private Button highButton;
-    @FXML
     private TextField locationEvent;
-    @FXML
-    private Button lowButton;
-    @FXML
-    private Button mediumButton;
     @FXML
     private TextField participant;
     @FXML
@@ -46,18 +39,25 @@ public class ScheduleEventController implements Initializable {
     @FXML
     private TimeField endTime;
     @FXML
-    private Label name;
+    private Label addedUsers;
 
     /** currently registered user */
     private User user;
-    /** currently registered user */
+    /** chosen reminder by user */
     private Reminder chosenReminder;
+    /** chosen priority by user */
     private Priority chosenPriority;
-    private LocalDate chosenDate;
+    /** chosen event date by user */
+    private LocalDate chosenDate = null;
+    /** chosen start time by user */
     private LocalTime chosenStartTime;
+    /** chosen end time by user */
     private LocalTime chosenEndTime;
-    Event event;
+    /** create event */
+    private Event event;
+    /** arraylist of event participants */
     private ArrayList<User> participants = new ArrayList<>();
+    boolean boolReminder;
 
 
     String username;
@@ -79,7 +79,7 @@ public class ScheduleEventController implements Initializable {
         chosenDate = eventDate.getValue();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
         String formattedString = chosenDate.format(formatter);
-        System.out.println(formattedString);
+
     }
 
     /**
@@ -89,7 +89,6 @@ public class ScheduleEventController implements Initializable {
     @FXML
         void low(MouseEvent event) {
             chosenPriority = Priority.LOW;
-            System.out.println(chosenPriority.name());
         }
 
         @FXML
@@ -102,7 +101,6 @@ public class ScheduleEventController implements Initializable {
         @FXML
         void high(MouseEvent event) {
             chosenPriority = Priority.HIGH;
-            System.out.println(chosenPriority.name());
 
         }
 
@@ -113,6 +111,7 @@ public class ScheduleEventController implements Initializable {
     public void getPriority(ActionEvent e){
 
         chosenReminder = remindChoice.getValue();
+        boolReminder = remindChoice.getSelectionModel().isEmpty();
         //System.out.print(chosenReminder.name());
     }
 
@@ -126,10 +125,10 @@ public class ScheduleEventController implements Initializable {
         chosenStartTime = startTime.getValue();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         String formattedString = chosenStartTime.format(dtf);
-        System.out.println(formattedString);
 
     }
 
+    String formattedString = "";
     /**
      * MouseEvent to get end time from user
      * @param e
@@ -138,20 +137,31 @@ public class ScheduleEventController implements Initializable {
     {
         chosenEndTime = endTime.getValue();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
-        String formattedString = chosenEndTime.format(dtf);
-        System.out.println(formattedString);
+        formattedString = chosenEndTime.format(dtf);
 
     }
 
+    /**
+     * function to add a participant to the participant arraylist afterwards into the according event in the event user bridge
+     * @param e
+     * @throws SQLException
+     */
     @FXML
     public void addParticipant(ActionEvent e) throws SQLException {
-       /* if(participant.getText().isBlank()){
 
-        }*/
-        User newUser = Database.getUser(participant.getText());
+        String p = participant.getText();
+        User newUser = Database.getUser(p);
+
+        if (newUser == null)
+        {
+            addedUsers.setText("*user couldn't be found");
+        }
+        else{
         participants.add(newUser);
+        addedUsers.setText("*" + newUser.getUsername() + " has been added to the event"); }
 
     }
+
 
     /**
      * initialize event object and create event 
@@ -159,8 +169,23 @@ public class ScheduleEventController implements Initializable {
      */
     @FXML
     public void createEvent(ActionEvent e) {
-        event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder);
-        this.user.createEvent(event);
+
+
+        if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){ //|| !boolReminder || chosenPriority == null){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Missing entry");
+            errorAlert.setContentText("Please fill in all entries");
+            errorAlert.showAndWait();
+        }
+       else{
+       event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder);
+       this.user.createEvent(event);
+
+            Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            errorAlert.setTitle("Event scheduled");
+            errorAlert.setContentText("Successfully created event");
+            errorAlert.showAndWait();}
+
     }
 
     @Override

@@ -15,7 +15,12 @@ public class JavaFxUtil {
 
         Parent root = FXMLLoader.load(JavaFxUtil.class.getClassLoader().getResource(fxml));
         Stage stage = (Stage) button.getScene().getWindow();
-        stage.setScene(new Scene(root, v, v1));
+        Scene scene = new Scene(root, v, v1);
+        scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
+        stage.setScene(scene);
         stage.centerOnScreen();
+
     }
+
+
 }

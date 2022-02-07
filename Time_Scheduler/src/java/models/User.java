@@ -1,6 +1,7 @@
 package models;
 
 import controller.Database;
+import javafx.scene.chart.PieChart;
 
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ public class User {
     /**
      * Email of user*/
     private String email;
-    /** List of events which the user is partaking*/
+    /** List of events */
     private ArrayList<Event> events = new ArrayList<Event>();
 
 
@@ -91,7 +92,32 @@ public class User {
         this.email = email;
     }
 
-    public User(int user_id, String username, String firstname, String lastname, String password, String email) {
+    public User(int id, String username, String firstname, String lastname, String email, ArrayList<Event> events) {
+        this.id = id;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.events = events;
+    }
+
+    public User(int id, String username, String firstname, String lastname, String password, String email) {
+        this.id = id;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.password = password;
+        this.email = email;
+    }
+
+
+
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(ArrayList<Event> events) {
+        this.events = events;
     }
 
     /**
@@ -106,6 +132,7 @@ public class User {
         this.lastname = other.lastname;
         this.password = other.password;
         this.email = other.email;
+        this.events = other.events;
     }
 
     /**
@@ -136,6 +163,17 @@ public class User {
         }
 
     }
+
+    /**
+     * Updates the local list of events from the database
+     */
+    public void updateEventList(){
+        events.clear();
+        events.addAll(Database.getEventsFromUser(this.getId()));
+    }
+
+
+
 
 }
 

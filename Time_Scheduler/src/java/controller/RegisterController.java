@@ -83,11 +83,10 @@ public class RegisterController{
             }
             Database.registerUser(user);
 
-            JavaFxUtil.sceneSwitcher("Dashboard1.fxml", registerButton, 950, 600);
-
+            JavaFxUtil.sceneSwitcher("Login.fxml", registerButton, 950, 600);
 
         }else{
-            passwordLabel.setText("Password does not match");
+            passwordLabel.setText("*Password does not match");
         }}
 
     }

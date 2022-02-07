@@ -1,9 +1,14 @@
 package controller;
 
 import models.Event;
+import models.Priority;
+import models.Reminder;
 import models.User;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class Database {
 
@@ -108,8 +113,8 @@ public class Database {
             String firstname = result.getString("firstname");
             String lastname = result.getString("lastname");
 
-           /* ArrayList<Event> events = getEventsFromUser(id); */
-            User user = new User(id, username, firstname, lastname, email);
+            ArrayList<Event> events = getEventsFromUser(id);
+            User user = new User(id, username, firstname, lastname, email, events);
 
             System.out.println("Fetched user.");
             closeDatabase();
@@ -183,11 +188,11 @@ public class Database {
      */
 
     public static boolean deleteUser(int id) {
-        String sql =" DELETE FROM User WHERE user_id = ?";
+        String sql =" DELETE FROM user WHERE user_id = ?";
         Database connectNow = new Database();
         Connection connectDB = connectNow.getConnection();
 
-        System.out.println("User Id:" + id);
+        System.out.println("User Id: " + id);
 
         try {
             PreparedStatement delete = connectDB.prepareStatement(sql);
@@ -350,6 +355,89 @@ public class Database {
             e.printStackTrace();
 
             return false;
+        }
+    }
+
+    /**
+     * Gets all events from User with help of the userId.
+     *
+     * @param userId is used to find the relative data
+     * @return a list of all events a user is part of.
+     */
+    public static ArrayList<Event> getEventsFromUser(int userId) {
+        String sql = "SELECT * FROM events " + "LEFT JOIN user_Events " + "ON user_Events.event_id = events.id_events "
+                + "WHERE user_Events.user_id = ?";
+
+        Connection connection = getConnection();
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int eventId = rs.getInt("event_id");
+                String name = rs.getString("name");
+                LocalDate date = rs.getDate("date").toLocalDate();
+                LocalTime startTime = rs.getTime("startTime").toLocalTime();
+                LocalTime endTime = rs.getTime("endTime").toLocalTime();
+                String location = rs.getString("location");
+                Reminder reminder = Enum.valueOf(Reminder.class, rs.getString("reminder"));
+                Priority priority = Enum.valueOf(Priority.class, rs.getString("priority"));
+
+                int host_id = rs.getInt("eventhost_id");
+
+                Event event = new Event(eventId, name, date, startTime, endTime, location, getParticipants(eventId), priority, reminder);
+
+                event.setId(eventId);
+                event.setEventHostId(host_id);
+                events.add(event);
+            }
+
+            rs.close();
+            ps.close();
+            return events;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * Gets a list of participants for an event.
+     *
+     * @param eventId eventid of the event you want the participants from
+     * @return the participants
+     */
+    private static ArrayList<User> getParticipants(int eventId) {
+        String sql = "SELECT * FROM user " + "LEFT JOIN user_Events "
+                + "ON user_Events.user_id = user.user_id WHERE user_Events.event_id = ? ";
+
+        Connection connection = getConnection();
+        ArrayList<User> participants = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, eventId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User u = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("firstname"),
+                        rs.getString("lastName"), rs.getString("email"));
+
+                participants.add(u);
+            }
+            rs.close();
+            ps.close();
+            return participants;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
