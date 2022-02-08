@@ -440,4 +440,46 @@ public class Database {
             return null;
         }
     }
+
+
+
+    /**
+     * Edits the event.
+     *
+     * @param event new event object which the Database should be adjusted for
+     * @return true, if successful
+     */
+    public static boolean editEvent(Event event) {
+        String sql = "UPDATE Event SET reminder = ? , priority = ? , name = ? , date = ? , time = ? , duration_minutes = ? , description = ? ,  host_id = ? "
+                + "WHERE event_id = ? ";
+
+        Database connectNow = new Database();
+        Connection connection = connectNow.getConnection();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+
+            ps.setString(1,event.getName());
+            ps.setString(2, event.getReminder().name());
+            ps.setDate(3,Date.valueOf(event.getDate()));
+            ps.setTime(4,Time.valueOf(event.getStartTime()));
+            ps.setTime(5, Time.valueOf(event.getEndTime()));
+
+            ps.executeUpdate();
+            ps.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            e.getErrorCode();
+
+            return false;
+        }
+    }
+
+
+
+
+
+
 }

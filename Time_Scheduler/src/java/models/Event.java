@@ -161,4 +161,30 @@ public class Event {
         this.reminder = reminder;
     }
 
+
+
+    /**
+     * Constructor for creating an event
+     *
+     * @param name - name of the event
+     * @param date - date of the event
+     * @param startTime - starting time of the event
+     * @param endTime - duration of the event in minutes
+     * @param participants - list of participants
+     * @param attachments - list of attachments
+     * @param location - location of the event
+     * @param reminder - selected reminder for the event
+     */
+    public Event(String name, LocalDate date, LocalTime startTime,LocalTime endTime, String location,
+                 ArrayList<User> participants, ArrayList<File> attachments, Reminder reminder) {
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.participants = participants;
+        this.attachments = attachments;
+        this.location = location;
+        this.reminder = reminder;
+    }
+
 }
