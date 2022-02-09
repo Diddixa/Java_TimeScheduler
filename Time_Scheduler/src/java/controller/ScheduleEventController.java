@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.time.LocalDate;
 
-
+/**
+ * Controller used to create an event references FXML file page1
+ */
 public class ScheduleEventController implements Initializable {
 
 
@@ -232,7 +234,6 @@ public class ScheduleEventController implements Initializable {
         remindChoice.setOnAction(this::getPriority);
         startTime.setOnMouseExited(this::getStartTime);
         endTime.setOnMouseExited(this::getEndTime);
-        fileChooser.setInitialDirectory(new File("C:\\Users\\Darka\\Desktop"));
 
     }
 }
