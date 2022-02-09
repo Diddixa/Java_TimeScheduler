@@ -31,11 +31,11 @@ public class PasswordEncryption {
      * @return Encoded Password in Format Salt$Hash
      */
     public static String createHash(String password) {
-        SecureRandom rndm = new SecureRandom(); //randomly generate string
-        byte[] salt = new byte[16];		//create array for salt
+        SecureRandom rndm = new SecureRandom();
+        byte[] salt = new byte[16];		//salt length
         rndm.nextBytes(salt);			//salt is filled with secure random bytes
         byte[] hash = pbkdf2(password.toCharArray(), salt);		//hash is created with password, salt and number of iterations
-        return Base64.getEncoder().withoutPadding().encodeToString(salt) + "$" + Base64.getEncoder().withoutPadding().encodeToString(hash);		//Returns encrypted password ($ to split salt from hash)
+        return Base64.getEncoder().withoutPadding().encodeToString(salt) + "$" + Base64.getEncoder().withoutPadding().encodeToString(hash);		//Returns encrypted password
     }
 
     /**
@@ -68,7 +68,7 @@ public class PasswordEncryption {
             return key.getEncoded();
         }
         catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("No such Algorithm Invalid" + e);
+            throw new IllegalStateException("Algorithm Invalid" + e);
         }
         catch (InvalidKeySpecException e) {
             throw new IllegalStateException("SecretKeyFactory invalid" + e);

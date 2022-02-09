@@ -23,9 +23,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.time.LocalDate;
 
-/**
- * Controller used to create an event references FXML file page1
- */
+
 public class ScheduleEventController implements Initializable {
 
 
@@ -49,11 +47,9 @@ public class ScheduleEventController implements Initializable {
     private TextField attachmentText;
     @FXML
     private Label addedAtt;
-    @FXML
-    private Label checkTime;
 
-    /** currently logged in user */
-    private User currentUser;
+    /** currently registered user */
+    private User user;
     /** chosen reminder by user */
     private Reminder chosenReminder;
     /** chosen priority by user */
@@ -74,6 +70,7 @@ public class ScheduleEventController implements Initializable {
     boolean boolReminder;
 
 
+    String username;
 
 
 
@@ -82,7 +79,7 @@ public class ScheduleEventController implements Initializable {
      * @param user
      */
     public void retrieveUser(User user){
-        this.currentUser = user;
+        this.user = user;
 
     }
 
@@ -197,9 +194,11 @@ public class ScheduleEventController implements Initializable {
              File file =  fileChooser.showSaveDialog(stage);
 
             attachments.add(file);
+
             attachmentText.setText(attachments.size() + " " + "File(s) added");
 
     }
+
 
     /**
      * initialize event object and create event 
@@ -209,19 +208,15 @@ public class ScheduleEventController implements Initializable {
     public void createEvent(ActionEvent e) {
 
 
-        if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){
+        if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){ //|| !boolReminder || chosenPriority == null){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Missing entry");
             errorAlert.setContentText("Please fill in all entries");
             errorAlert.showAndWait();
         }
-       else if(chosenStartTime.isAfter(chosenEndTime)) {
-            checkTime.setText("*endtime of event can't be before starttime");
-        }
        else{
-
        event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder, attachments);
-       this.currentUser.createEvent(event);
+       this.user.createEvent(event);
 
             Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
             errorAlert.setTitle("Event scheduled");
@@ -237,6 +232,7 @@ public class ScheduleEventController implements Initializable {
         remindChoice.setOnAction(this::getPriority);
         startTime.setOnMouseExited(this::getStartTime);
         endTime.setOnMouseExited(this::getEndTime);
+        fileChooser.setInitialDirectory(new File("C:\\Users\\Darka\\Desktop"));
 
     }
 }
