@@ -55,23 +55,29 @@ public class EditProfileController {
             errorAlert.showAndWait();
         }
         else{
-        User temp = new User(loggedUser);
+       // User temp = new User(loggedUser);
 
+        /*
         temp.setEmail(emailText.getText());
-        temp.setFirstname(usernameText.getText());
+        temp.setFirstname(usernameText.getText()); */
 
-        if(!Database.isTaken(temp)) {
-            userLabel.setText("Information already exists.");
-        }
 
         loggedUser.setEmail(emailText.getText());
         loggedUser.setFirstname(firstnameText.getText());
         loggedUser.setLastname(lastnameText.getText());
         loggedUser.setUsername(usernameText.getText());
 
+            if(!Database.isTaken(loggedUser)) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Please check email or username!");
+                errorAlert.setContentText("Either email or username already registered");
+                errorAlert.showAndWait();
+            }
+
         if(!passwordTxt.getText().isBlank()) {
             loggedUser.setPassword(PasswordEncryption.createHash(passwordTxt.getText()));
         }
+
         Database.editUser(loggedUser, loggedUser.getId());
 
         if(Database.editProfile(loggedUser)) {
