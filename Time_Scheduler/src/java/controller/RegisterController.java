@@ -20,9 +20,7 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-/**
- * this controller deals with the Registration of the user data into our database
- */
+
 public class RegisterController{
 
     @FXML
@@ -56,7 +54,7 @@ public class RegisterController{
 
 
     /**
-     * method to switch to the login screen
+     * Function created to switch from Register Scene to Login (will be global later)
      * @param e
      * @throws Exception
      */
@@ -70,7 +68,7 @@ public class RegisterController{
 
         if(usernameTxt.getText().isBlank() || firstnameTxt.getText().isBlank() || lastnameTxt.getText().isBlank() || setPWD.getText().isBlank() || emailTxt.getText().isBlank())
         {
-            registerLabel.setText("one of the required fields is missing!");
+            registerLabel.setText("One of the required fields is missing!");
         }
         else{
         if(setPWD.getText().equals(confirmPWD.getText())){
@@ -80,7 +78,7 @@ public class RegisterController{
 
             if(!Database.isTaken(user))
             {
-                registerLabel.setText("*username or email already taken");
+                registerLabel.setText("*username or email already taken!");
                 return;
             }
             Database.registerUser(user);
