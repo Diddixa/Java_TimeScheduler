@@ -12,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import models.User;
 
 import java.io.IOException;
@@ -61,9 +60,8 @@ public class RegisterController{
      */
     public void switchToLogin(ActionEvent e) throws Exception {
 
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.setScene(new Scene(root, 520, 560));
+        JavaFxUtil.sceneSwitcher("Login.fxml", closeButton, 520, 560);
+
     }
 
     public void registerButton(ActionEvent e) throws IOException {
@@ -77,22 +75,21 @@ public class RegisterController{
 
             String encryptPass = PasswordEncryption.createHash(setPWD.getText());
             User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
+
+            if(!Database.isTaken(user))
+            {
+                registerLabel.setText("*username or email already taken!");
+                return;
+            }
             Database.registerUser(user);
 
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Dashboard1.fxml"));
-            Stage stage = (Stage) registerButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 950, 600));
-            stage.setMaximized(true);
+            JavaFxUtil.sceneSwitcher("Login.fxml", registerButton, 950, 600);
 
         }else{
-            passwordLabel.setText("Password does not match");
+            passwordLabel.setText("*Password does not match");
         }}
 
     }
-
-
-
-
 
 
 

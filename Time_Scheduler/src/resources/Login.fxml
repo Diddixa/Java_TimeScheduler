@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+<BorderPane id="login" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="520.0" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <left>
       <AnchorPane prefHeight="407.0" prefWidth="228.0" style="-fx-background-color: AA336A;" BorderPane.alignment="CENTER">
          <children>
@@ -42,12 +42,12 @@
          </Label>
          <TextField layoutX="99.0" layoutY="187.0" prefHeight="26.0" prefWidth="173.0" promptText="Password" />
          <PasswordField fx:id="enterPassword" layoutX="99.0" layoutY="188.0" prefHeight="26.0" prefWidth="173.0" promptText="Password" />
-         <Button fx:id="loginButton" layoutX="21.0" layoutY="256.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-background-color: AA336A; -fx-cursor: hand;" text="Login" textFill="WHITE">
+         <Button fx:id="loginButton" layoutX="21.0" layoutY="256.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-cursor: hand;" text="Login" textFill="WHITE">
             <font>
                <Font name="Arial Black" size="14.0" />
             </font>
          </Button>
-         <Button fx:id="cancelButton" layoutX="21.0" layoutY="313.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-background-color: AA336A; -fx-cursor: hand;" text="Cancel" textFill="WHITE">
+         <Button fx:id="cancelButton" layoutX="21.0" layoutY="313.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="32.0" prefWidth="256.0" style="-fx-cursor: hand;" text="Cancel" textFill="WHITE">
             <font>
                <Font name="Arial Black" size="14.0" />
             </font>
@@ -62,7 +62,7 @@
                <Font size="14.0" />
             </font>
          </Label>
-         <Button fx:id="signUpButton" layoutX="159.0" layoutY="361.0" mnemonicParsing="false" onAction="#switchToRegister" style="-fx-background-color: transparent; -fx-cursor: hand;" text="Sign up!" textFill="#9316c7" underline="true">
+         <Button fx:id="signUpButton" layoutX="159.0" layoutY="361.0" mnemonicParsing="false" onAction="#switchToRegister" style="-fx-cursor: hand;" styleClass="button-register" text="Sign up!" textFill="#9316c7">
             <font>
                <Font name="Arial Black" size="14.0" />
             </font>

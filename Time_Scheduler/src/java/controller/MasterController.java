@@ -4,107 +4,178 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
-import models.Master;
+import javafx.stage.StageStyle;
+import models.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MasterController implements Initializable {
-    public TableView<Master> tableView;
 
-    public TableColumn<Master, String> colID;
-    public TableColumn<Master, String> colUsername;
-    public TableColumn<Master, String> colFirstName;
-    public TableColumn<Master, String> colLastName;
-    public TableColumn<Master, String> colEmail;
-    public TableColumn<Master, String> colPassword;
+    public TableView<User> tableView;
 
-    public Button closeButton;
-    public TextField textFieldID;
-    public TextField textFieldUsername;
-    public TextField textFieldFirstName;
-    public TextField textFieldLastName;
-    public TextField textFieldEmail;
-    public TextField textFieldPassword;
+    public TableColumn<User, Integer> colID;
+    public TableColumn<User, String> colUsername;
+    public TableColumn<User, String> colFirstName;
+    public TableColumn<User, String> colLastName;
+    public TableColumn<User, String> colPassword;
+    public TableColumn<User, String> colEmail;
 
-    @FXML
-    public void handleCloseButtonAction(ActionEvent event) throws IOException {
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
-    }
+    public Button logoutButton;
 
-    /*
-    Initializes the MasterController Class.
+    ObservableList<User> observableList = FXCollections.observableArrayList();
+
+    /**
+     * Initializes the MasterController Class.
+     * @param location
+     * @param resources
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        colID.setCellValueFactory(new PropertyValueFactory<>("UserID"));
-        colUsername.setCellValueFactory(new PropertyValueFactory<>("Username"));
-        colFirstName.setCellValueFactory(new PropertyValueFactory<>("UserFirstName"));
-        colLastName.setCellValueFactory(new PropertyValueFactory<>("UserLastName"));
-        colEmail.setCellValueFactory(new PropertyValueFactory<>("UserEmail"));
-        colPassword.setCellValueFactory(new PropertyValueFactory<>("UserPassword"));
 
-        // Load dummy data
-        tableView.setItems(observableList);
+        loadData();
 
-        // Set the cells in the table to editable
-        tableView.setEditable(true);
-        colUsername.setCellFactory(TextFieldTableCell.forTableColumn());
-        colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colLastName.setCellFactory(TextFieldTableCell.forTableColumn());
-        colEmail.setCellFactory(TextFieldTableCell.forTableColumn());
-        colPassword.setCellFactory(TextFieldTableCell.forTableColumn());
+        /**
+         * Tableview settings, to resize the columns automatically.
+         */
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
     }
 
-    /*
-    This method will return an ObservableList of Master objects.
+    /**
+     * This method will return an ObservableList of User objects.
      */
-    ObservableList<Master> observableList = FXCollections.observableArrayList(
-            new Master("123", "Diddi", "Djidde", "Saengsawad", "diddi@mail.de", "Aroy"),
-            new Master("456", "Lami", "Lam", "Dao Ngoc", "lami@mail.de", "PhoDacBiet")
-    );
+    public void loadData() {
 
-    /*
-    This method will add a new Master.
-     */
-    public void buttonAdd(ActionEvent event) {
-        Master master = new Master(textFieldID.getText(), textFieldUsername.getText(), textFieldFirstName.getText(), textFieldLastName.getText(), textFieldEmail.getText(), textFieldPassword.getText());
-        tableView.getItems().add(master);
+        try {
+            Connection connection = Database.getConnection();
+
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM user");
+
+            while (resultSet.next()) {
+                observableList.add(new User(
+                        resultSet.getInt("user_id"),
+                        resultSet.getString("username"),
+                        resultSet.getString("firstname"),
+                        resultSet.getString("lastname"),
+                        resultSet.getString("password"),
+                        resultSet.getString("email")
+                ));
+                tableView.setItems(observableList);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(MasterController.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        colID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        colFirstName.setCellValueFactory(new PropertyValueFactory<>("firstname"));
+        colLastName.setCellValueFactory(new PropertyValueFactory<>("lastname"));
+        colPassword.setCellValueFactory(new PropertyValueFactory<>("password"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+
     }
 
-    /*
-    This method will remove a selected Master.
+    /**
+     * Method to clear all information of the table
      */
-    public void buttonRemove(ActionEvent event) {
-        ObservableList<Master> allMaster, singleMaster;
-
-        // selects all Users and stores them in this variable
-        allMaster = tableView.getItems();
-
-        // get the selected column or row
-        singleMaster = tableView.getSelectionModel().getSelectedItems();
-
-        // the selected row(s) will be deleted from allMaster
-        singleMaster.forEach(allMaster::remove);
+    @FXML
+    public void buttonClearTable(ActionEvent event) {
+        tableView.getItems().clear();
     }
 
-    /*
-    This method will edit the selected field of the table
+    /**
+     * Method to populate the table with all users from the database.
      */
-    public void onEditChange(TableColumn.CellEditEvent<Master, String> userStringCellEditEvent) {
-        Master master = tableView.getSelectionModel().getSelectedItem();
-        master.setUsername(userStringCellEditEvent.getNewValue());
-        master.setUserFirstName(userStringCellEditEvent.getNewValue());
-        master.setUserLastName(userStringCellEditEvent.getNewValue());
-        master.setUserEmail(userStringCellEditEvent.getNewValue());
-        master.setUserPassword(userStringCellEditEvent.getNewValue());
+    @FXML
+    public void buttonPopulateTable(ActionEvent event) {
+        buttonClearTable(event);
+        loadData();
+    }
+
+    /**
+     * Method to display the add-a-user-dialog
+     * @param event
+     * @throws IOException
+     */
+    @FXML
+    public void buttonAddUser(ActionEvent event) throws IOException {
+        Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("DialogAddUser.fxml"));
+        Scene scene = new Scene(parent);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.show();
+    }
+
+    /**
+     * Method to reuse the add-a-user-dialog to edit user's information
+     * @param event
+     * @throws IOException
+     */
+    public void buttonUpdateUser(ActionEvent event) throws IOException {
+        User user = tableView.getSelectionModel().getSelectedItem();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DialogAddUser.fxml"));
+        Parent root = loader.load();
+
+        DialogAddUserController addUserController = loader.getController();
+        addUserController.setUpdate(true);
+        addUserController.setTextField(
+                user.getId(),
+                user.getUsername(),
+                user.getFirstname(),
+                user.getLastname(),
+                user.getPassword(),
+                user.getEmail()
+                );
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    /**
+     * Method to display the delete-a-user-dialog
+     * @param event
+     * @throws IOException
+     */
+    @FXML
+    public void buttonDeleteUser(ActionEvent event) throws IOException {
+        User user = tableView.getSelectionModel().getSelectedItem();
+
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DialogDeleteUser.fxml"));
+        Parent root = loader.load();
+
+        DialogDeleteUserController deleteUserController = loader.getController();
+        deleteUserController.setTextField(user.getId());
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    /**
+     * Button to logout. Will return to the login screen.
+     * @param event
+     * @throws IOException
+     */
+    @FXML
+    public void buttonLogout(ActionEvent event) throws IOException {
+        JavaFxUtil.sceneSwitcher("Login.fxml", logoutButton, 520, 580 );
     }
 }

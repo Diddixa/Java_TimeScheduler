@@ -1,10 +1,21 @@
 package controller;
 
+import models.Event;
+import models.Priority;
+import models.Reminder;
 import models.User;
 
+import java.io.*;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
+/**
+ * The database class deals with all queries on our Mysql DB, for better overview and reuasability
+ */
 public class Database {
+
     public static Connection databaseLink;
 
     public static Connection getConnection() {
@@ -25,6 +36,21 @@ public class Database {
         }
         return databaseLink;
     }
+
+    /**
+     * Close an existing connection to the database. Functions is used to avoid max_user in sql
+     */
+    public static void closeDatabase() {
+        try {
+            if (databaseLink != null) {
+                databaseLink.close();
+                databaseLink = null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Fetch user data from database. This is only called by other user related DB
@@ -69,6 +95,41 @@ public class Database {
     }
 
     /**
+     * Query a username and return the corresponding User object from its table
+     * entry. Used to search the user table.
+     *
+     * @param key - String of username or Int of userid
+     * @return User object on successful query, else <code>null</code>
+     */
+
+    public static <S> User getUser(S key) throws SQLException {
+        Connection connection = getConnection();
+
+        ResultSet result = fetchUserData(connection, key);
+        if (result == null) {
+            return null;
+        }
+
+        try {
+            int id = result.getInt("user_id");
+            String username = result.getString("username");
+            String email = result.getString("email");
+            String firstname = result.getString("firstname");
+            String lastname = result.getString("lastname");
+
+            ArrayList<Event> events = getEventsFromUser(id);
+            User user = new User(id, username, firstname, lastname, email, events);
+
+            System.out.println("Fetched user.");
+            closeDatabase();
+            return user;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Function to create a new user in the database, used for registration and for the admin
      * @param user
      */
@@ -87,6 +148,65 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
             e.getCause();
+        }
+    }
+
+    /**
+     * Edits a user in the database with the parameter user.
+     *
+     * @param user This user's attribute values are taken to edit the user in the DB
+     *             with the same id
+     *
+     * @return <code>true</code>, if successful
+     */
+    public static boolean editUser(User user, int user_id) {
+        String sql = "UPDATE user SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
+
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+        try {
+            PreparedStatement edit = connectDB.prepareStatement(sql);
+            edit.setString(1, user.getFirstname());
+            edit.setString(2, user.getLastname());
+            edit.setString(3, user.getUsername());
+            edit.setString(4, user.getEmail());
+            edit.setString(5, user.getPassword());
+            edit.setInt(6, user_id);
+
+            edit.executeUpdate();
+            edit.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        System.out.println("Updated user.");
+        return true;
+    }
+
+    /** Delete user in the user table and user's corresponding entries
+     in table Location and table user_Events.
+     @param id - id of user to delete
+     @return true if deletion was successful
+     */
+
+    public static boolean deleteUser(int id) {
+        String sql =" DELETE FROM user WHERE user_id = ?";
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+
+        System.out.println("User Id: " + id);
+
+        try {
+            PreparedStatement delete = connectDB.prepareStatement(sql);
+            delete.setInt(1,id);
+            delete.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
@@ -137,5 +257,306 @@ public class Database {
         return 10;
     }
 
-}
+    /**
+     * Check if username or email is already taken.
+     *
+     * @param user - User data
+     * @return true if user data is available
+     */
+    public static boolean isTaken(User user) {
+        String sql = "SELECT * FROM user WHERE username = ? OR email=?";
 
+        Connection connection = getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getEmail());
+
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                if (result.getInt("user_id") != user.getId()) {
+                    return false;
+                }
+            }
+            statement.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+    }
+
+    /**
+     * Create table entry of new event in database.
+     *
+     * @param event Object of new entry.
+     * @return event ID on successful creation, return -1 on failed creation
+     */
+    public static int storeEvent(Event event) {
+        String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection connection = getConnection();
+        int eventId;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1, event.getEventHostId());
+            statement.setString(2, event.getName());
+            statement.setDate(3, Date.valueOf(event.getDate()));
+            statement.setTime(4, Time.valueOf(event.getStartTime()));
+            statement.setTime(5, Time.valueOf(event.getEndTime()));
+            statement.setString(6, event.getLocation());
+            statement.setString(7, event.getReminder().name());
+            statement.setString(8, event.getPriority().name());
+
+            statement.executeUpdate();
+
+            ResultSet generatedKey = statement.getGeneratedKeys();
+
+            if (generatedKey.next()) {
+                eventId = generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Creating user failed, no ID obtained.");
+            }
+
+            statement.close();
+            closeDatabase();
+
+            return eventId;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    /**
+     * Creates an entry in the User_Event table in the Database.
+     *
+     * @param userId the user id of the according user
+     * @param eventId the event id of the according event
+     * @return true when insertion was successful, false when insertion had an
+     *         exception.
+     */
+    public static boolean createUserEvents(int userId, int eventId) {
+        String sql = "INSERT INTO user_Events (user_id , event_id) " + "VALUES(?, ?)";
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, eventId);
+
+            ps.executeUpdate();
+
+            ps.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
+    /**
+     * Gets all events from User with help of the userId.
+     *
+     * @param userId is used to find the relative data
+     * @return a list of the events the user is in
+     */
+    public static ArrayList<Event> getEventsFromUser(int userId) {
+        String sql = "SELECT * FROM events " + "LEFT JOIN user_Events " + "ON user_Events.event_id = events.events_id "
+                + "WHERE user_Events.user_id = ?";
+
+        Connection connection = getConnection();
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int eventId = rs.getInt("event_id");
+                String name = rs.getString("name");
+                LocalDate date = rs.getDate("date").toLocalDate();
+                LocalTime startTime = rs.getTime("startTime").toLocalTime();
+                LocalTime endTime = rs.getTime("endTime").toLocalTime();
+                String location = rs.getString("location");
+                Reminder reminder = Enum.valueOf(Reminder.class, rs.getString("reminder"));
+                Priority priority = Enum.valueOf(Priority.class, rs.getString("priority"));
+                ArrayList<File> attachments = getAttachmentsFromEvent(eventId);
+                int host_id = rs.getInt("eventhost_id");
+
+                Event event = new Event(eventId, name, date, startTime, endTime, location, getParticipants(eventId), priority, reminder);
+
+                event.setId(eventId);
+                event.setEventHostId(host_id);
+                event.setAttachments(attachments);
+                events.add(event);
+            }
+
+            rs.close();
+            ps.close();
+            return events;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * Gets a list of participants for an event.
+     *
+     * @param eventId eventid of the event you want the participants from
+     * @return the participants
+     */
+    private static ArrayList<User> getParticipants(int eventId) {
+        String queryParticipants = "SELECT * FROM user " + "LEFT JOIN user_Events "
+                + "ON user_Events.user_id = user.user_id WHERE user_Events.event_id = ? ";
+
+        Connection connection = getConnection();
+        ArrayList<User> participants = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(queryParticipants);
+            ps.setInt(1, eventId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                User user = new User(rs.getInt("user_id"), rs.getString("username"), rs.getString("firstname"),
+                        rs.getString("lastName"), rs.getString("email"));
+
+                participants.add(user);
+            }
+            rs.close();
+            ps.close();
+            return participants;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Adds attachment entry into the Database.
+     *
+     * @param file File to be uploaded into the database
+     * @param event Event that the file belongs to
+     * @return -1 on failed creation, ID on successful creation
+     */
+    public static int storeAttachment(File file, Event event) {
+        String sql = "INSERT INTO attachments (attachment, eventID, attachmentName) VALUES ( ? , ? , ? )";
+        Connection connection = getConnection();
+        int attachmentId = -1;
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql , Statement.RETURN_GENERATED_KEYS);
+            FileInputStream input = new FileInputStream(file);
+            ps.setBinaryStream(1 , input);
+            ps.setInt(2 , event.getId());
+            ps.setString(3, file.getName());
+
+            ps.executeUpdate();
+            ResultSet generatedKey = ps.getGeneratedKeys();
+
+            if (generatedKey.next()) {
+                attachmentId = generatedKey.getInt(1);
+            } else {
+                throw new SQLException("Couldn't store attachment.");
+            }
+
+            input.close();
+            ps.close();
+            closeDatabase();
+            System.out.println("Attachment stored.");
+            return attachmentId;
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            closeDatabase();
+            return attachmentId;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return attachmentId;
+        }
+    }
+
+    /**
+     * Gets the Attachments out of the Database.
+     *
+     * @param eventId Id of an event from which the attachments should be returned
+     * @return List of files
+     */
+    public static ArrayList<File> getAttachmentsFromEvent(int eventId){
+        String sql = "SELECT * FROM Attachment WHERE event_id = ?";
+        Connection connection = getConnection();
+        ArrayList<File> files = new ArrayList<>();
+        InputStream input = null;
+        FileOutputStream output = null;
+
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1 ,  eventId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                File tempFile = new File(rs.getString("name"));
+                output = new FileOutputStream(tempFile);
+                input = rs.getBinaryStream("file");
+
+                byte[] buffer = new byte[4096];
+                while (input.read(buffer) > 0){
+                    output.write(buffer);
+                }
+
+                files.add(tempFile);
+
+                input.close();
+                output.close();
+            }
+
+
+            return files;
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    /**
+     * Delete all Attachment entries in the Database.
+     *
+     * @param eventId Event which the entries should be deleted from.
+     */
+    public static void deleteAllAttachments(int eventId){
+        String sql = "DELETE FROM Attachment WHERE event_id = ?";
+
+        Connection connection = getConnection();
+
+        try{
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt( 1, eventId);
+
+            ps.executeUpdate();
+
+            ps.close();
+            closeDatabase();
+        } catch(SQLException e){
+            e.printStackTrace();
+            closeDatabase();
+        }
+    }
+
+
+}
