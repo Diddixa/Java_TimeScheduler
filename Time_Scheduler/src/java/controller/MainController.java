@@ -134,12 +134,13 @@ public class MainController implements Initializable  {
                ScheduleEventController controller = loader.getController();
                controller.retrieveUser(this.user); // currently logged in user
             }
-            else if(Objects.equals(page, "page2")){
+            else if(Objects.equals(page, "page3")){
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
                 root = loader.load();
-                CalendarController controller = loader.getController();
-                controller.retrieveUser(this.user); // currently logged in user
+                EditProfileController editController = loader.getController();
+                editController.retrieveUser(this.user); // currently logged in user
+                editController.loadUserData();
             }
 
         } catch (IOException e) {
