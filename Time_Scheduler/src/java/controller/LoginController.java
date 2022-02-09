@@ -65,10 +65,14 @@ public class LoginController implements Initializable {
 
             JavaFxUtil.sceneSwitcher("Master.fxml", signUpButton, 950, 600);
         }
-
+        if(usernameTxt.getText().isBlank() || enterPassword.getText().isBlank()){
+            loginMsgLabel.setTextFill(Color.RED);
+            loginMsgLabel.setText("*either username or password is missing");
+        }
+        else{
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
             try {
-                if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
+                if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText())) {
 
                     User currentUser = Database.getUser(usernameTxt.getText());
 
@@ -91,7 +95,7 @@ public class LoginController implements Initializable {
                 catch(SQLException sqlException){
                 sqlException.printStackTrace();}
             }
-            }
+            }}
 
 
     /**

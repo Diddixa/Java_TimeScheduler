@@ -56,7 +56,7 @@ public class MainController implements Initializable  {
 
         this.user  = user;
         username.setText(this.user.getUsername());
-        firstLastName.setText(this.user.getFirstname() + " " + this.user.getLastname());
+        //firstLastName.setText(this.user.getFirstname() + " " + this.user.getLastname());
     }
 
     @FXML
@@ -64,7 +64,7 @@ public class MainController implements Initializable  {
 
     @FXML
     void loadEvents(ActionEvent event) {
-        this.user.updateEventList();
+       // this.user.updateEventList();
         List<Event> events = new ArrayList<>(user.getEvents());
 
 /*
