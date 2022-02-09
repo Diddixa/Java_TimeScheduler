@@ -80,6 +80,7 @@ public class LoginController implements Initializable {
                     loader.setLocation(getClass().getClassLoader().getResource("Dashboard1.fxml"));
                     Parent root = loader.load();
                     Scene scene = new Scene(root, 950, 600);
+                    scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
                     MainController controller = loader.getController();
                     controller.retrieveUser(currentUser);
 

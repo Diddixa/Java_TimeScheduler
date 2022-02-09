@@ -34,15 +34,43 @@
     -fx-font-size: 24px;
 }
 
+/* USER VIEW */
+.user-sidebar .button {
+    -fx-background-color: #AA336A;
+}
+.user-sidebar .button:hover {
+	-fx-border-color: #fffafb99;
+    -fx-border-width: 0 0 0 2px;
+    -fx-border-style: solid;
+}
+.user-sidebar .button:focused{
+    -fx-background-color: #CC3D80;
+	-fx-border-color: #FFFAFB;
+    -fx-border-width: 0 0 0 2px;
+    -fx-border-style: solid;
+}
+.user-sidebar .button:hover .text,
+.user-sidebar .button:hover .image-view,
+.user-sidebar .button:focused .text,
+.user-sidebar .button:focused .image-view {
+	-fx-translate-x: -2px;
+}
 
 /* ADMIN VIEW */
+.admin-topbar .button {
+	-fx-font-weight: 700;
+    -fx-font-size: 14px;
+}
 .admin-topbar .button:hover {
-	-fx-border-color: white;
+	-fx-border-color: #FFFAFB;
     -fx-border-width: 2px 0 0 0;
     -fx-border-style: solid;
 }
-.admin-topbar .button:hover .text{
+.admin-topbar .button:hover .image-view {
 	-fx-translate-y: -1px;
+}
+.admin-topbar .button:hover .text {
+	-fx-translate-y: -2px;
 }
 
 .table-view {

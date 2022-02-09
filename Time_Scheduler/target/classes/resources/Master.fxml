@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -14,42 +16,92 @@
     <top>
         <HBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="950.0" style="-fx-background-color: #AA336A;" styleClass="admin-topbar" BorderPane.alignment="TOP_LEFT">
             <children>
-                <Button mnemonicParsing="false" onAction="#buttonPopulateTable" prefHeight="50.0" prefWidth="150.0" text="Refresh" textFill="WHITE">
+                <Button graphicTextGap="10.0" mnemonicParsing="false" onAction="#buttonPopulateTable" prefHeight="50.0" prefWidth="150.0" text="Refresh" textFill="WHITE">
                     <font>
                         <Font name="Roboto Medium" size="16.0" />
                     </font>
                     <cursor>
                         <Cursor fx:constant="HAND" />
-                    </cursor></Button>
-                <Button mnemonicParsing="false" onAction="#buttonDeleteUser" prefHeight="50.0" prefWidth="150.0" text="Remove user" textFill="WHITE">
-                    <font>
-                        <Font name="Roboto Medium" size="16.0" />
-                    </font>
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor></Button>
-            <Button mnemonicParsing="false" onAction="#buttonAddUser" prefHeight="50.0" prefWidth="150.0" text="Add user" textFill="WHITE">
+                    </cursor>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/refresh.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button graphicTextGap="10.0" mnemonicParsing="false" onAction="#buttonAddUser" prefHeight="50.0" prefWidth="150.0" text="Add user" textFill="WHITE">
                <font>
                   <Font name="Roboto Medium" size="16.0" />
                </font>
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/add-user.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-                <Button mnemonicParsing="false" onAction="#buttonClearTable" prefHeight="50.0" prefWidth="150.0" text="Clear tables" textAlignment="CENTER" textFill="WHITE">
+            <Button graphicTextGap="10.0" mnemonicParsing="false" onAction="#buttonUpdateUser" prefHeight="50.0" prefWidth="150.0" text="Update user" textFill="WHITE">
+               <font>
+                  <Font name="Roboto Medium" size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/user_settings.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+                <Button graphicTextGap="10.0" mnemonicParsing="false" onAction="#buttonDeleteUser" prefHeight="50.0" prefWidth="150.0" text="Remove user" textFill="WHITE">
                     <font>
                         <Font name="Roboto Medium" size="16.0" />
                     </font>
                     <cursor>
                         <Cursor fx:constant="HAND" />
-                    </cursor></Button>
-                <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#buttonLogout" prefHeight="50.0" prefWidth="150.0" text="Logout" textFill="WHITE">
+                    </cursor>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/remove-user.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+                <Button graphicTextGap="10.0" mnemonicParsing="false" onAction="#buttonClearTable" prefHeight="50.0" prefWidth="150.0" text="Clear tables" textAlignment="CENTER" textFill="WHITE">
                     <font>
                         <Font name="Roboto Medium" size="16.0" />
                     </font>
                     <cursor>
                         <Cursor fx:constant="HAND" />
-                    </cursor></Button>
+                    </cursor>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/trash.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+                <Button fx:id="logoutButton" graphicTextGap="10.0" mnemonicParsing="false" onAction="#buttonLogout" prefHeight="50.0" prefWidth="150.0" text="Logout" textFill="WHITE">
+                    <font>
+                        <Font name="Roboto Medium" size="16.0" />
+                    </font>
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../images/logout.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
             </children>
             <BorderPane.margin>
                 <Insets />
@@ -65,11 +117,11 @@
                 <TableView fx:id="tableView" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="950.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                         <TableColumn fx:id="colID" maxWidth="50.0" prefWidth="40.0" text="ID" />
-                        <TableColumn fx:id="colUsername" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Username" />
-                        <TableColumn fx:id="colFirstName" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="First Name" />
-                        <TableColumn fx:id="colLastName" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Last Name" />
-                        <TableColumn fx:id="colPassword" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Password" />
-                        <TableColumn fx:id="colEmail" maxWidth="200.0" onEditCommit="#onEditChange" prefWidth="160.0" text="Email Address" />
+                        <TableColumn fx:id="colUsername" maxWidth="200.0" prefWidth="160.0" text="Username" />
+                        <TableColumn fx:id="colFirstName" maxWidth="200.0" prefWidth="160.0" text="First Name" />
+                        <TableColumn fx:id="colLastName" maxWidth="200.0" prefWidth="160.0" text="Last Name" />
+                        <TableColumn fx:id="colPassword" maxWidth="200.0" prefWidth="160.0" text="Password" />
+                        <TableColumn fx:id="colEmail" maxWidth="200.0" prefWidth="160.0" text="Email Address" />
                     </columns>
                 </TableView>
             </children>

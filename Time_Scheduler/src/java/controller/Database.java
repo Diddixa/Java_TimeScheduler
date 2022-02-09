@@ -162,8 +162,8 @@ public class Database {
      *
      * @return <code>true</code>, if successful
      */
-    public static boolean editUser(User user) {
-        String sql = "UPDATE User SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
+    public static boolean editUser(User user, int user_id) {
+        String sql = "UPDATE user SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
 
         Database connectNow = new Database();
         Connection connectDB = connectNow.getConnection();
@@ -174,6 +174,7 @@ public class Database {
             edit.setString(3, user.getUsername());
             edit.setString(4, user.getEmail());
             edit.setString(5, user.getPassword());
+            edit.setInt(6, user_id);
 
             edit.executeUpdate();
             edit.close();
