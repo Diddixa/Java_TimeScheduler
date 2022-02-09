@@ -131,5 +131,10 @@
             <Font name="Arial Black" size="12.0" />
          </font>
       </Label>
+      <Label fx:id="checkTime" layoutX="58.0" layoutY="369.0" prefHeight="17.0" prefWidth="217.0" textFill="#d90606">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

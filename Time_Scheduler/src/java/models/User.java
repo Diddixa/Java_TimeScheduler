@@ -76,6 +76,14 @@ public class User {
         this.id = id;
     }
 
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(ArrayList<Event> events) {
+        this.events = events;
+    }
+
     public User(String username, String firstname, String lastname, String password, String email) {
         this.username = username;
         this.firstname = firstname;
@@ -110,16 +118,6 @@ public class User {
         this.email = email;
     }
 
-
-
-    public ArrayList<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(ArrayList<Event> events) {
-        this.events = events;
-    }
-
     /**
      * Copy constructor used to edit the user
      *
@@ -136,8 +134,8 @@ public class User {
     }
 
     /**
-     * Add new event to event list
-     *
+     * Used when a participant is added to an event
+     * to avoid redundancies a new entry in event won't be added instead into our user_Events table
      * @param event - Newly created event
      */
     private void addEvent(Event event) {
@@ -158,7 +156,7 @@ public class User {
         event.getAttachments().forEach(e -> Database.storeAttachment(e, event));
         this.addEvent(event);
 
-        for (User participant : event.getParticipants()) {
+        for (User participant : event.getParticipants()) {//loop through participant list
             if (participant == this) continue;
             participant.addEvent(event);
         }

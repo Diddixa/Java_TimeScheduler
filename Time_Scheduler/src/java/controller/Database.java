@@ -12,7 +12,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
- * The database class deals with all queries on our Mysql DB, for better overview and reuasability
+ * The database class deals with all queries on our Mysql DB, for better overview and reusability
  */
 public class Database {
 
@@ -53,11 +53,11 @@ public class Database {
 
 
     /**
-     * Fetch user data from database. This is only called by other user related DB
+     * fetch user data from DB (only user data no events or participants)
      * functions.
      *
      * @param connection - SQL jdbc connection object, connection to DB
-     * @param key        - used to find a certain user ()
+     * @param key        - used to find a certain user
      * @return SQL result of data entry or <code>null</code> if user doesn't exist
      */
     private static <S> ResultSet fetchUserData(Connection connection, S key) throws SQLException {
@@ -83,7 +83,7 @@ public class Database {
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
-                System.out.println("Successful");
+                System.out.println("User data fetched");
                 return result;
             }
             return null;
@@ -107,6 +107,7 @@ public class Database {
 
         ResultSet result = fetchUserData(connection, key);
         if (result == null) {
+            closeDatabase();
             return null;
         }
 
@@ -125,6 +126,7 @@ public class Database {
             return user;
         } catch (SQLException e) {
             e.printStackTrace();
+            closeDatabase();
             return null;
         }
     }
@@ -144,10 +146,11 @@ public class Database {
         try {
             Statement statement = connectDB.createStatement();
             statement.executeUpdate(InsertRegister);
-
+            closeDatabase();
         } catch (Exception e) {
             e.printStackTrace();
             e.getCause();
+            closeDatabase();
         }
     }
 
@@ -202,9 +205,11 @@ public class Database {
             PreparedStatement delete = connectDB.prepareStatement(sql);
             delete.setInt(1,id);
             delete.executeUpdate();
+            closeDatabase();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            closeDatabase();
             return false;
         }
     }
@@ -218,42 +223,37 @@ public class Database {
      * @throws SQLException
      */
 
-    public static int confirmLogin(String username, String password) throws SQLException {
+    public static boolean confirmLogin(String username, String password) throws SQLException {
 
-        Database connectNow = new Database();
-        Connection connectDB = connectNow.getConnection();
+        // Database connectNow = new Database();
+        Connection connectDB = getConnection();
         ResultSet userData = fetchUserData(connectDB, username);
 
         if(userData == null)
         {
             System.out.println("No user found");
-            return 0;
+            return false;
         }
 
         String hash;
         hash = userData.getString("password");
         String pwd_encrypted = PasswordEncryption.verify(password, hash);
 
-        String verifyLogin = "SELECT count(1) FROM user WHERE username = '" + username + "' AND password = '" + pwd_encrypted + "'";
+        String verifyLogin = "SELECT * FROM user WHERE username = ? AND password = ? ";
 
-        try{
-            Statement statement = connectDB.createStatement();
-            ResultSet queryResult = statement.executeQuery(verifyLogin);
+        PreparedStatement statement = connectDB.prepareStatement(verifyLogin);
 
-            while(queryResult.next()){
-                if(queryResult.getInt(1) == 1){ //if field 1 is equal to 1 the actual label is used
-                    return 1;
-                } else
-                {
-                    return 0;
-                }
-            }
+        statement.setString(1, username);
+        statement.setString(2, pwd_encrypted);
 
-        }catch (Exception e){
-            e.printStackTrace();
-            e.getCause();
-        }
-        return 10;
+        ResultSet result = statement.executeQuery();
+
+        Boolean res = result.next(); //returns the boolean value
+        statement.close(); //close preparedstatement for good practice
+
+
+        System.out.println("user successfully found");
+        return res;
     }
 
     /**
@@ -278,11 +278,11 @@ public class Database {
                 }
             }
             statement.close();
-
+            closeDatabase();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-
+            closeDatabase();
             return false;
         }
 
@@ -329,6 +329,7 @@ public class Database {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            closeDatabase();
             return -1;
         }
     }
@@ -353,11 +354,11 @@ public class Database {
             ps.executeUpdate();
 
             ps.close();
-
+            closeDatabase();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-
+            closeDatabase();
             return false;
         }
     }
@@ -406,9 +407,103 @@ public class Database {
             return events;
         } catch (SQLException e) {
             e.printStackTrace();
+            closeDatabase();
             return null;
         }
 
+    }
+
+    /**
+     * Edits the event.
+     *
+     * @param event new event object which the Database should be adjusted for
+     * @return true, if successful
+     */
+    public static boolean editEvent(Event event) {
+        String sql = "UPDATE Event SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  host_id = ? "
+                + "WHERE event_id = ? ";
+
+        Database connectNow = new Database();
+        Connection connection = connectNow.getConnection();
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+
+            ps.setString(1,event.getName());
+            ps.setString(2, event.getReminder().name());
+            ps.setString(3, event.getPriority().name());
+            ps.setDate(4,Date.valueOf(event.getDate()));
+            ps.setTime(5,Time.valueOf(event.getStartTime()));
+            ps.setTime(6, Time.valueOf(event.getEndTime()));
+            ps.setString(7,event.getLocation());
+            ps.setInt(8,event.getEventHostId());
+            ps.setInt(9, event.getId());
+
+            ps.executeUpdate();
+            ps.close();
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            e.getErrorCode();
+
+            return false;
+        }
+    }
+
+    /**
+     * Delete table entry in Event.
+     *
+     * @param eventId the event id of the event to be deleted
+     * @return true when deletion is successful, false when deletion is unsuccessful
+     */
+    public static boolean deleteEvent(int eventId) {
+        String sql = "DELETE FROM events WHERE events_id = ?";
+        Connection connection = getConnection();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, eventId);
+
+            ps.executeUpdate();
+
+            ps.close();
+
+            closeDatabase();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            closeDatabase();
+            return false;
+        }
+    }
+
+    /**
+     * Delete table entry in the User_Event & therefore remove the connection
+     * between the User & Event.
+     *
+     * @param userId  User that should be removed from the event
+     * @param eventId Event that the User should be removed from
+     * @return true on success, false on failure.
+     */
+    public static boolean deleteUserEventBridge(int userId, int eventId) {
+        String sql;
+        Connection connection = getConnection();
+        sql = "DELETE FROM user_Events WHERE user_id = ? AND event_id = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, eventId);
+
+            ps.executeUpdate();
+            closeDatabase();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            closeDatabase();
+            return false;
+        }
     }
 
 
@@ -513,7 +608,7 @@ public class Database {
                 output = new FileOutputStream(tempFile);
                 input = rs.getBinaryStream("file");
 
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[1024];
                 while (input.read(buffer) > 0){
                     output.write(buffer);
                 }
