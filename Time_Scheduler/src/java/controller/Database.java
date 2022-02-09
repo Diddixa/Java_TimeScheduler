@@ -182,6 +182,40 @@ public class Database {
         }
     }
 
+    /**
+     * Edits a user in the database with the parameter user.
+     *
+     * @param user This user's attribute values are taken to edit the user in the DB
+     *             with the same id
+     *
+     * @return <code>true</code>, if successful
+     */
+    public static boolean editProfile(User user) {
+        String sql = "UPDATE user SET firstname = ?, lastname = ?, username = ?, email = ? WHERE user_id = ?";
+
+        Database connectNow = new Database();
+        Connection connectDB = connectNow.getConnection();
+        try {
+            PreparedStatement edit = connectDB.prepareStatement(sql);
+            edit.setString(1, user.getFirstname());
+            edit.setString(2, user.getLastname());
+            edit.setString(3, user.getUsername());
+            edit.setString(4, user.getEmail());
+            edit.setInt(5, user.getId());
+
+            edit.executeUpdate();
+            edit.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        System.out.println("Updated user.");
+        return true;
+    }
+
     public static boolean confirmLogin(String username, String password) throws SQLException {
         Connection connectDB = getConnection();
         ResultSet userData = fetchUserData(connectDB, username);
@@ -437,7 +471,7 @@ public class Database {
     }
 
     public static ArrayList<File> getAttachmentsFromEvent(int eventId) {
-        String sql = "SELECT * FROM Attachment WHERE event_id = ?";
+        String sql = "SELECT * FROM attachments WHERE event_id = ?";
         Connection connection = getConnection();
         ArrayList<File> files = new ArrayList();
         InputStream input = null;
