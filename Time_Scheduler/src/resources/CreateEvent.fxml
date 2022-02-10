@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.calendarfx.view.TimeField?>
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="699.0" style="-fx-background-color: ffff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ScheduleEventController">
+<AnchorPane id="event" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="699.0" style="-fx-background-color: ffff;" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateEventController">
    <children>
       <Pane layoutY="8.0" prefHeight="103.0" prefWidth="699.0" style="-fx-background-color: AA336A;">
          <children>
@@ -67,20 +68,32 @@
             <Font name="Arial Black" size="20.0" />
          </font>
       </Label>
-      <Button fx:id="highButton" layoutX="577.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#high" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: #e41515; -fx-cursor: hand;" text="High">
+      <Button fx:id="highButton" layoutX="577.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#high" prefHeight="36.0" prefWidth="76.0" style="-fx-cursor: hand;" text="High">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font>
+         <styleClass>
+            <String fx:value="button-priority" />
+            <String fx:value="button-priority-high" />
+         </styleClass>
       </Button>
-      <Button fx:id="mediumButton" layoutX="483.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#medium" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: yellow; -fx-cursor: hand;" text="medium">
+      <Button fx:id="mediumButton" layoutX="483.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#medium" prefHeight="36.0" prefWidth="76.0" style="-fx-cursor: hand;" text="medium">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font>
+         <styleClass>
+            <String fx:value="button-priority" />
+            <String fx:value="button-priority-medium" />
+         </styleClass>
       </Button>
-      <Button fx:id="lowButton" layoutX="386.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#low" prefHeight="36.0" prefWidth="76.0" style="-fx-background-color: green; -fx-cursor: hand;" text="low">
+      <Button fx:id="lowButton" layoutX="386.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#low" prefHeight="36.0" prefWidth="76.0" style="-fx-cursor: hand;" text="low">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font>
+         <styleClass>
+            <String fx:value="button-priority" />
+            <String fx:value="button-priority-low" />
+         </styleClass>
       </Button>
       <TextField fx:id="participant" layoutX="58.0" layoutY="539.0" prefHeight="30.0" prefWidth="242.0" promptText="Participant" style="-fx-background-color: #eeeeee;" />
       <Button layoutX="300.0" layoutY="536.0" mnemonicParsing="false" onAction="#addParticipant" prefHeight="25.0" prefWidth="51.0" style="-fx-cursor: hand; -fx-background-color: ffff;">

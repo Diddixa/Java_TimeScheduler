@@ -26,7 +26,7 @@ import java.time.LocalDate;
 /**
  * Controller used to create an event references FXML file page1
  */
-public class ScheduleEventController implements Initializable {
+public class CreateEventController implements Initializable {
 
 
     @FXML

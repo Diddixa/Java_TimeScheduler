@@ -1,24 +1,28 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import models.Event;
-import models.Priority;
 import models.User;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -66,50 +70,23 @@ public class MainController implements Initializable  {
     private Label eventName;
 
     @FXML
-    void loadEvents(ActionEvent event) {
-        //this.user.updateEventList();
-        List<Event> events = new ArrayList<>(user.getEvents());
-
-/*
-        for(int i = 0; i < events.size(); i++)
-        {
-            Priority prio = events.get(i).getPriority();
-
-            switch(prio){
-                case Priority.HIGH:  break;
-                case Priority.MEDIUM:
-
-
-            }
-
-            eventName.setText(events.get(i).getName());
-            eventName.setText(events.get(i).getLocation());
-        }
-        eventName.setText(events.get(4).getName()); */
-
-        // if(hostid == userID)
-
-    }
-
-
-    @FXML
     void home(MouseEvent event) {
         bp.setCenter(ap);
     }
 
     @FXML
-    void page1(MouseEvent event) throws IOException {
-        loadingPage("page1");
+    void CreateEvent(MouseEvent event) throws IOException {
+        loadingPage("CreateEvent");
     }
 
     @FXML
-    void page2(MouseEvent event) throws IOException {
-        loadingPage("page2");
+    void EventSchedule(MouseEvent event) throws IOException {
+        loadingPage("EventSchedule");
     }
 
     @FXML
-    void page3(MouseEvent event) throws IOException {
-        loadingPage("page3");
+    void editProfile(MouseEvent event) throws IOException {
+        loadingPage("editProfile");
     }
 
     public void logoutToLogin(ActionEvent e) throws IOException {
@@ -129,15 +106,23 @@ public class MainController implements Initializable  {
         Parent root = null;
 
         try {
-            if(Objects.equals(page, "page1"))
+            if(Objects.equals(page, "CreateEvent"))
             {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
                 root = loader.load();
-               ScheduleEventController controller = loader.getController();
+               CreateEventController controller = loader.getController();
                controller.retrieveUser(this.user); // currently logged in user
             }
-            else if(Objects.equals(page, "page3")){
+            else if(Objects.equals(page, "EventSchedule")){
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
+                root = loader.load();
+                EventScheduleController EventSchedule = loader.getController();
+                EventSchedule.retrieveUser(this.user); // currently logged in user
+                EventSchedule.loadEvents();
+            }
+            else if(Objects.equals(page, "editProfile")){
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
                 root = loader.load();
@@ -176,9 +161,11 @@ public class MainController implements Initializable  {
         thread.start();
     }
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-    timeNow();
-}
+        timeNow();
+    }
 
 }
