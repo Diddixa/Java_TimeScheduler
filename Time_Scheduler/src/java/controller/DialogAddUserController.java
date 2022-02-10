@@ -27,6 +27,7 @@ public class DialogAddUserController {
 
     int userID;
     private boolean update;
+    String oldPassword;
 
     /**
      * Creates a new user when all needed information are entered and clicked on the confirm button.
@@ -37,7 +38,7 @@ public class DialogAddUserController {
         String username = textFieldUsername.getText();
         String firstName = textFieldFirstname.getText();
         String lastName = textFieldLastname.getText();
-        String password = PasswordEncryption.createHash(textFieldPassword.getText());
+        String password = textFieldPassword.getText();
         String email = textFieldEmail.getText();
         User user = new User(
                 username,
@@ -73,6 +74,8 @@ public class DialogAddUserController {
      */
     public void getQuery(User user) {
         if(update == false) {
+            String password = PasswordEncryption.createHash(textFieldPassword.getText());
+            user.setPassword(password);
             Database.registerUser(user);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -85,7 +88,16 @@ public class DialogAddUserController {
             System.out.println("Create User: " + user.getId());
         }
         else {
-            Database.editUser(user, userID);
+            if(!oldPassword.equals(textFieldPassword.getText())) {
+                String password = PasswordEncryption.createHash(textFieldPassword.getText());
+                user.setPassword(password);
+                Database.editUser(user, userID);
+                System.out.println("New Password");
+            }
+            else {
+                Database.editUser(user, userID);
+                System.out.println("Old Password");
+            }
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("User information updated!");
@@ -109,13 +121,17 @@ public class DialogAddUserController {
         textFieldEmail.setText(email);
     }
 
+    public String getOldPassword(String password) {
+        oldPassword = password;
+        return oldPassword;
+    }
+
     /**
      * Boolean to switch to update mode
      * @param b
      */
     void setUpdate(boolean b) {
         this.update = b;
-
     }
 
     /**

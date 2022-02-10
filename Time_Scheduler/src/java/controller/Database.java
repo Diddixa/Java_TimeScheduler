@@ -168,7 +168,11 @@ import models.User;
 
     /**
      * Edits a user in the database with the parameter user.
-     * @param user This user's attribute values are taken to edit the user in the DB with the same id
+     *
+     * @param user This user's attribute values are taken to edit the user in the DB
+     *             with the same id
+     * @param user_id
+     *
      * @return <code>true</code>, if successful
      */
     public static boolean editUser(User user, int user_id) {

@@ -224,6 +224,4 @@ public class Event {
 
         Database.editEvent(this);
     }
-
-
 }

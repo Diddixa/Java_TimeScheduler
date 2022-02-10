@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.User;
@@ -132,6 +131,7 @@ public class MasterController implements Initializable {
      */
     public void buttonUpdateUser(ActionEvent event) throws IOException {
         User user = tableView.getSelectionModel().getSelectedItem();
+        handleNoUserSelected(user);
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DialogAddUser.fxml"));
         Parent root = loader.load();
@@ -146,9 +146,11 @@ public class MasterController implements Initializable {
                 user.getPassword(),
                 user.getEmail()
                 );
+        addUserController.getOldPassword(user.getPassword());
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
     }
 
@@ -160,6 +162,7 @@ public class MasterController implements Initializable {
     @FXML
     public void buttonDeleteUser(ActionEvent event) throws IOException {
         User user = tableView.getSelectionModel().getSelectedItem();
+        handleNoUserSelected(user);
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("DialogDeleteUser.fxml"));
         Parent root = loader.load();
@@ -169,6 +172,8 @@ public class MasterController implements Initializable {
 
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        root.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
     }
 
@@ -180,5 +185,17 @@ public class MasterController implements Initializable {
     @FXML
     public void buttonLogout(ActionEvent event) throws IOException {
         JavaFxUtil.sceneSwitcher("Login.fxml", logoutButton, 520, 580 );
+    }
+
+    void handleNoUserSelected(User user) throws IOException {
+        if(user == null) {
+            Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("DialogWarning.fxml"));
+            Scene scene = new Scene(parent);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+        }
     }
 }
