@@ -1,5 +1,7 @@
 package models;
 
+import controller.Database;
+
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -36,8 +38,9 @@ public class Event {
      * Event host id of event
      */
     private int eventHostId;
-    /*** List of participants of an event*/
+    /** List of participants of an event*/
     private ArrayList<User> participants;
+    /** List of attachments */
     private ArrayList<File> attachments;
     /** Priority of event*/
     private Priority priority;
@@ -177,5 +180,24 @@ public class Event {
         this.reminder = reminder;
         this.attachments = attachments;
     }
+
+    /**
+     * method to edit the event information
+     * @param other - Event to be copied from
+     */
+    public void editEvent(Event other) {
+        name = other.name;
+        date = other.date;
+        startTime = other.startTime;
+        endTime = other.endTime;
+        location = other.location;
+        participants = other.participants;
+        priority = other.priority;
+        attachments = other.attachments;
+        reminder = other.reminder;
+
+        Database.editEvent(this);
+    }
+
 
 }

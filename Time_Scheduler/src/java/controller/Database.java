@@ -26,27 +26,37 @@ import models.Priority;
 import models.Reminder;
 import models.User;
 
-public class Database {
+    /**
+     * The database class deals with all queries on our Mysql DB, for better overview and reuasability
+    */
+    public class Database {
     public static Connection databaseLink;
 
     public Database() {
     }
 
     public static Connection getConnection() {
+
+        /** Database Username*/
         String databaseUser = "ummyxpjqfaflxgpt";
+        /** Database Password */
         String databasePassword = "6cMSMYdNZ5nK4urkpbs9";
+        /** Database URL */
         String url = "jdbc:mysql://bpxq2ruzggpg92vaehks-mysql.services.clever-cloud.com/bpxq2ruzggpg92vaehks";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             databaseLink = DriverManager.getConnection(url, databaseUser, databasePassword);
-        } catch (Exception var4) {
-            var4.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return databaseLink;
     }
 
+    /**
+     * Close an existing connection to the database. Functions is used to avoid max_user in sql
+     */
     public static void closeDatabase() {
         try {
             if (databaseLink != null) {
@@ -59,6 +69,14 @@ public class Database {
 
     }
 
+    /**
+     * fetch user data from DB (only user data no events or participants)
+     * functions.
+     *
+     * @param connection - SQL jdbc connection object, connection to DB
+     * @param key        - used to find a certain user
+     * @return SQL result of data entry or <code>null</code> if user doesn't exist
+     */
     private static <S> ResultSet fetchUserData(Connection connection, S key) throws SQLException {
         String sqlColumn = "";
         if (key instanceof String) {
@@ -86,13 +104,20 @@ public class Database {
             } else {
                 return null;
             }
-        } catch (SQLException var6) {
-            var6.printStackTrace();
-            System.out.println(var6);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e);
             return null;
         }
     }
 
+    /**
+     * Query a user and return the corresponding User object from its table
+     * entry. Used to search the user table.
+     *
+     * @param key - String of username or Int of userid
+     * @return User object on successful query, else <code>null</code>
+     */
     public static <S> User getUser(S key) throws SQLException {
         Connection connection = getConnection();
         ResultSet result = fetchUserData(connection, key);
@@ -111,34 +136,41 @@ public class Database {
                 System.out.println("Fetched user.");
                 closeDatabase();
                 return user;
-            } catch (SQLException var10) {
-                var10.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
                 closeDatabase();
                 return null;
             }
         }
     }
 
+    /**
+     * Function to create a new user in the database, used for registration and for the admin
+     * @param user
+     */
     public static void registerUser(User user) {
-        Database connectNow = new Database();
         Connection connectDB = getConnection();
         String InsertField = "INSERT INTO user(username, password, firstname, lastname, email) VALUES ('";
-        String var10000 = user.getUsername();
-        String InsertValues = var10000 + "','" + user.getPassword() + "','" + user.getFirstname() + "','" + user.getLastname() + "','" + user.getEmail() + "')";
+        String InsertValues = user.getUsername() + "','" + user.getPassword() + "','" + user.getFirstname() + "','" + user.getLastname() + "','" + user.getEmail() + "')";
         String InsertRegister = InsertField + InsertValues;
 
         try {
             Statement statement = connectDB.createStatement();
             statement.executeUpdate(InsertRegister);
             closeDatabase();
-        } catch (Exception var7) {
-            var7.printStackTrace();
-            var7.getCause();
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getCause();
             closeDatabase();
         }
 
     }
 
+    /**
+     * Edits a user in the database with the parameter user.
+     * @param user This user's attribute values are taken to edit the user in the DB with the same id
+     * @return <code>true</code>, if successful
+     */
     public static boolean editUser(User user, int user_id) {
         String sql = "UPDATE user SET firstname = ?, lastname = ?, username = ?, email = ?, password = ? WHERE user_id = ?";
         Database connectNow = new Database();
@@ -163,7 +195,12 @@ public class Database {
         return true;
     }
 
-    public static boolean deleteUser(int id) {
+    /** Delete user in the user table and user's corresponding entries
+     in table Location and table user_Events.
+     @param id - id of user to delete
+     @return true if deletion was successful
+     */
+        public static boolean deleteUser(int id) {
         String sql = " DELETE FROM user WHERE user_id = ?";
         Database connectNow = new Database();
         Connection connectDB = getConnection();
@@ -184,10 +221,7 @@ public class Database {
 
     /**
      * Edits a user in the database with the parameter user.
-     *
      * @param user This user's attribute values are taken to edit the user in the DB
-     *             with the same id
-     *
      * @return <code>true</code>, if successful
      */
     public static boolean editProfile(User user) {
@@ -216,7 +250,15 @@ public class Database {
         return true;
     }
 
-    public static boolean confirmLogin(String username, String password) throws SQLException {
+    /**
+     *  Verifies whether password and username are in the database and decrypts the password
+     * @param username
+     * @param password
+     * @return
+     * @throws SQLException
+     */
+
+        public static boolean confirmLogin(String username, String password) throws SQLException {
         Connection connectDB = getConnection();
         ResultSet userData = fetchUserData(connectDB, username);
         if (userData == null) {
@@ -237,6 +279,12 @@ public class Database {
         }
     }
 
+    /**
+     * Check if username or email is already taken.
+     *
+     * @param user - User data
+     * @return true if user data is available
+     */
     public static boolean isTaken(User user) {
         String sql = "SELECT * FROM user WHERE username = ? OR email=?";
         Connection connection = getConnection();
@@ -263,7 +311,13 @@ public class Database {
         }
     }
 
-    public static int storeEvent(Event event) {
+    /**
+     * Create table entry of new event in database.
+     *
+     * @param event Object of new entry.
+     * @return event ID on successful creation, return -1 on failed creation
+     */
+     public static int storeEvent(Event event) {
         String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = getConnection();
 
@@ -294,7 +348,15 @@ public class Database {
         }
     }
 
-    public static boolean createUserEvents(int userId, int eventId) {
+    /**
+     * Creates an entry in the User_Event table in the Database.
+     *
+     * @param userId the user id of the according user
+     * @param eventId the event id of the according event
+     * @return true when insertion was successful, false when insertion had an
+     *         exception.
+     */
+        public static boolean createUserEvents(int userId, int eventId) {
         String sql = "INSERT INTO user_Events (user_id , event_id) VALUES(?, ?)";
         Connection connection = getConnection();
 
@@ -313,7 +375,12 @@ public class Database {
         }
     }
 
-    public static ArrayList<Event> getEventsFromUser(int userId) {
+    /**
+     * Gets all events from User with help of the userId.
+     * @param userId is used to find the relative data
+     * @return a list of the events the user is in
+     */
+        public static ArrayList<Event> getEventsFromUser(int userId) {
         String sql = "SELECT * FROM events LEFT JOIN user_Events ON user_Events.event_id = events.events_id WHERE user_Events.user_id = ?";
         Connection connection = getConnection();
         ArrayList events = new ArrayList();
@@ -351,9 +418,13 @@ public class Database {
         }
     }
 
+        /**
+         * method used to edit a user event
+         * @param event is necessary to load all event data
+         * @return true on success and false on failure
+         */
     public static boolean editEvent(Event event) {
         String sql = "UPDATE Event SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  host_id = ? WHERE event_id = ? ";
-        Database connectNow = new Database();
         Connection connection = getConnection();
 
         try {
@@ -377,6 +448,11 @@ public class Database {
         }
     }
 
+        /**
+         * delete event from events table
+         * @param eventId know which event to be deleted
+         * @return
+         */
     public static boolean deleteEvent(int eventId) {
         String sql = "DELETE FROM events WHERE events_id = ?";
         Connection connection = getConnection();
@@ -395,7 +471,13 @@ public class Database {
         }
     }
 
-    public static boolean deleteUserEventBridge(int userId, int eventId) {
+        /**
+         *  delete event in user_Events table
+         * @param userId user to be removed from table
+         * @param eventId corresponding event to user to be removed
+         * @return
+         */
+    public static boolean deleteUserEvents(int userId, int eventId) {
         Connection connection = getConnection();
         String sql = "DELETE FROM user_Events WHERE user_id = ? AND event_id = ?";
 
@@ -413,7 +495,13 @@ public class Database {
         }
     }
 
-    private static ArrayList<User> getParticipants(int eventId) {
+    /**
+     * Gets a list of participants for an event.
+     *
+     * @param eventId eventid of the event you want the participants from
+     * @return the participants
+     */
+        private static ArrayList<User> getParticipants(int eventId) {
         String queryParticipants = "SELECT * FROM user LEFT JOIN user_Events ON user_Events.user_id = user.user_id WHERE user_Events.event_id = ? ";
         Connection connection = getConnection();
         ArrayList participants = new ArrayList();
@@ -437,6 +525,13 @@ public class Database {
         }
     }
 
+    /**
+     * Adds attachment entry into the Database.
+     *
+     * @param file File to be uploaded into the database
+     * @param event Event that the file belongs to
+     * @return -1 on failed creation, ID on successful creation
+     */
     public static int storeAttachment(File file, Event event) {
         String sql = "INSERT INTO attachments (attachment, eventID, attachmentName) VALUES ( ? , ? , ? )";
         Connection connection = getConnection();
@@ -470,6 +565,12 @@ public class Database {
         }
     }
 
+    /**
+     * Gets the Attachments out of the Database.
+     *
+     * @param eventId Id of an event from which the attachments should be returned
+     * @return List of files
+     */
     public static ArrayList<File> getAttachmentsFromEvent(int eventId) {
         String sql = "SELECT * FROM attachments WHERE event_id = ?";
         Connection connection = getConnection();
@@ -498,13 +599,18 @@ public class Database {
             }
 
             return files;
-        } catch (IOException | SQLException var10) {
-            var10.printStackTrace();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
-    public static void deleteAllAttachments(int eventId) {
+    /**
+     * Delete all Attachment entries in the Database.
+     *
+     * @param eventId Event which the entries should be deleted from.
+     */
+         public static void deleteAllAttachments(int eventId) {
         String sql = "DELETE FROM Attachment WHERE event_id = ?";
         Connection connection = getConnection();
 

@@ -26,43 +26,58 @@
             </Text>
          </children>
       </Pane>
-      <TextField fx:id="emailText" layoutX="237.0" layoutY="172.0" prefHeight="20.0" prefWidth="236.0" promptText="Email" />
-      <TextField fx:id="firstnameText" layoutX="237.0" layoutY="240.0" prefHeight="20.0" prefWidth="236.0" promptText="Firstname" />
-      <TextField fx:id="lastnameText" layoutX="237.0" layoutY="310.0" prefHeight="20.0" prefWidth="236.0" promptText="Lastname" />
-      <TextField fx:id="usernameText" layoutX="237.0" layoutY="386.0" prefHeight="20.0" prefWidth="236.0" promptText="Username" />
+      <TextField fx:id="emailText" layoutX="237.0" layoutY="165.0" prefHeight="36.0" prefWidth="236.0" promptText="Email" style="-fx-background-color: #eeeeee;">
+         <font>
+            <Font name="Arial Bold" size="12.0" />
+         </font></TextField>
+      <TextField fx:id="firstnameText" layoutX="237.0" layoutY="233.0" prefHeight="36.0" prefWidth="236.0" promptText="Firstname" style="-fx-background-color: #eeeeee;">
+         <font>
+            <Font name="Arial Bold" size="12.0" />
+         </font></TextField>
+      <TextField fx:id="lastnameText" layoutX="237.0" layoutY="310.0" prefHeight="36.0" prefWidth="236.0" promptText="Lastname" style="-fx-background-color: #eeeeee;">
+         <font>
+            <Font name="Arial Bold" size="12.0" />
+         </font></TextField>
+      <TextField fx:id="usernameText" layoutX="237.0" layoutY="386.0" prefHeight="36.0" prefWidth="236.0" promptText="Username" style="-fx-background-color: #eeeeee;">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></TextField>
       <Button fx:id="saveChangesButton" layoutX="293.0" layoutY="535.0" mnemonicParsing="false" onAction="#saveChangesButtonOnAction" prefHeight="40.0" prefWidth="123.0" style="-fx-background-color: AA336A; -fx-cursor: hand;" text="save changes">
          <font>
             <Font name="Arial Black" size="12.0" />
          </font></Button>
-      <PasswordField fx:id="passwordTxt" layoutX="237.0" layoutY="460.0" prefHeight="25.0" prefWidth="236.0" promptText="Password" />
+      <PasswordField fx:id="passwordTxt" layoutX="237.0" layoutY="460.0" prefHeight="36.0" prefWidth="236.0" promptText="Password" style="-fx-background-color: #eeeeee;">
+         <font>
+            <Font name="Arial Bold" size="12.0" />
+         </font></PasswordField>
       <ImageView fitHeight="40.0" fitWidth="55.0" layoutX="237.0" layoutY="535.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../images/icons8-change-user-100.png" />
          </image>
       </ImageView>
-      <Text layoutX="106.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+      <Text fill="#aa336a" layoutX="36.0" layoutY="191.0" strokeType="OUTSIDE" strokeWidth="0.0" style="bac: AA336A;" text="Email">
          <font>
-            <Font name="Arial Black" size="18.0" />
+            <Font name="Arial Black" size="20.0" />
          </font>
       </Text>
-      <Text layoutX="104.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Firstname">
+      <Text fill="#aa336a" layoutX="36.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Firstname">
          <font>
-            <Font name="Arial Black" size="18.0" />
+            <Font name="Arial Black" size="20.0" />
          </font>
       </Text>
-      <Text layoutX="104.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lastname">
+      <Text fill="#aa336a" layoutX="36.0" layoutY="329.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lastname">
          <font>
-            <Font name="Arial Black" size="18.0" />
+            <Font name="Arial Black" size="20.0" />
          </font>
       </Text>
-      <Text layoutX="102.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+      <Text fill="#aa336a" layoutX="35.0" layoutY="406.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
          <font>
-            <Font name="Arial Black" size="18.0" />
+            <Font name="Arial Black" size="20.0" />
          </font>
       </Text>
-      <Text layoutX="104.0" layoutY="479.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+      <Text fill="#aa336a" layoutX="36.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
          <font>
-            <Font name="Arial Black" size="18.0" />
+            <Font name="Arial Black" size="20.0" />
          </font>
       </Text>
    </children>
