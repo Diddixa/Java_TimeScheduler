@@ -157,7 +157,7 @@ public class ScheduleEventController implements Initializable {
     }
 
     /**
-     * function to add a participant to the participant arraylist afterwards into the according event in the event user bridge
+     * add a participant to the participant arraylist afterwards into the according event in the event user bridge
      * @param e
      * @throws SQLException
      */
@@ -182,7 +182,7 @@ public class ScheduleEventController implements Initializable {
 
 
     /**
-     * function to add a file to the Attachments array list
+     * add a file to the Attachments array list
      * @param e
      * @throws SQLException
      */
@@ -203,7 +203,7 @@ public class ScheduleEventController implements Initializable {
 
 
     /**
-     * initialize event object and create event 
+     * initialize event object and create event while checking for the correct entries
      * @param e
      */
     @FXML

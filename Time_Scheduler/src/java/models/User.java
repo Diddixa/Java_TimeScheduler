@@ -5,6 +5,9 @@ import javafx.scene.chart.PieChart;
 
 import java.util.ArrayList;
 
+/**
+ * User model
+ */
 public class User {
     /** id of user*/
     private int id;
@@ -76,6 +79,14 @@ public class User {
         this.id = id;
     }
 
+    /**
+     * Create new user
+     * @param username
+     * @param firstname
+     * @param lastname
+     * @param password
+     * @param email
+     */
     public User(String username, String firstname, String lastname, String password, String email) {
         this.username = username;
         this.firstname = firstname;
@@ -84,6 +95,14 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * Add participant to an event
+     * @param id
+     * @param username
+     * @param firstname
+     * @param lastname
+     * @param email
+     */
     public User(int id, String username, String firstname, String lastname, String email) {
         this.id = id;
         this.username = username;
@@ -92,6 +111,15 @@ public class User {
         this.email = email;
     }
 
+    /**
+     * Fetch user data from database by using getUser
+     * @param id
+     * @param username
+     * @param firstname
+     * @param lastname
+     * @param email
+     * @param events
+     */
     public User(int id, String username, String firstname, String lastname, String email, ArrayList<Event> events) {
         this.id = id;
         this.username = username;
@@ -101,6 +129,15 @@ public class User {
         this.events = events;
     }
 
+    /**
+     * called upon when loading user data into Adminview
+     * @param id
+     * @param username
+     * @param firstname
+     * @param lastname
+     * @param password
+     * @param email
+     */
     public User(int id, String username, String firstname, String lastname, String password, String email) {
         this.id = id;
         this.username = username;

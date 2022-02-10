@@ -8,6 +8,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+/**
+ * DialogDeleteUser is a controller utility class that deals with adding users to the admin view
+ */
 public class DialogDeleteUserController {
     @FXML
     public TextField textFieldID;

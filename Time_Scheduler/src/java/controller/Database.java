@@ -27,7 +27,7 @@ import models.Reminder;
 import models.User;
 
     /**
-     * The database class deals with all queries on our Mysql DB, for better overview and reuasability
+     * The database class deals with all queries on our Mysql DB, for better overview and readability
     */
     public class Database {
     public static Connection databaseLink;
@@ -55,7 +55,7 @@ import models.User;
     }
 
     /**
-     * Close an existing connection to the database. Functions is used to avoid max_user in sql
+     * Close an existing connection to the database. Method is used to avoid max_user_connections
      */
     public static void closeDatabase() {
         try {
@@ -145,8 +145,8 @@ import models.User;
     }
 
     /**
-     * Function to create a new user in the database, used for registration and for the admin
-     * @param user
+     * Create a new user and insert the data into our database.
+     * @param user necessary to determine new user
      */
     public static void registerUser(User user) {
         Connection connectDB = getConnection();
@@ -252,8 +252,8 @@ import models.User;
 
     /**
      *  Verifies whether password and username are in the database and decrypts the password
-     * @param username
-     * @param password
+     * @param username used to fetch the right user from DB
+     * @param password  to compare user password with internally saved password
      * @return
      * @throws SQLException
      */
@@ -315,7 +315,7 @@ import models.User;
      * Create table entry of new event in database.
      *
      * @param event Object of new entry.
-     * @return event ID on successful creation, return -1 on failed creation
+     * @return event ID on successful creation, return -1 on failed creation (since no eventID can be -1)
      */
      public static int storeEvent(Event event) {
         String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
@@ -341,8 +341,8 @@ import models.User;
             } else {
                 throw new SQLException("Creating user failed, no ID obtained.");
             }
-        } catch (SQLException var6) {
-            var6.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             closeDatabase();
             return -1;
         }
@@ -391,7 +391,7 @@ import models.User;
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
-                int eventId = rs.getInt("event_id");
+                int eventId = rs.getInt("events_id");
                 String name = rs.getString("name");
                 LocalDate date = rs.getDate("date").toLocalDate();
                 LocalTime startTime = rs.getTime("startTime").toLocalTime();
@@ -424,7 +424,7 @@ import models.User;
          * @return true on success and false on failure
          */
     public static boolean editEvent(Event event) {
-        String sql = "UPDATE Event SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  host_id = ? WHERE event_id = ? ";
+        String sql = "UPDATE events SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  host_id = ? WHERE events_id = ? ";
         Connection connection = getConnection();
 
         try {
@@ -572,7 +572,7 @@ import models.User;
      * @return List of files
      */
     public static ArrayList<File> getAttachmentsFromEvent(int eventId) {
-        String sql = "SELECT * FROM attachments WHERE event_id = ?";
+        String sql = "SELECT * FROM attachments WHERE eventID = ?";
         Connection connection = getConnection();
         ArrayList<File> files = new ArrayList();
         InputStream input = null;
@@ -584,9 +584,9 @@ import models.User;
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
-                File tempFile = new File(rs.getString("name"));
+                File tempFile = new File(rs.getString("attachmentName"));
                 output = new FileOutputStream(tempFile);
-                input = rs.getBinaryStream("file");
+                input = rs.getBinaryStream("attachment");
                 byte[] buffer = new byte[1024];
 
                 while(input.read(buffer) > 0) {
@@ -611,7 +611,7 @@ import models.User;
      * @param eventId Event which the entries should be deleted from.
      */
          public static void deleteAllAttachments(int eventId) {
-        String sql = "DELETE FROM Attachment WHERE event_id = ?";
+        String sql = "DELETE FROM Attachment WHERE eventID = ?";
         Connection connection = getConnection();
 
         try {
@@ -620,8 +620,8 @@ import models.User;
             ps.executeUpdate();
             ps.close();
             closeDatabase();
-        } catch (SQLException var4) {
-            var4.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             closeDatabase();
         }
 

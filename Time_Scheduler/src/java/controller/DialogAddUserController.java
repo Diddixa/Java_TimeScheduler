@@ -8,6 +8,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import models.User;
 
+/**
+ * DialogAddUser is a controller utility class that deals with adding users to the admin view
+ */
 public class DialogAddUserController {
     @FXML
     public TextField textFieldUsername;

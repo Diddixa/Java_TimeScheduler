@@ -25,6 +25,9 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Main dashobard scene also deals with switching scenes between side navigation panel
+ */
 public class MainController implements Initializable  {
 
     @FXML
@@ -118,7 +121,7 @@ public class MainController implements Initializable  {
 
     /**
      * method to load between the scenes using the fxml name as parameter
-     * send the logged in user information between the scenes
+     * send the logged-in user information between the scenes
      * @param page
      * @throws IOException
      */

@@ -36,14 +36,19 @@ public class EditProfileController {
     private TextField usernameText;
     private User loggedUser;
 
-
-        public void loadUserData(){
-
+    /**
+     * load logged in user data into textfields
+     */
+    public void loadUserData(){
         emailText.setText(loggedUser.getEmail());
         firstnameText.setText(loggedUser.getFirstname());
         lastnameText.setText(loggedUser.getLastname());
         usernameText.setText(loggedUser.getUsername()); }
 
+    /**
+     * Check if user input is correct and update user information in DB
+     * @param event
+     */
     @FXML
     void saveChangesButtonOnAction(ActionEvent event) {
 
@@ -55,12 +60,6 @@ public class EditProfileController {
             errorAlert.showAndWait();
         }
         else{
-       // User temp = new User(loggedUser);
-
-        /*
-        temp.setEmail(emailText.getText());
-        temp.setFirstname(usernameText.getText()); */
-
 
         loggedUser.setEmail(emailText.getText());
         loggedUser.setFirstname(firstnameText.getText());

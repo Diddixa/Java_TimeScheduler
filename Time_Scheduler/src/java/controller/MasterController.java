@@ -24,6 +24,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Controller class for the Admin works with Master.fxml
+ */
 public class MasterController implements Initializable {
 
     public TableView<User> tableView;
