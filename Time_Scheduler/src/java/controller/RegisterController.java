@@ -66,6 +66,11 @@ public class RegisterController{
 
     }
 
+    /**
+     *  Validate user input and register him into database
+     * @param e
+     * @throws IOException
+     */
     public void registerButton(ActionEvent e) throws IOException {
 
         if(usernameTxt.getText().isBlank() || firstnameTxt.getText().isBlank() || lastnameTxt.getText().isBlank() || setPWD.getText().isBlank() || emailTxt.getText().isBlank())

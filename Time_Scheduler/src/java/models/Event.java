@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * Event model
+ */
 public class Event {
 
 
@@ -134,7 +137,18 @@ public class Event {
         this.name = name;
     }
 
-
+    /**
+     * Get all events from user
+     * @param id
+     * @param name
+     * @param date
+     * @param startTime
+     * @param endTime
+     * @param location
+     * @param participants
+     * @param priority
+     * @param reminder
+     */
     public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder) {
         this.id = id;
         this.name = name;
@@ -169,6 +183,18 @@ public class Event {
         this.reminder = reminder;
     }
 
+    /**
+     * Create a new event
+     * @param name
+     * @param date
+     * @param startTime
+     * @param endTime
+     * @param location
+     * @param participants
+     * @param priority
+     * @param reminder
+     * @param attachments
+     */
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, ArrayList<File> attachments) {
         this.name = name;
         this.date = date;

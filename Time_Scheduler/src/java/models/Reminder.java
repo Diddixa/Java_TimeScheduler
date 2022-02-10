@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Enum to define Reminder priority
+ */
 public enum Reminder {
     WEEKS("One week before", 10080),
     DAYS("Three days before",4320 ),
@@ -9,24 +12,18 @@ public enum Reminder {
 
     /** Name of reminder */
     private String name;
-    /** minutes before start of event */
+    /** reminder time */
     private int minutes;
 
     /**
      * Constructor for reminder enum
-     * @param name - name of the enum
-     * @param minutes - minutes before start of en event when the user should be reminded
+     * @param name
+     * @param minutes
      */
+
     private Reminder(String name, int minutes) {
         this.name = name;
         this.minutes = minutes;
     }
 
-    /**
-     * Get the name of the reminder as a string
-     * @return name of the reminder as a string
-     */
-    public String toString() {
-        return name;
-    }
 }

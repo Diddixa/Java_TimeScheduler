@@ -22,6 +22,9 @@ import java.sql.Statement;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller that deals with logging in a user corresponds to Login.fxml
+ */
 public class LoginController implements Initializable {
 
     @FXML
@@ -49,7 +52,7 @@ public class LoginController implements Initializable {
     }
 
     /**
-     * Function created to switch from Login Scene to Register (will be global later)
+     * Switch from Login Scene to Register
      * @param e
      * @throws IOException
      */
@@ -59,6 +62,11 @@ public class LoginController implements Initializable {
 
     }
 
+    /**
+     * on action event to login a user while checking that the data corresponds to an entry in our user table
+     * @param e
+     * @throws IOException
+     */
     public void loginButtonOnAction(ActionEvent e) throws IOException {
 
         if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "12345678")) {

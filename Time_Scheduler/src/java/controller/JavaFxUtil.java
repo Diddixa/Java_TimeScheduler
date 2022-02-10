@@ -12,7 +12,14 @@ import java.io.IOException;
  */
 public class JavaFxUtil {
 
-
+    /**
+     * method used to switch scenes
+     * @param fxml fxml file
+     * @param button button that's used
+     * @param v size parameter x
+     * @param v1 size parameter y
+     * @throws IOException
+     */
     public static void sceneSwitcher(String fxml, Button button, int v, int v1) throws IOException {
 
         Parent root = FXMLLoader.load(JavaFxUtil.class.getClassLoader().getResource(fxml));
@@ -21,7 +28,6 @@ public class JavaFxUtil {
         scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
         stage.setScene(scene);
         stage.centerOnScreen();
-
     }
 
 

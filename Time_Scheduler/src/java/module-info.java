@@ -5,8 +5,8 @@ module com.javaproject.time_scheduler {
     requires org.kordamp.ikonli.javafx;
     requires java.sql;
     requires com.calendarfx.view;
-    requires javax.mail.api;
     requires activation;
+    requires javax.mail.api;
 
     opens com.javaproject.time_scheduler to javafx.fxml;
     exports com.javaproject.time_scheduler;
