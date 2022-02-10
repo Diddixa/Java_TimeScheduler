@@ -166,7 +166,35 @@ public class User {
     }
 
     /**
-     * Updates the local list of events from the database
+     * Remove event from participant and user_Events table
+     *
+     * @param event - Event to be removed
+     */
+    public void removeEvent(Event event) {
+
+        Database.deleteUserEvents(this.getId(), event.getId());
+    }
+
+    /**
+     * method removes event from user and all participants
+     * @param event - Event to be deleted
+     */
+    public void deleteEvent(Event event) {
+
+        removeEvent(event);
+        if (event.getEventHostId() == this.getId()) {
+
+            for (User participant : event.getParticipants()) {
+                participant.removeEvent(event);
+            }
+            Database.deleteEvent(event.getId());
+            Database.deleteAllAttachments(event.getId());
+        }
+    }
+
+
+    /**
+     * Updates the event list
      */
     public void updateEventList(){
         events.clear();
