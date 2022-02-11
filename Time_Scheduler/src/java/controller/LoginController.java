@@ -70,7 +70,7 @@ public class LoginController implements Initializable {
      */
     public void loginButtonOnAction(ActionEvent e) throws IOException {
 
-        if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "12345678")) {
+        if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "1234")) {
 
             JavaFxUtil.sceneSwitcher("Master.fxml", signUpButton, 950, 600);
         }
