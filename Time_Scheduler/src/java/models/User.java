@@ -1,8 +1,10 @@
 package models;
 
 import controller.Database;
+import controller.MailSender;
 import javafx.scene.chart.PieChart;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 
 /**
@@ -187,7 +189,7 @@ public class User {
      *
      * @param event - Newly created event
      */
-    public void createEvent(Event event) {
+    public void createEvent(Event event) throws MessagingException {
 
         event.setEventHostId(this.getId());
         int eventId = Database.storeEvent(event);
@@ -200,6 +202,11 @@ public class User {
             participant.addEvent(event);
         }
 
+      /*  MailSender.sendEventMail(event);
+
+        if (!event.getParticipants().isEmpty()) {
+            MailSender.sendEventMail(event);
+        } */
     }
 
     /**

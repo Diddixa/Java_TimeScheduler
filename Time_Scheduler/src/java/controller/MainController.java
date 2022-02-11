@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import models.Event;
 import models.User;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -113,6 +114,7 @@ public class MainController implements Initializable  {
                 root = loader.load();
                CreateEventController controller = loader.getController();
                controller.retrieveUser(this.user); // currently logged in user
+                MailSender.reminderMail(this.user);
             }
             else if(Objects.equals(page, "EventSchedule")){
                 FXMLLoader loader = new FXMLLoader();
@@ -121,6 +123,7 @@ public class MainController implements Initializable  {
                 EventScheduleController EventSchedule = loader.getController();
                 EventSchedule.retrieveUser(this.user); // currently logged in user
                 EventSchedule.loadEvents();
+                MailSender.reminderMail(this.user);
             }
             else if(Objects.equals(page, "editProfile")){
                 FXMLLoader loader = new FXMLLoader();
@@ -131,7 +134,7 @@ public class MainController implements Initializable  {
                 editController.loadUserData();
             }
 
-        } catch (IOException e) {
+        } catch (IOException | MessagingException e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
         }
 
