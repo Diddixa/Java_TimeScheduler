@@ -322,7 +322,7 @@ import models.User;
      * @return event ID on successful creation, return -1 on failed creation (since no eventID can be -1)
      */
      public static int storeEvent(Event event) {
-        String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO events (eventhost_id, name, date, startTime, endTime, location, reminder, priority, description) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = getConnection();
 
         try {
@@ -335,6 +335,7 @@ import models.User;
             statement.setString(6, event.getLocation());
             statement.setString(7, event.getReminder().name());
             statement.setString(8, event.getPriority().name());
+            statement.setString(9, event.getDescription());
             statement.executeUpdate();
             ResultSet generatedKey = statement.getGeneratedKeys();
             if (generatedKey.next()) {
@@ -403,9 +404,11 @@ import models.User;
                 String location = rs.getString("location");
                 Reminder reminder = (Reminder)Enum.valueOf(Reminder.class, rs.getString("reminder"));
                 Priority priority = (Priority)Enum.valueOf(Priority.class, rs.getString("priority"));
+                String description = rs.getString("description");
                 ArrayList<File> attachments = getAttachmentsFromEvent(eventId);
                 int host_id = rs.getInt("eventhost_id");
-                Event event = new Event(eventId, name, date, startTime, endTime, location, getParticipants(eventId), priority, reminder);
+
+                Event event = new Event(eventId, name, date, startTime, endTime, location, getParticipants(eventId), priority, reminder, description);
                 event.setId(eventId);
                 event.setEventHostId(host_id);
                 event.setAttachments(attachments);
@@ -428,7 +431,7 @@ import models.User;
          * @return true on success and false on failure
          */
     public static boolean editEvent(Event event) {
-        String sql = "UPDATE events SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  host_id = ? WHERE events_id = ? ";
+        String sql = "UPDATE events SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  host_id = ?, description = ? WHERE events_id = ? ";
         Connection connection = getConnection();
 
         try {
@@ -442,6 +445,7 @@ import models.User;
             ps.setString(7, event.getLocation());
             ps.setInt(8, event.getEventHostId());
             ps.setInt(9, event.getId());
+            ps.setString(10, event.getDescription());
             ps.executeUpdate();
             ps.close();
             return true;
