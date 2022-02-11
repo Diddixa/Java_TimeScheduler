@@ -15,6 +15,14 @@ public enum Reminder {
     /** reminder time */
     private int minutes;
 
+    public String getName() {
+        return name;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
     /**
      * Constructor for reminder enum
      * @param name
@@ -26,4 +34,11 @@ public enum Reminder {
         this.minutes = minutes;
     }
 
+    /**
+     * Get the name of the reminder as a string
+     * @return name of the reminder as a string
+     */
+    public String toString() {
+        return name;
+    }
 }

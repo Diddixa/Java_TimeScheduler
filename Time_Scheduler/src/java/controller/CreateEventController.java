@@ -14,6 +14,7 @@ import models.Priority;
 import models.Reminder;
 import models.User;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
@@ -109,7 +110,6 @@ public class CreateEventController implements Initializable {
         @FXML
         void medium(MouseEvent event) {
             chosenPriority = Priority.MEDIUM;
-            System.out.println(chosenPriority.name());
 
         }
 
@@ -127,7 +127,6 @@ public class CreateEventController implements Initializable {
 
         chosenReminder = remindChoice.getValue();
         boolReminder = remindChoice.getSelectionModel().isEmpty();
-        //System.out.print(chosenReminder.name());
     }
 
 
@@ -207,7 +206,7 @@ public class CreateEventController implements Initializable {
      * @param e
      */
     @FXML
-    public void createEvent(ActionEvent e) {
+    public void createEvent(ActionEvent e) throws MessagingException {
 
 
         if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){ //|| !boolReminder || chosenPriority == null){

@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import models.User;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -91,6 +92,7 @@ public class LoginController implements Initializable {
                     scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
                     MainController controller = loader.getController();
                     controller.retrieveUser(currentUser);
+                   // MailSender.reminderMail(currentUser);
 
                     Stage stage = (Stage) signUpButton.getScene().getWindow();
                     stage.setScene(scene);
@@ -100,7 +102,7 @@ public class LoginController implements Initializable {
                     else{
                     loginMsgLabel.setTextFill(Color.RED);
                     loginMsgLabel.setText("*sadly invalid, maybe try to register?"); }}
-                catch(SQLException sqlException){
+                catch(SQLException  sqlException){
                 sqlException.printStackTrace();}
             }
             }}

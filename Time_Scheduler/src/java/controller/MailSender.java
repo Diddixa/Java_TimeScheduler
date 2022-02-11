@@ -1,7 +1,14 @@
 package controller;
+import models.Event;
+import models.Reminder;
+import models.User;
+
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Timer;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -12,109 +19,252 @@ import javax.mail.internet.MimeMessage;
  */
 public class MailSender {
 
+    /**creating new session object to hold host data */
+    Session newSession = null;
+
+    /**creating new message object to hold email content */
+    MimeMessage mimeMessage = null;
     /**
-     * Connection of mail server
+     * Logs into Gmail account and sends email to all participants
      */
-    protected Session mailSession;
+    public  void sendMail() {
+        String username = "timescheduler2022@gmail.com";
+        String password = "Java00PT!me$cheduler";
+        String mailHost = "smtp.gmail.com";
+        Transport transport = null;
+        try {
+            transport = newSession.getTransport("smtp");
+            transport.connect(mailHost, username, password);
+            transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
+            transport.close();
 
-    /**
-     * Method to connect to the mail server of the sender. In this case it is the gmail mail server.
-     * @param smtpHost
-     * @param smtpPort
-     * @param username
-     * @param password
+            System.out.println("Mail successfully sent");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     * Sets up email server, creates a email draft and sends the email to all participants
+     *
+     * @param event the event of subject
+     * @param status of the event, which Mail layout will be drafted(creation, update, deletion email)
      */
-    public void login(String smtpHost, String smtpPort, String username, String password) {
-
-        /**
-         * Setup connection to the mail server
-         */
-        Properties props = new Properties();
-
-        /**
-         * Prints a debug protocol in the terminal console.
-         */
-        props.put("mail.debug", "true");
-
-        props.put("mail.smtp.host", smtpHost);
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", smtpPort);
-
-        /**
-         * Sender login
-         */
-        Authenticator auth = new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
-            }
-        };
-
-        /**
-         * Creates a session by props and login data of auth
-         */
-        this.mailSession = Session.getDefaultInstance(props, auth);
-        System.out.println("Logged in!");
+    public static void sendEventMail(Event event) throws MessagingException {
+        MailSender mail = new MailSender();
+        mail.setupServerProperties();
+        mail.draftReminderMail(event);
+        mail.sendMail();
     }
 
     /**
-     * Method to send an e-mail to specific users.
-     * @param senderMail
-     * @param senderName
-     * @param receiverAddresses
-     * @param subject
-     * @param message
-     * @throws MessagingException
-     * @throws UnsupportedEncodingException
+     * Sets up email server, creates a reminder email draft and sends the mail to all participants
+     * checks if current time is the reminder time
+     *
+     * @param user logged in user
      */
-    public void send(String senderMail, String senderName, String receiverAddresses, String subject, String message) throws MessagingException, UnsupportedEncodingException {
-        if(mailSession == null) {
-            throw new IllegalStateException("You have to log in first!");
+    public static void reminderMail(User user) throws MessagingException {
+        for(Event event : user.getEvents()){
+            if(user.getId() == event.getEventHostId()) {
+                if (checkReminderTime(event)) {
+                    MailSender mail = new MailSender();
+                    mail.setupServerProperties();
+                    mail.draftReminderMail(event);
+                    mail.sendMail();
+                    event.setReminder(Reminder.NONE);
+                }
+            }
         }
+    }
+
+
+    /**
+     * Drafts the reminder mail layout
+     * @param  event event of subject
+     */
+    public void draftReminderMail(Event event) throws MessagingException {
+        mimeMessage = new MimeMessage(newSession);
 
         /**
-         * Sets the formats of the email.
-         * MimeMessage makes it possible, to display the email properly
-         */
-        MimeMessage msg = new MimeMessage(mailSession);
-        /**
-         * Information are needed, so the email can be transfered by the
+         * Information are needed, so the email can be transferred by the
          * mail server properly, without any formatting problems
          */
-        msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
-        msg.addHeader("format", "flowed");
-        msg.addHeader("Content-Transfer-Encoding", "8bit");
+        mimeMessage.addHeader("Content-type", "text/HTML; charset=UTF-8");
+        mimeMessage.addHeader("format", "flowed");
+        mimeMessage.addHeader("Content-Transfer-Encoding", "8bit");
 
-        /**
-         * Tuple with the email and the Name of the Sender
-         */
-        msg.setFrom(new InternetAddress(senderMail, senderName));
-        /**
-         * E-mail addresses won't be altered
-         */
-        msg.setReplyTo(InternetAddress.parse(senderMail, false));
-        /**
-         * Set the subject text and use UTF-8
-         */
-        msg.setSubject(subject, "UTF-8");
-        /**
-         * Set the mail text message
-         */
-        msg.setText(message, "UTF-8", "html");
-        /**
-         * Set the sending date & time
-         */
-        msg.setSentDate(new Date());
+        for (User participant : event.getParticipants()) {
+            try {
+                mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(participant.getEmail()));
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
 
-        /**
-         * Set the recipients and the type (cc, gcc etc.).
-         * Set the address names won't be altered.
-         */
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiverAddresses, false));
+        try {
+            mimeMessage.setSubject("Reminder: " + event.getName() + " " + event.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + event.getStartTime() + " " + event.getEndTime());
+            mimeMessage.setText(message(event), null, "html");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 
-        System.out.println("Send email...");
-        Transport.send(msg); // send email
-        System.out.println("Email sent.");
+        event.setReminder(Reminder.NONE);
+        Database.editEvent(event);
+    }
+
+    /**
+     * Sets up Google's SMTP server for email session
+     */
+    void setupServerProperties() {
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        newSession = Session.getDefaultInstance(properties, null);
+    }
+
+    /**
+     * Checks if the current time after reminder time
+     *
+     * @param event event of subject
+     * @return Boolean if current time is after reminder time
+     */
+    public static boolean checkReminderTime(Event event){
+        if(event.getReminder().equals(Reminder.NONE)){
+            return false;
+        }
+        LocalDateTime eventTime = event.getDate().atTime(event.getStartTime());
+        LocalDateTime reminderTime = eventTime.minusMinutes(event.getReminder().getMinutes());
+        if(LocalDateTime.now().isAfter(eventTime)){
+            return false;
+        }
+        return  LocalDateTime.now().isAfter(reminderTime);
+    }
+
+
+    /**
+     * Method to find get all participants from an event. Returns an unordered list formatted in HTML.
+     * Return result will be added to the e-mail message.
+     * @param event
+     * @return
+     */
+    public static String allParticipants(Event event) {
+        String participants = "<li style=\"list-style: none;\">None</li>";
+        if(event.getParticipants().size() > 1) {
+            for(int i=0; i < event.getParticipants().size(); i++) {
+                participants = "<li style=\"list-style: none;\">" + event.getParticipants().get(i) + "</li>";
+            }
+        }
+        return participants;
+    }
+
+    /**
+     * Reminder e-mail message returning a string formatted in HTML.
+     * @param event
+     * @return
+     */
+    public static String message(Event event) {
+        return "<!DOCTYPE html>\n" +
+                "<html lang=\"en\" xmlns=\"https://www.w3.org/1999/xhtml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
+                " <head>\n" +
+                "  <meta charset=\"utf-8\">\n" +
+                "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
+                "  <meta name=\"x-apple-disable-message-reformatting\">\n" +
+                "  <title></title>\n" +
+                "  <!--[if mso]>\n" +
+                "  <style>\n" +
+                "   table {\n" +
+                "    border-collapse: collapse;\n" +
+                "    border-spacing: 0;\n" +
+                "    border: none;\n" +
+                "    margin: 0;\n" +
+                "   }\n" +
+                "   div, td {\n" +
+                "    padding: 0;\n" +
+                "   }\n" +
+                "   div {\n" +
+                "    margin: 0 !important;\n" +
+                "   }\n" +
+                "  </style>\n" +
+                "  <noscript>\n" +
+                "   <xml>\n" +
+                "    <o:OfficeDocumentSettings>\n" +
+                "     <o:PixelsPerInch>96</oPixelsPerInch>\n" +
+                "     </o:OfficeDocumentSettings>\n" +
+                "   </xml>\n" +
+                "  </noscript>\n" +
+                "  <![endif]-->\n" +
+                "  <style>\n" +
+                "   table, td, div, h1, p {\n" +
+                "    font-family: Arial, sans-serif;\n" +
+                "   }\n" +
+                "  </style>\n" +
+                "  </head>\n" +
+                "  <body style=\"margin: 0; padding: 0; word-spacing: normal; background-color: #FFFFFF\">\n" +
+                "   <div role=\"article\" aria-roledescription=\"email\" lang=\"en\" style=\"text-size-adjust:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; background-color:#FFFFFF;\">\n" +
+                "    <table role=\"presentation\" style=\"width:100%; border:none; border-spacing:0;\">\n" +
+                "     <tr>\n" +
+                "      <td align=\"center\" style=\"padding: 0;\">\n" +
+                "      <!--[if mso]>\n" +
+                "       <table role=\"presentation\" align=\"center\" style=\"width:600px\">\n" +
+                "        <tr>\n" +
+                "         <td>\n" +
+                "      <![endif]-->\n" +
+                "       <table role=\"presentation\" style=\"width: 94%; max-width:600px; border:none; border-spacing:0; text-align:left; font-family:Arial,sans-serif; font-size:16px; line-height:22px; color:#363636;\">\n" +
+                "       <!-- Header -->\n" +
+                "        <tr>\n" +
+                "         <td style=\"background:#7c1f4f; padding:30px; text-align:center;\">\n" +
+                "          <h2 style=\"font-family:Lato,sans-serif; font-size:30px; line-height:32px; color:#FCECF4; text-align: left; text-transform:uppercase; margin:0;\">Time<br>Scheduler</h2>\n" +
+                "         </td>\n" +
+                "        </tr>\n" +
+                "         <!-- Header end -->\n" +
+                "        <tr>\n" +
+                "        <td style=\"padding:30px; background-color:#ffffff;\">\n" +
+                "         <h1 style=\"margin-top:0; margin-bottom:16px; font-size:26px; line-height:32px; font-weight:bold; color: #7c1f4f;\">Don't forget your event!</h1>\n" +
+                "         <p>This is a kindly reminder for your upcoming event:</p>\n" +
+                "         <h2 style=\"font-size:20px; font-weight:bold; color: #2c2c2c;\">" + event.getName() + "</h2>\n" +
+                "         <table>\n" +
+                "          <tr style=\"vertical-align: baseline;\">\n" +
+                "           <td style=\"color: #acacac\">Date:</td>\n" +
+                "           <td style=\"padding: 0 0 0 10px;\">" + event.getDate() + "</td>\n" +
+                "          </tr>\n" +
+                "          <tr style=\"vertical-align: baseline;\">\n" +
+                "           <td style=\"color: #acacac\">Time:</td>\n" +
+                "           <td style=\"padding: 0 0 0 10px;\">" + event.getStartTime() + " - " + event.getEndTime() + "</td>\n" +
+                "          </tr>\n" +
+                "          <tr style=\"vertical-align: baseline;\">\n" +
+                "           <td style=\"color: #acacac\">Location:</td>\n" +
+                "           <td style=\"padding: 0 0 0 10px;\">" + event.getLocation() + "</td>\n" +
+                "          </tr>\n" +
+                "          <tr style=\"vertical-align: baseline;\">\n" +
+                "           <td style=\"color: #acacac\">Participants:</td>\n" +
+                "           <td>\n" +
+                "            <ul style=\"padding: 0 0 0 10px;\">\n" + allParticipants(event) +
+                "            </ul>\n" +
+                "           </td>\n" +
+                "          </tr>\n" +
+                "         </table>\n" +
+                "        </td>\n" +
+                "       </tr>\n" +
+                "       <!-- Footer -->\n" +
+                "       <tr>\n" +
+                "        <td style=\"padding:20px; text-align:center; font-size:12px; background:#404040; color:#cccccc;\">\n" +
+                "         <p style=\"margin:0;font-size:14px;line-height:20px;\">&reg; Time Scheduler <script>document.write(new Date().getFullYear())</script></p>\n" +
+                "        </td>\n" +
+                "       </tr>\n" +
+                "       <!-- Footer end -->\n" +
+                "      </table>\n" +
+                "      <!--[if mso]>\n" +
+                "         </td>\n" +
+                "        </tr>\n" +
+                "       </table>\n" +
+                "      <![endif]-->\n" +
+                "     </td>\n" +
+                "    </tr>\n" +
+                "   </table>\n" +
+                "  </div>\n" +
+                " </body>\n" +
+                "</html>";
     }
 }
