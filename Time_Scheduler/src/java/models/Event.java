@@ -48,6 +48,16 @@ public class Event {
     /** Priority of event*/
     private Priority priority;
     private Reminder reminder;
+    private String description;
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public ArrayList<File> getAttachments() {
         return attachments;
@@ -149,7 +159,7 @@ public class Event {
      * @param priority
      * @param reminder
      */
-    public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder) {
+    public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, String description) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -159,6 +169,7 @@ public class Event {
         this.participants = participants;
         this.priority = priority;
         this.reminder = reminder;
+        this.description = description;
     }
 
 
@@ -172,7 +183,7 @@ public class Event {
         this.reminder = reminder;
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder) {
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, String description) {
         this.name = name;
         this.date = date;
         this.startTime = startTime;
@@ -181,7 +192,9 @@ public class Event {
         this.participants = participants;
         this.priority = priority;
         this.reminder = reminder;
+        this.description = description;
     }
+
 
     /**
      * Create a new event
@@ -195,7 +208,7 @@ public class Event {
      * @param reminder
      * @param attachments
      */
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, ArrayList<File> attachments) {
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, ArrayList<File> attachments, String description) {
         this.name = name;
         this.date = date;
         this.startTime = startTime;
@@ -205,6 +218,7 @@ public class Event {
         this.priority = priority;
         this.reminder = reminder;
         this.attachments = attachments;
+        this.description = description;
     }
 
     /**

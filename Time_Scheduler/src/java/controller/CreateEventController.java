@@ -49,7 +49,9 @@ public class CreateEventController implements Initializable {
     @FXML
     private TextField attachmentText;
     @FXML
-    private Label addedAtt;
+    private Label falseTime;
+    @FXML
+    private TextField description;
 
     /** currently registered user */
     private User user;
@@ -208,23 +210,24 @@ public class CreateEventController implements Initializable {
     @FXML
     public void createEvent(ActionEvent e) throws MessagingException {
 
-
         if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){ //|| !boolReminder || chosenPriority == null){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Missing entry");
             errorAlert.setContentText("Please fill in all entries");
             errorAlert.showAndWait();
         }
+       else if (chosenStartTime.isAfter(chosenEndTime)){
+            falseTime.setText("*start time can't be before end time");
+        }
        else{
-       event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder, attachments);
-       this.user.createEvent(event);
+                event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder, attachments, description.getText());
+                this.user.createEvent(event);
 
-            Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
-            errorAlert.setTitle("Event scheduled");
-            errorAlert.setContentText("Successfully created event");
-            errorAlert.showAndWait();}
-
-    }
+                Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                errorAlert.setTitle("Event scheduled");
+                errorAlert.setContentText("Successfully created event");
+                errorAlert.showAndWait();}
+        }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

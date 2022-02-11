@@ -153,7 +153,7 @@ public class MailSender {
         String participants = "<li style=\"list-style: none;\">None</li>";
         if(event.getParticipants().size() > 1) {
             for(int i=0; i < event.getParticipants().size(); i++) {
-                participants = "<li style=\"list-style: none;\">" + event.getParticipants().get(i) + "</li>";
+                participants = "<li style=\"list-style: none;\">" + event.getParticipants().get(i).getUsername() + "</li>";
             }
         }
         return participants;
