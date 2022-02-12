@@ -16,6 +16,7 @@ import models.User;
 
 import javax.mail.MessagingException;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalTime;
@@ -208,7 +209,7 @@ public class CreateEventController implements Initializable {
      * @param e
      */
     @FXML
-    public void createEvent(ActionEvent e) throws MessagingException {
+    public void createEvent(ActionEvent e) throws MessagingException, IOException {
 
         if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){ //|| !boolReminder || chosenPriority == null){
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -217,7 +218,7 @@ public class CreateEventController implements Initializable {
             errorAlert.showAndWait();
         }
        else if (chosenStartTime.isAfter(chosenEndTime)){
-            falseTime.setText("*start time can't be before end time");
+            falseTime.setText("*start time can't be after end time");
         }
        else{
                 event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder, attachments, description.getText());

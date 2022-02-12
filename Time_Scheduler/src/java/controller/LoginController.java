@@ -74,6 +74,7 @@ public class LoginController implements Initializable {
 
             JavaFxUtil.sceneSwitcher("Master.fxml", signUpButton, 950, 600);
         }
+
         if(usernameTxt.getText().isBlank() || enterPassword.getText().isBlank()){
             loginMsgLabel.setTextFill(Color.RED);
             loginMsgLabel.setText("*either username or password is missing");
@@ -92,7 +93,7 @@ public class LoginController implements Initializable {
                     scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
                     MainController controller = loader.getController();
                     controller.retrieveUser(currentUser);
-                   // MailSender.reminderMail(currentUser);
+                    MailSender.reminderMail(currentUser);
 
                     Stage stage = (Stage) signUpButton.getScene().getWindow();
                     stage.setScene(scene);
@@ -102,7 +103,7 @@ public class LoginController implements Initializable {
                     else{
                     loginMsgLabel.setTextFill(Color.RED);
                     loginMsgLabel.setText("*sadly invalid, maybe try to register?"); }}
-                catch(SQLException  sqlException){
+                catch(SQLException | MessagingException sqlException){
                 sqlException.printStackTrace();}
             }
             }}

@@ -431,7 +431,7 @@ import models.User;
          * @return true on success and false on failure
          */
     public static boolean editEvent(Event event) {
-        String sql = "UPDATE events SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  host_id = ?, description = ? WHERE events_id = ? ";
+        String sql = "UPDATE events SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  eventhost_id = ?, description = ? WHERE events_id = ? ";
         Connection connection = getConnection();
 
         try {

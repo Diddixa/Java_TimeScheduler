@@ -148,6 +148,19 @@ public class Event {
     }
 
     /**
+     * Get a list of all participants' full names as text
+     *
+     * @return String of participant names
+     */
+    public String participantList() {
+        String list = "";
+        for (User participant : getParticipants()) {
+            list += participant.getFirstname() + " " + participant.getLastname() + "<br>";
+        }
+        return "<html> " + list + "<html>";
+    }
+
+    /**
      * Get all events from user
      * @param id
      * @param name
