@@ -114,7 +114,6 @@ public class MainController implements Initializable  {
                 root = loader.load();
                CreateEventController controller = loader.getController();
                controller.retrieveUser(this.user); // currently logged in user
-                MailSender.reminderMail(this.user);
             }
             else if(Objects.equals(page, "EventSchedule")){
                 FXMLLoader loader = new FXMLLoader();

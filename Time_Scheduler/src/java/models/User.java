@@ -5,6 +5,7 @@ import controller.MailSender;
 import javafx.scene.chart.PieChart;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +31,7 @@ public class User {
     private String email;
     /** List of events */
     private ArrayList<Event> events = new ArrayList<Event>();
+
 
 
 
@@ -189,7 +191,7 @@ public class User {
      *
      * @param event - Newly created event
      */
-    public void createEvent(Event event) throws MessagingException {
+    public void createEvent(Event event) throws MessagingException, IOException {
 
         event.setEventHostId(this.getId());
         int eventId = Database.storeEvent(event);
@@ -202,11 +204,11 @@ public class User {
             participant.addEvent(event);
         }
 
-      /*  MailSender.sendEventMail(event);
+          updateEventList();
 
         if (!event.getParticipants().isEmpty()) {
-            MailSender.sendEventMail(event);
-        } */
+            MailSender.sendEventMail(event, MailStatus.CREATED);
+        }
     }
 
     /**
@@ -219,11 +221,12 @@ public class User {
         Database.deleteUserEvents(this.getId(), event.getId());
     }
 
+
     /**
      * method removes event from user and all participants
      * @param event - Event to be deleted
      */
-    public void deleteEvent(Event event) {
+    public void deleteEvent(Event event) throws MessagingException, IOException {
 
         removeEvent(event);
         if (event.getEventHostId() == this.getId()) {
@@ -233,6 +236,11 @@ public class User {
             }
             Database.deleteEvent(event.getId());
             Database.deleteAllAttachments(event.getId());
+        }
+
+
+        if (!event.getParticipants().isEmpty()) {
+            MailSender.sendEventMail(event, MailStatus.DELETED);
         }
     }
 
