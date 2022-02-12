@@ -116,7 +116,7 @@ public class MailSender {
                 e.printStackTrace();
             }
         }
-            mimeMessage.setSubject(event.getName() + " " + event.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + event.getStartTime() + " " + event.getEndTime() + " " + event.getLocation());
+            mimeMessage.setSubject(event.getName() + " " + event.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + event.getStartTime() + "-" + event.getEndTime() + " " + event.getLocation());
            // mimeMessage.setText(MailSender.eventMessage(event, status),null, "html");
             text.setContent(MailSender.eventMessage(event, status), "text/HTML; charset=UTF-8");
              multipart.addBodyPart(text);
@@ -147,7 +147,7 @@ public class MailSender {
         }
 
         try {
-            mimeMessage.setSubject("Reminder: " + event.getName() + " " + event.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + event.getStartTime() + " " + event.getEndTime() + " " + event.getLocation());
+            mimeMessage.setSubject("Reminder: " + event.getName() + " " + event.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + event.getStartTime() + "-" + event.getEndTime() + " " + event.getLocation());
             mimeMessage.setText(reminderMessage(event), null, "html");
 
         } catch (MessagingException e) {
