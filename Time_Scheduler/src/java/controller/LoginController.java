@@ -8,10 +8,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import models.User;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -20,7 +22,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+/**
+ * Controller that deals with logging in a user corresponds to Login.fxml
+ */
 public class LoginController implements Initializable {
 
     @FXML
@@ -50,12 +57,16 @@ public class LoginController implements Initializable {
 
     }
 
-    public User GetLoggedInUser() {
-        return loggedInUser;
+    public static boolean valMail(String mail){
+        String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        Pattern emailPat = Pattern.compile(emailRegex,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = emailPat.matcher(mail);
+        return matcher.find();
+
     }
 
     /**
-     * Function created to switch from Login Scene to Register (will be global later)
+     * Switch from Login Scene to Register
      * @param e
      * @throws IOException
      */
@@ -65,16 +76,26 @@ public class LoginController implements Initializable {
 
     }
 
+    /**
+     * on action event to login a user while checking that the data corresponds to an entry in our user table
+     * @param e
+     * @throws IOException
+     */
     public void loginButtonOnAction(ActionEvent e) throws IOException {
 
-        if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "12345678")) {
+        if (Objects.equals(usernameTxt.getText(), "Admin") && Objects.equals(enterPassword.getText(), "1234")) {
 
             JavaFxUtil.sceneSwitcher("Master.fxml", signUpButton, 950, 600);
         }
 
+        if(usernameTxt.getText().isBlank() || enterPassword.getText().isBlank()){
+            loginMsgLabel.setTextFill(Color.RED);
+            loginMsgLabel.setText("*something is missing...");
+        }
+        else{
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
             try {
-                if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
+                if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText())) {
 
                     User currentUser = Database.getUser(usernameTxt.getText());
                     loggedInUser = currentUser;
@@ -83,8 +104,10 @@ public class LoginController implements Initializable {
                     loader.setLocation(getClass().getClassLoader().getResource("Dashboard1.fxml"));
                     Parent root = loader.load();
                     Scene scene = new Scene(root, 950, 600);
+                    scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
                     MainController controller = loader.getController();
                     controller.retrieveUser(currentUser);
+                    MailSender.reminderMail(currentUser);
 
                     Stage stage = (Stage) signUpButton.getScene().getWindow();
                     stage.setScene(scene);
@@ -92,11 +115,14 @@ public class LoginController implements Initializable {
 
                     }
                     else{
-                    loginMsgLabel.setText("Sadly invalid, maybe try to register?"); }}
-                catch(SQLException sqlException){
+                    loginMsgLabel.setTextFill(Color.RED);
+                    loginMsgLabel.setText("*sadly invalid, maybe try to register?");
+                    }
+            }
+                catch(SQLException | MessagingException sqlException){
                 sqlException.printStackTrace();}
             }
-            }
+            }}
 
 
     /**

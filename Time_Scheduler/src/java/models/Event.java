@@ -1,9 +1,15 @@
-package models;
 
+package models;
+import controller.Database;
+
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/**
+ * Event model
+ */
 public class Event {
 
 
@@ -35,16 +41,31 @@ public class Event {
      * Event host id of event
      */
     private int eventHostId;
-    /**
-     * List of participants of an event
-     */
+    /** List of participants of an event*/
     private ArrayList<User> participants;
-    /**
-     * Priority of event
-     */
+    /** List of attachments */
+    private ArrayList<File> attachments;
+    /** Priority of event*/
     private Priority priority;
     private Reminder reminder;
+    private String description;
 
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public ArrayList<File> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(ArrayList<File> attachments) {
+        this.attachments = attachments;
+    }
 
     public int getId() {
         return id;
@@ -126,8 +147,32 @@ public class Event {
         this.name = name;
     }
 
+    /**
+     * Get a list of all participants' full names as text
+     *
+     * @return String of participant names
+     */
+    public String participantList() {
+        String list = "";
+        for (User participant : getParticipants()) {
+            list += participant.getFirstname() + " " + participant.getLastname() + "<br>";
+        }
+        return "<html> " + list + "<html>";
+    }
 
-    public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder) {
+    /**
+     * Get all events from user
+     * @param id
+     * @param name
+     * @param date
+     * @param startTime
+     * @param endTime
+     * @param location
+     * @param participants
+     * @param priority
+     * @param reminder
+     */
+    public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, String description) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -137,7 +182,9 @@ public class Event {
         this.participants = participants;
         this.priority = priority;
         this.reminder = reminder;
+        this.description = description;
     }
+
 
     public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, Priority priority, Reminder reminder) {
         this.id = id;
@@ -150,7 +197,6 @@ public class Event {
         this.reminder = reminder;
     }
 
-
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, Reminder reminder, Priority priority) {
         this.name = name;
         this.date = date;
@@ -161,7 +207,7 @@ public class Event {
         this.reminder = reminder;
     }
 
-    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder) {
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, String description) {
         this.name = name;
         this.date = date;
         this.startTime = startTime;
@@ -170,6 +216,67 @@ public class Event {
         this.participants = participants;
         this.priority = priority;
         this.reminder = reminder;
+        this.description = description;
+    }
+
+
+    /**
+     * Create a new event
+     * @param name
+     * @param date
+     * @param startTime
+     * @param endTime
+     * @param location
+     * @param participants
+     * @param priority
+     * @param reminder
+     * @param attachments
+     */
+    public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, ArrayList<User> participants, Priority priority, Reminder reminder, ArrayList<File> attachments, String description) {
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.participants = participants;
+        this.priority = priority;
+        this.reminder = reminder;
+        this.attachments = attachments;
+        this.description = description;
+    }
+
+    /**
+     * method to edit the event information
+     * @param other - Event to be copied from
+     */
+    public void editEvent(Event other) {
+        name = other.name;
+        date = other.date;
+        startTime = other.startTime;
+        endTime = other.endTime;
+        location = other.location;
+        participants = other.participants;
+        priority = other.priority;
+        attachments = other.attachments;
+        reminder = other.reminder;
+        description = other.description;
+
+        Database.editEvent(this);
+    }
+
+    /**
+     * Method to remove participants
+     * @param user
+     * @return
+     */
+    public boolean removeParticipant(User user) {
+        if(participants.contains(user)) {
+            participants.remove(user);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public String toString() {
@@ -193,5 +300,4 @@ public class Event {
         }
         return fullNames;
     }
-
 }

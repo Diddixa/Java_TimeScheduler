@@ -11,6 +11,7 @@ import java.io.IOException;
 import javafx.stage.StageStyle;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -21,14 +22,11 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
 
-       /* Parent root = FXMLLoader.load(JavaFxUtil.class.getClassLoader().getResource(fxml));
-        Stage stage = (Stage) button.getScene().getWindow();
-        Scene scene = new Scene(root, v, v1);
-        scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
-        stage.setScene(scene);
-        stage.centerOnScreen(); */
+
 
     }
+
+
 
     public static void main(String[] args) {
         launch(args);

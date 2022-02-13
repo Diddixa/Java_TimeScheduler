@@ -5,6 +5,7 @@ module com.javaproject.time_scheduler {
     requires org.kordamp.ikonli.javafx;
     requires java.sql;
     requires com.calendarfx.view;
+    requires activation;
     requires javax.mail.api;
     requires itextpdf;
 

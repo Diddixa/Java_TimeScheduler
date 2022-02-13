@@ -1,31 +1,39 @@
 package controller;
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import models.Event;
-import models.Priority;
-import models.User;
+        import javafx.application.Platform;
+        import javafx.collections.FXCollections;
+        import javafx.collections.ObservableList;
+        import javafx.event.ActionEvent;
+        import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.fxml.Initializable;
+        import javafx.geometry.Insets;
+        import javafx.scene.Parent;
+        import javafx.scene.control.Button;
+        import javafx.scene.control.Label;
+        import javafx.scene.input.MouseEvent;
+        import javafx.scene.layout.AnchorPane;
+        import javafx.scene.layout.BorderPane;
+        import javafx.scene.layout.GridPane;
+        import javafx.scene.layout.VBox;
+        import models.Event;
+        import models.User;
 
-import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+        import javax.mail.MessagingException;
+        import java.io.IOException;
+        import java.net.URL;
+        import java.sql.Connection;
+        import java.sql.ResultSet;
+        import java.sql.SQLException;
+        import java.text.SimpleDateFormat;
+        import java.util.*;
+        import java.util.logging.Level;
+        import java.util.logging.Logger;
 
-public class MainController implements Initializable {
+/**
+ * Main dashobard scene also deals with switching scenes between side navigation panel
+ */
+public class MainController implements Initializable  {
 
     @FXML
     private AnchorPane ap;
@@ -38,7 +46,8 @@ public class MainController implements Initializable {
 
     @FXML
     private Label username;
-
+    @FXML
+    private Label firstLastName;
 
     @FXML
     private Label time;
@@ -55,38 +64,11 @@ public class MainController implements Initializable {
 
         this.user  = user;
         username.setText(this.user.getUsername());
-
+        //firstLastName.setText(this.user.getFirstname() + " " + this.user.getLastname());
     }
 
     @FXML
     private Label eventName;
-
-    @FXML
-    void loadEvents(ActionEvent event) {
-        this.user.updateEventList();
-        List<Event> events = new ArrayList<>(user.getEvents());
-
-/*
-        for(int i = 0; i < events.size(); i++)
-        {
-            Priority prio = events.get(i).getPriority();
-
-            switch(prio){
-                case Priority.HIGH:  break;
-                case Priority.MEDIUM:
-
-
-            }
-
-            eventName.setText(events.get(i).getName());
-            eventName.setText(events.get(i).getLocation());
-        }
-        eventName.setText(events.get(4).getName()); */
-
-        // if(hostid == userID)
-
-    }
-
 
     @FXML
     void home(MouseEvent event) {
@@ -94,18 +76,18 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    void page1(MouseEvent event) throws IOException {
-        loadingPage("page1");
+    void CreateEvent(MouseEvent event) throws IOException {
+        loadingPage("CreateEvent");
     }
 
     @FXML
-    void page2(MouseEvent event) throws IOException {
-        loadingPage("MyEventsToPdf");
+    void EventSchedule(MouseEvent event) throws IOException {
+        loadingPage("EventSchedule");
     }
 
     @FXML
-    void page3(MouseEvent event) throws IOException {
-        loadingPage("page3");
+    void editProfile(MouseEvent event) throws IOException {
+        loadingPage("editProfile");
     }
 
     public void logoutToLogin(ActionEvent e) throws IOException {
@@ -117,7 +99,7 @@ public class MainController implements Initializable {
 
     /**
      * method to load between the scenes using the fxml name as parameter
-     * send the logged in user information between the scenes
+     * send the logged-in user information between the scenes
      * @param page
      * @throws IOException
      */
@@ -125,26 +107,33 @@ public class MainController implements Initializable {
         Parent root = null;
 
         try {
-          /*  if(Objects.equals(page, "page1"))
-            { */
+            if(Objects.equals(page, "CreateEvent"))
+            {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
                 root = loader.load();
-                if (page == "page1"){
-                    ScheduleEventController schedule_controller = loader.getController();
-                    schedule_controller.retrieveUser(this.user); // currently logged in user
-                }
-                else if ( page == "MyEventsToPdf"){
-                    MyEventsToPdfController my_events_controller = loader.getController();
-                    my_events_controller.retrieveUser(this.user); // currently logged in user
-                    my_events_controller.loadData();
-                }
+                CreateEventController controller = loader.getController();
+                controller.retrieveUser(this.user); // currently logged in user
+            }
+            else if(Objects.equals(page, "EventSchedule")){
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
+                root = loader.load();
+                EventScheduleController EventSchedule = loader.getController();
+                EventSchedule.retrieveUser(this.user); // currently logged in user
+                EventSchedule.loadEvents();
+                MailSender.reminderMail(this.user);
+            }
+            else if(Objects.equals(page, "editProfile")){
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
+                root = loader.load();
+                EditProfileController editController = loader.getController();
+                editController.retrieveUser(this.user); // currently logged in user
+                editController.loadUserData();
+            }
 
-           /* }
-            else{
-             root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));}*/
-
-        } catch (IOException e) {
+        } catch (IOException | MessagingException e) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, e);
         }
 
@@ -174,9 +163,11 @@ public class MainController implements Initializable {
         thread.start();
     }
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-    timeNow();
-}
+        timeNow();
+    }
 
 }
