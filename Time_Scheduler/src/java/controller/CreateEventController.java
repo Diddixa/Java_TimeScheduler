@@ -279,7 +279,8 @@ public class CreateEventController implements Initializable {
            }
         }
         else {
-            if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){ //|| !boolReminder || chosenPriority == null){
+            if(this.user.getId() == this.event.getEventHostId()){
+            if(eventName.getText().isBlank() || formattedString.isBlank() || locationEvent.getText().isBlank() || chosenPriority == null || chosenDate == null){
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Missing entry");
                 errorAlert.setContentText("Please fill in all entries");
@@ -298,12 +299,17 @@ public class CreateEventController implements Initializable {
                 this.event.setPriority(chosenPriority);
                 this.event.setAttachments(attachments);
                 this.event.setDescription(description.getText());
-                //System.out.println(this.event.getId());
 
-                Database.editEvent(this.event);
-            }
+                this.event.editEvent(this.event);
+
+            }}
+            else{
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("No Permission");
+            errorAlert.setContentText("You are not allowed to edit this event!");
+            errorAlert.showAndWait();
         }
-    }
+    }}
 
     int eventID;
     void setTextFields(int eId, String eName, LocalDate eDate, LocalTime eStart, LocalTime eEnd, String eLocation, String eParticipants, Reminder eReminder, String eDescription) {
@@ -424,7 +430,12 @@ public class CreateEventController implements Initializable {
 
         buttonDeleteEvent.setOnAction(e -> {
             try {
-                this.user.deleteEvent(event);
+                if(this.user.getId() == event.getEventHostId()){
+                    this.user.deleteEvent(event);
+                }
+                else{
+                    this.user.removeEvent(event);
+                }
             } catch (MessagingException ex) {
                 ex.printStackTrace();
             } catch (IOException ex) {

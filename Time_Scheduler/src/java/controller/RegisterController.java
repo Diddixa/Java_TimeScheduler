@@ -19,6 +19,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * this controller deals with the Registration of the user data into our database
@@ -63,6 +65,18 @@ public class RegisterController{
     }
 
     /**
+     *  check mail format
+     * @param mail entered mail address
+     * @return true when succesful
+     */
+    public static boolean valMail(String mail){
+        String emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
+        Pattern emailPat = Pattern.compile(emailRegex,Pattern.CASE_INSENSITIVE);
+        Matcher matcher = emailPat.matcher(mail);
+        return matcher.find();
+    }
+
+    /**
      *  Validate user input and register him into database
      * @param e
      * @throws IOException
@@ -75,6 +89,7 @@ public class RegisterController{
         }
         else{
         if(setPWD.getText().equals(confirmPWD.getText())){
+            if(valMail(emailTxt.getText())){
 
             String encryptPass = PasswordEncryption.createHash(setPWD.getText());
             User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
@@ -86,7 +101,10 @@ public class RegisterController{
             }
             Database.registerUser(user);
 
-            JavaFxUtil.sceneSwitcher("Login.fxml", registerButton, 520, 560);
+            JavaFxUtil.sceneSwitcher("Login.fxml", registerButton, 520, 560); }
+            else{
+                registerLabel.setText("*mail is not in valid email format");
+            }
 
         }else{
             passwordLabel.setText("*Password does not match");
