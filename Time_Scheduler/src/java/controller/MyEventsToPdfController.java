@@ -1,3 +1,4 @@
+/*
 package controller;
 
 import javafx.collections.FXCollections;
@@ -56,7 +57,9 @@ public class MyEventsToPdfController implements Initializable {
     public TableColumn<Event, Priority> colPriority;
     public TableColumn<Event, Reminder> colReminder;
 
-    /** currently registered user */
+    */
+/** currently registered user *//*
+
     private User user;
 
     @FXML
@@ -71,13 +74,17 @@ public class MyEventsToPdfController implements Initializable {
 
     ObservableList<Event> observableList = FXCollections.observableArrayList();
 
-    /*
+    */
+/*
     Initializes the  Class.
-     */
+     *//*
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        /* Tableview Settings */
+        */
+/* Tableview Settings *//*
+
         myEventsTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
@@ -116,17 +123,21 @@ public class MyEventsToPdfController implements Initializable {
 
     }
 
-    /**
+    */
+/**
      * function to retrieve the logged in user from LoginController
      * @param user
-     */
+     *//*
+
     public void retrieveUser(User user){
         this.user = user;
     }
 
-    /*
+    */
+/*
     This method will return an ObservableList of Event objects.
-     */
+     *//*
+
     public void loadData() {
         colId.setCellValueFactory(new PropertyValueFactory<>("Id"));
         colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -163,14 +174,17 @@ public class MyEventsToPdfController implements Initializable {
     }
 
 
-    /**
+    */
+/**
      * Export selected event to pdf
      * @param e
-     */
+     *//*
+
     @FXML
     public void btnExportToPDFOnAction(ActionEvent e) throws IOException, DocumentException {
         // Get selected row
         Event event = myEventsTableView.getSelectionModel().getSelectedItem();
+*/
 /*
         // Ask to select an event if none is selected
         if (event == null){
@@ -180,15 +194,18 @@ public class MyEventsToPdfController implements Initializable {
             alert.showAndWait();
             return;
         }
-*/
+*//*
+
         saveFile(btnExportPDF, event.toString());
     }
 
 
-    /**
+    */
+/**
      * Export current week events to pdf
      * @param e
-     */
+     *//*
+
     @FXML
     public void btnExportWeeklyToPDFOnAction(ActionEvent e) throws IOException, DocumentException {
         // Get selected row
@@ -229,3 +246,4 @@ public class MyEventsToPdfController implements Initializable {
 
 
 }
+*/

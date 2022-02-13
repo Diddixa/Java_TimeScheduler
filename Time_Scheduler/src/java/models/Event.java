@@ -278,4 +278,26 @@ public class Event {
             return false;
         }
     }
+
+    public String toString() {
+        String str = "Id: " + this.id + "\n" +
+                "Name: " + this.name + "\n" +
+                "Date: " + this.date + "\n" +
+                "StartTime: " + this.startTime + "\n" +
+                "EndTime: " + this.endTime + "\n" +
+                "Location: " + this.location + "\n" +
+                "Participants: " + String.join(", ", this.getParticipantsFullNames()) + "\n" +
+                "Priority: " + this.priority + "\n" +
+                "Reminder: " + this.reminder + "\n" ;
+
+        return str;
+    }
+
+    public ArrayList<String> getParticipantsFullNames() {
+        ArrayList<String> fullNames = new ArrayList<>();
+        for (User user: this.participants) {
+            fullNames.add(user.getFirstname() + " " + user.getLastname());
+        }
+        return fullNames;
+    }
 }
