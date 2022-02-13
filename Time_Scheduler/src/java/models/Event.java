@@ -139,6 +139,17 @@ public class Event {
         this.reminder = reminder;
     }
 
+    public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, Priority priority, Reminder reminder) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.priority = priority;
+        this.reminder = reminder;
+    }
+
 
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, Reminder reminder, Priority priority) {
         this.name = name;
@@ -159,6 +170,28 @@ public class Event {
         this.participants = participants;
         this.priority = priority;
         this.reminder = reminder;
+    }
+
+    public String toString() {
+        String str = "Id: " + this.id + "\n" +
+                "Name: " + this.name + "\n" +
+                "Date: " + this.date + "\n" +
+                "StartTime: " + this.startTime + "\n" +
+                "EndTime: " + this.endTime + "\n" +
+                "Location: " + this.location + "\n" +
+                "Participants: " + String.join(", ", this.getParticipantsFullNames()) + "\n" +
+                "Priority: " + this.priority + "\n" +
+                "Reminder: " + this.reminder + "\n" ;
+
+        return str;
+    }
+
+    public ArrayList<String> getParticipantsFullNames() {
+        ArrayList<String> fullNames = new ArrayList<>();
+        for (User user: this.participants) {
+            fullNames.add(user.getFirstname() + " " + user.getLastname());
+        }
+        return fullNames;
     }
 
 }

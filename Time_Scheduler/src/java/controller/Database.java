@@ -365,7 +365,7 @@ public class Database {
      * @return a list of all events a user is part of.
      */
     public static ArrayList<Event> getEventsFromUser(int userId) {
-        String sql = "SELECT * FROM events " + "LEFT JOIN user_Events " + "ON user_Events.event_id = events.id_events "
+        String sql = "SELECT * FROM events " + "LEFT JOIN user_Events " + "ON user_Events.event_id = events.events_id "
                 + "WHERE user_Events.user_id = ?";
 
         Connection connection = getConnection();

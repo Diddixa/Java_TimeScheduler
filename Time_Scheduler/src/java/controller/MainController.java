@@ -100,7 +100,7 @@ public class MainController implements Initializable {
 
     @FXML
     void page2(MouseEvent event) throws IOException {
-        loadingPage("page2");
+        loadingPage("MyEventsToPdf");
     }
 
     @FXML
@@ -130,8 +130,16 @@ public class MainController implements Initializable {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
                 root = loader.load();
-               ScheduleEventController controller = loader.getController();
-               controller.retrieveUser(this.user); // currently logged in user
+                if (page == "page1"){
+                    ScheduleEventController schedule_controller = loader.getController();
+                    schedule_controller.retrieveUser(this.user); // currently logged in user
+                }
+                else if ( page == "MyEventsToPdf"){
+                    MyEventsToPdfController my_events_controller = loader.getController();
+                    my_events_controller.retrieveUser(this.user); // currently logged in user
+                    my_events_controller.loadData();
+                }
+
            /* }
             else{
              root = FXMLLoader.load(getClass().getClassLoader().getResource(page + ".fxml"));}*/

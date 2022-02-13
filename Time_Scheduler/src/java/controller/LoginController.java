@@ -42,9 +42,16 @@ public class LoginController implements Initializable {
     @FXML
     private TextField usernameTxt;
 
+
+    private User loggedInUser;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public User GetLoggedInUser() {
+        return loggedInUser;
     }
 
     /**
@@ -70,6 +77,7 @@ public class LoginController implements Initializable {
                 if (Database.confirmLogin(usernameTxt.getText(), enterPassword.getText()) == 1) {
 
                     User currentUser = Database.getUser(usernameTxt.getText());
+                    loggedInUser = currentUser;
 
                     FXMLLoader loader = new FXMLLoader();
                     loader.setLocation(getClass().getClassLoader().getResource("Dashboard1.fxml"));

@@ -178,14 +178,13 @@ public class ScheduleEventController implements Initializable {
             errorAlert.showAndWait();
         }
        else{
-       event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder);
-       this.user.createEvent(event);
-
+           event = new Event(eventName.getText(), chosenDate, chosenStartTime, chosenEndTime, locationEvent.getText(), participants, chosenPriority, chosenReminder);
+           this.user.createEvent(event);
             Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
             errorAlert.setTitle("Event scheduled");
             errorAlert.setContentText("Successfully created event");
-            errorAlert.showAndWait();}
-
+            errorAlert.showAndWait();
+       }
     }
 
     @Override
