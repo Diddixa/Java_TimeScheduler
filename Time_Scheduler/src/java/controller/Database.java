@@ -444,14 +444,18 @@ import models.User;
                 ps.setTime(6, Time.valueOf(event.getEndTime()));
                 ps.setString(7, event.getLocation());
                 ps.setInt(8, event.getEventHostId());
-                ps.setInt(9, event.getId());
-                ps.setString(10, event.getDescription());
+                ps.setString(9, event.getDescription());
+                ps.setInt(10, event.getId());
+
                 ps.executeUpdate();
                 ps.close();
+
+                System.out.println("user updated");
                 return true;
             } catch (SQLException var5) {
                 var5.printStackTrace();
                 var5.getErrorCode();
+                System.out.println("failed to update");
                 return false;
             }
         }
