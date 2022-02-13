@@ -2,6 +2,8 @@
 
 <?import com.calendarfx.view.TimeField?>
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -10,140 +12,230 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane id="event" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="644.0" prefWidth="699.0" style="-fx-background-color: ffff;" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateEventController">
+<AnchorPane id="createEvent" fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: ffff;" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateEventController">
    <children>
-      <Pane layoutY="8.0" prefHeight="103.0" prefWidth="699.0" style="-fx-background-color: AA336A;">
-         <children>
-            <Text fill="#2d2a2a" layoutX="14.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time is precious... plan it wisely" wrappingWidth="217.046875">
-               <font>
-                  <Font name="Book Antiqua" size="24.0" />
-               </font>
-            </Text>
-            <ImageView fitHeight="103.0" fitWidth="131.0" layoutX="571.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../images/sandclock.png" />
-               </image>
-            </ImageView>
-         </children></Pane>
-      <Label alignment="TOP_LEFT" layoutX="56.0" layoutY="128.0" text="Name of event">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="eventName" layoutX="56.0" layoutY="158.0" prefHeight="30.0" prefWidth="289.0" promptText="Name" style="-fx-background-color: #eeeeee;" />
-      <Label layoutX="56.0" layoutY="205.0" text="Date of event">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <DatePicker fx:id="eventDate" layoutX="56.0" layoutY="235.0" onAction="#scheduleDate" prefHeight="36.0" prefWidth="289.0" promptText="DD/MM/YYYY" style="-fx-background-color: AA336A; -fx-background-color: #eeeeee;" />
-      <Label layoutX="56.0" layoutY="297.0" text="Event duration">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="58.0" layoutY="372.0" text="Location">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="locationEvent" layoutX="56.0" layoutY="402.0" prefHeight="30.0" prefWidth="289.0" promptText="Your location" style="-fx-background-color: #eeeeee;" />
-      <Label layoutX="56.0" layoutY="438.0" text="Participants">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <Label alignment="TOP_LEFT" layoutX="380.0" layoutY="128.0" text="Remind me">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <ChoiceBox fx:id="remindChoice" layoutX="382.0" layoutY="158.0" prefHeight="30.0" prefWidth="189.0" />
-      <Label alignment="TOP_LEFT" layoutX="380.0" layoutY="205.0" text="Priority">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <Button fx:id="highButton" layoutX="574.0" layoutY="235.0" mnemonicParsing="false" onMouseClicked="#high" prefHeight="36.0" prefWidth="76.0" style="-fx-cursor: hand;" text="High">
-         <font>
-            <Font name="Arial Black" size="13.0" />
-         </font>
-         <styleClass>
-            <String fx:value="button-priority" />
-            <String fx:value="button-priority-high" />
-         </styleClass>
-      </Button>
-      <Button fx:id="mediumButton" layoutX="480.0" layoutY="235.0" mnemonicParsing="false" onMouseClicked="#medium" prefHeight="36.0" prefWidth="76.0" style="-fx-cursor: hand;" text="medium">
-         <font>
-            <Font name="Arial Black" size="13.0" />
-         </font>
-         <styleClass>
-            <String fx:value="button-priority" />
-            <String fx:value="button-priority-medium" />
-         </styleClass>
-      </Button>
-      <Button fx:id="lowButton" layoutX="383.0" layoutY="235.0" mnemonicParsing="false" onMouseClicked="#low" prefHeight="36.0" prefWidth="76.0" style="-fx-cursor: hand;" text="low">
-         <font>
-            <Font name="Arial Black" size="13.0" />
-         </font>
-         <styleClass>
-            <String fx:value="button-priority" />
-            <String fx:value="button-priority-low" />
-         </styleClass>
-      </Button>
-      <TextField fx:id="participant" layoutX="56.0" layoutY="467.0" prefHeight="30.0" prefWidth="250.0" promptText="Participant" style="-fx-background-color: #eeeeee;" />
-      <Button layoutX="303.0" layoutY="463.0" mnemonicParsing="false" onAction="#addParticipant" prefHeight="25.0" prefWidth="51.0" style="-fx-cursor: hand; -fx-background-color: ffff;">
+      <Button fx:id="buttonCancel" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="25.0" maxWidth="25.0" mnemonicParsing="false" onAction="#close" text="Button" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <graphic>
-            <ImageView fitHeight="28.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../images/add.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
-      <Button layoutX="434.0" layoutY="497.0" mnemonicParsing="false" onAction="#createEvent" prefHeight="103.0" prefWidth="143.0" style="-fx-background-color: ffff; -fx-cursor: hand;">
-         <graphic>
-            <ImageView fitHeight="156.0" fitWidth="146.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../images/TimeIsMoney.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
-      <Label layoutX="380.0" layoutY="372.0" text="Event description">
-         <font>
-            <Font name="Arial Black" size="23.0" />
-         </font>
-      </Label>
-      <TimeField fx:id="startTime" layoutX="62.0" layoutY="329.0" />
-      <TimeField fx:id="endTime" layoutX="222.0" layoutY="329.0" />
-      <Label fx:id="addedUsers" layoutX="56.0" layoutY="501.0" prefHeight="29.0" prefWidth="270.0">
-         <font>
-            <Font name="Arial Black" size="12.0" />
-         </font>
-      </Label>
-      <Label alignment="TOP_LEFT" layoutX="380.0" layoutY="292.0" prefHeight="29.0" prefWidth="306.0" text="Add attachments (optional)">
-         <font>
-            <Font name="Arial Black" size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="attachmentText" layoutX="377.0" layoutY="327.0" prefHeight="30.0" prefWidth="242.0" promptText="Attachment file" style="-fx-background-color: #eeeeee;" />
-      <Button layoutX="619.0" layoutY="323.0" mnemonicParsing="false" onAction="#addFile" prefHeight="25.0" prefWidth="51.0" style="-fx-cursor: hand; -fx-background-color: ffff;">
-         <graphic>
-            <ImageView fitHeight="28.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../images/attachment.png" />
+                  <Image url="@../../../images/cancel.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <TextField fx:id="description" alignment="TOP_LEFT" layoutX="373.0" layoutY="402.0" prefHeight="91.0" prefWidth="289.0" promptText="Description" style="-fx-background-color: #eeeeee;" />
-      <Label fx:id="falseTime" layoutX="56.0" layoutY="347.0" prefHeight="29.0" prefWidth="270.0" textFill="#e10000">
-         <font>
-            <Font name="Arial Black" size="12.0" />
-         </font>
-      </Label>
+      <Pane fx:id="header" maxHeight="75.0" prefHeight="75.0" style="-fx-background-color: #AA336A;" styleClass="header" AnchorPane.bottomAnchor="524.6666666666666" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="53.0" layoutY="23.0" text="CREATE AN EVENT" />
+            <ImageView fitWidth="25.0" layoutX="20.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../images/calendar.png" />
+               </image>
+               <viewport>
+                  <Rectangle2D height="35.0" width="35.0" />
+               </viewport>
+            </ImageView>
+         </children>
+      </Pane>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="40.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+         <children>
+            <VBox fx:id="boxLeft" prefHeight="644.0" prefWidth="350.0" spacing="10.0">
+               <children>
+                  <Label alignment="TOP_LEFT" text="Name of event">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="eventName" maxWidth="260.0" prefHeight="30.0" prefWidth="289.0" promptText="Name">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label text="Date of event">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane>
+                     <children>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="261.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@../../../images/calendar_dark.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D height="35.0" width="35.0" />
+                           </viewport>
+                        </ImageView>
+                        <DatePicker fx:id="eventDate" maxWidth="285.0" onAction="#scheduleDate" prefHeight="30.0" prefWidth="311.0" promptText="DD/MM/YYYY" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </AnchorPane>
+                  <Label text="Event duration">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="21.0" prefWidth="309.0" spacing="20.0">
+                     <children>
+                        <TimeField fx:id="startTime" prefHeight="31.0" prefWidth="79.0" HBox.hgrow="ALWAYS" />
+                        <TimeField fx:id="endTime" prefHeight="55.0" prefWidth="83.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <Label fx:id="falseTime" prefHeight="29.0" prefWidth="270.0" textFill="#e10000">
+                     <font>
+                        <Font name="Arial Black" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Location">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="locationEvent" maxWidth="260.0" prefHeight="30.0" prefWidth="289.0" promptText="Your location">
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Label text="Participants">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                  </Label>
+                  <HBox prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="participant" maxWidth="260.0" prefHeight="30.0" promptText="Username" HBox.hgrow="ALWAYS" />
+                        <Button mnemonicParsing="false" onAction="#addParticipant" style="-fx-cursor: hand; -fx-background-color: ffff;">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../images/add.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <Label fx:id="addedUsers" prefHeight="29.0" prefWidth="270.0">
+                     <font>
+                        <Font name="Arial Black" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox prefHeight="644.0" prefWidth="350.0">
+               <children>
+                  <Label alignment="TOP_LEFT" text="Remind me">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <ChoiceBox fx:id="remindChoice" prefHeight="30.0" prefWidth="190.0">
+                     <VBox.margin>
+                        <Insets bottom="25.0" />
+                     </VBox.margin>
+                  </ChoiceBox>
+                  <Label alignment="TOP_LEFT" text="Priority">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="15.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefWidth="200.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="lowButton" mnemonicParsing="false" onMouseClicked="#low" prefHeight="35.0" prefWidth="100.0" style="-fx-cursor: hand;" text="low" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Arial Black" size="13.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="button-priority" />
+                              <String fx:value="button-priority-low" />
+                           </styleClass>
+                        </Button>
+                        <Button fx:id="mediumButton" mnemonicParsing="false" onMouseClicked="#medium" prefHeight="35.0" prefWidth="100.0" style="-fx-cursor: hand;" text="medium" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Arial Black" size="13.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="button-priority" />
+                              <String fx:value="button-priority-medium" />
+                           </styleClass>
+                        </Button>
+                        <Button fx:id="highButton" mnemonicParsing="false" onMouseClicked="#high" prefHeight="35.0" prefWidth="100.0" style="-fx-cursor: hand;" text="High" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="Arial Black" size="13.0" />
+                           </font>
+                           <styleClass>
+                              <String fx:value="button-priority" />
+                              <String fx:value="button-priority-high" />
+                           </styleClass>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="31.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label alignment="TOP_LEFT" prefWidth="306.0" text="Add attachments (optional)">
+                     <font>
+                        <Font name="Arial Black" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="4.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="attachmentText" maxWidth="260.0" prefHeight="30.0" prefWidth="260.0" promptText="Attachment file" />
+                        <Button mnemonicParsing="false" onAction="#addFile" prefHeight="25.0" prefWidth="25.0" style="-fx-cursor: hand; -fx-background-color: ffff;">
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../../images/attachment.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="40.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Event description">
+                     <font>
+                        <Font name="Arial Black" size="23.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="description" alignment="TOP_LEFT" prefHeight="126.0" promptText="Description" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets bottom="30.0" />
+                     </VBox.margin></TextField>
+                  <Button fx:id="buttonCreateEvent" alignment="CENTER" mnemonicParsing="false" onAction="#createEvent" prefWidth="200.0" text="Create event" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets left="55.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
    </children>
 </AnchorPane>

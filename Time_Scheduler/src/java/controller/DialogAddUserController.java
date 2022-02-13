@@ -84,19 +84,15 @@ public class DialogAddUserController {
             alert.setHeaderText(null);
             alert.setContentText("New user has been successfully added!");
             alert.showAndWait();
-
-            System.out.println("Create User: " + user.getId());
         }
         else {
             if(!oldPassword.equals(textFieldPassword.getText())) {
                 String password = PasswordEncryption.createHash(textFieldPassword.getText());
                 user.setPassword(password);
                 Database.editUser(user, userID);
-                System.out.println("New Password");
             }
             else {
                 Database.editUser(user, userID);
-                System.out.println("Old Password");
             }
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

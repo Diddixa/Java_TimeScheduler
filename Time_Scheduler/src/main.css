@@ -17,6 +17,34 @@
 .button:hover {
     -fx-background-color: #CC3D80;
 }
+.text-field {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #aeaeae;
+}
+.text-field:focused {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #AA336A;
+}
+.header .label {
+    -fx-text-fill: #FFFAFB;
+	-fx-font-weight: 700;
+    -fx-font-size: 24px;
+}
+.header .button {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #AA336A;
+	-fx-font-weight: 700;
+    -fx-font-size: 16px;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1), 20, 0.0, 6 , 6);
+}
+
+.text-field .text {
+    -fx-font-family: "Roboto";
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+}
 
 /* WARNING */
 #warning .label {
@@ -40,6 +68,8 @@
 #login .button-register {
     -fx-background-color: transparent;
     -fx-text-fill: #9316c7;
+	-fx-font-weight: 700;
+    -fx-font-size: 14px;
 }
 #login .button-register:hover {
     -fx-background-color: transparent;
@@ -47,10 +77,8 @@
     -fx-underline: true;
 }
 
-/* REGISTRATION */
-#register .header .label {
-    -fx-font-size: 24px;
-}
+
+/* EDIT PROFILE */
 
 /* USER VIEW */
 .user-sidebar .button {
@@ -61,7 +89,8 @@
     -fx-border-width: 0 0 0 2px;
     -fx-border-style: solid;
 }
-.user-sidebar .button:focused {
+.user-sidebar .button:focused,
+.user-sidebar .button:selected {
     -fx-background-color: #CC3D80;
 	-fx-border-color: #FFFAFB;
     -fx-border-width: 0 0 0 2px;
@@ -70,48 +99,125 @@
 .user-sidebar .button:hover .text,
 .user-sidebar .button:hover .image-view,
 .user-sidebar .button:focused .text,
-.user-sidebar .button:focused .image-view {
+.user-sidebar .button:focused .image-view,
+.user-sidebar .button:selected .text,
+.user-sidebar .button:selected .image-view {
 	-fx-translate-x: -2px;
 }
 
-#event .button-priority {
+#createEvent .date-picker {
+    -fx-background-color: transparent;
+}
+#createEvent .date-picker .date-picker-display-node {
+    -fx-background-color: transparent;
+}
+#createEvent .date-picker .arrow-button {
+    -fx-background-color: transparent;
+}
+#createEvent .date-picker .arrow-button .arrow {
+    -fx-background-color: transparent;
+}
+
+#createEvent .date-picker-popup {
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.1) , 12, 0.0, 4 , 4);
+}
+#createEvent .date-picker-popup .month-year-pane {
+    -fx-background-color: #FFFFFF;
+}
+#createEvent .date-picker-popup .button {
+    -fx-background-color: transparent;
+}
+#createEvent .date-picker-popup .left-arrow,
+#createEvent .date-picker-popup .right-arrow {
+    -fx-background-color: #000;
+    -fx-effect: none;
+}
+#createEvent .date-picker-popup .calendar-grid,
+#createEvent .date-picker-popup .date-cell {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #FFFFFF;
+}
+#createEvent .date-picker-popup .previous-month,
+#createEvent .date-picker-popup .next-month {
+    -fx-background-color: transparent;
+    -fx-text-fill: #aeaeae;
+}
+#createEvent .date-picker-popup .today {
+    -fx-background-color: #fff, derive(#AA336A, -20%), #fff;
+    -fx-text-fill: #AA336A;
+}
+#createEvent .date-picker-popup .day-cell:hover,
+#createEvent .date-picker-popup .today:hover,
+#createEvent .date-picker-popup .today.selected,
+#createEvent .date-picker-popup .selected {
+    -fx-background-color: #AA336A;
+    -fx-text-fill: #FFFFFF;
+}
+#createEvent .date-picker-popup .previous-month:hover,
+#createEvent .date-picker-popup .next-month:hover {
+    -fx-background-color: #AA336AAe;
+    -fx-text-fill: #FFFFFF;
+}
+
+#createEvent .button-priority {
     -fx-background-color: #FFFFFF;
     -fx-border-radius: 2px;
 	-fx-font-weight: 500;
     -fx-font-size: 14px;
 }
-#event .button-priority-high {
+
+#createEvent .button-priority-high {
     -fx-border-color: #ff7979;
     -fx-text-fill: #ac0000;
 }
-
-#event .button-priority-high:hover {
+#createEvent .button-priority-high:hover {
     -fx-background-color: #ff797933;
 }
-#event .button-priority-high:focused {
+#createEvent .button-priority-high:focused,
+#createEvent .button-priority-high:selected {
     -fx-background-color: #ff7979;
 }
 
-#event .button-priority-medium {
+#createEvent .button-priority-medium {
     -fx-border-color: #ffe08c;
     -fx-text-fill: #BA8200;
 }
-#event .button-priority-medium:hover {
+#createEvent .button-priority-medium:hover {
     -fx-background-color: #ffe08c33;
 }
-#event .button-priority-medium:focused {
+#createEvent .button-priority-medium:focused,
+#createEvent .button-priority-medium:selected {
     -fx-background-color: #ffe08c;
 }
 
-#event .button-priority-low {
+#createEvent .button-priority-low {
     -fx-border-color: #65F093;
     -fx-text-fill: #007726;
 }
-#event .button-priority-low:hover {
+#createEvent .button-priority-low:hover {
     -fx-background-color: #65F09333;
 }
-#event .button-priority-low:focused {
+#createEvent .button-priority-low:focused,
+#createEvent .button-priority-low:selected {
     -fx-background-color: #65F093;
+}
+
+#eventPage .scroll-pane .viewport {
+    -fx-background-color: #FFFFFF;
+}
+
+#thumbEvent {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 15px;
+    -fx-effect:  dropshadow( gaussian , rgba(170,51,106,0.1), 20, 0.0, 6 , 6);
+}
+#thumbEvent .bg-prio {
+    -fx-background-radius: 100px;
+}
+#thumbEvent .eventName {
+	-fx-font-weight: 700;
+    -fx-font-size: 14px;
 }
 
 /* ADMIN VIEW */

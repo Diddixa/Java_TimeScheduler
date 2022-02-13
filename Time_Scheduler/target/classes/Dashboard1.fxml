@@ -3,56 +3,24 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <BorderPane id="user" fx:id="bp" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="950.0" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <left>
-      <VBox prefHeight="600.0" prefWidth="253.0" style="-fx-background-color: #AA336A;" styleClass="user-sidebar" BorderPane.alignment="CENTER">
+      <VBox prefHeight="600.0" prefWidth="250.0" style="-fx-background-color: #AA336A;" styleClass="user-sidebar" BorderPane.alignment="CENTER">
          <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #AA336A;">
-               <children>
-                  <Label layoutX="14.0" layoutY="9.0" prefHeight="30.0" prefWidth="110.0" text="Welcome" textFill="#fffafb">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="username" layoutX="14.0" layoutY="35.0" textFill="#fffafb">
-                     <font>
-                        <Font name="Roboto Medium" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="time" alignment="CENTER" layoutX="179.0" layoutY="14.0" prefHeight="21.0" prefWidth="73.0" textFill="#fffafb">
-                     <font>
-                        <Font name="Roboto" size="14.0" />
-                     </font>
-                  </Label>
-                  <ImageView fitHeight="128.0" fitWidth="138.0" layoutX="125.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../images/time.png" />
-                     </image>
-                  </ImageView>
-                  <Label fx:id="firstLastName" layoutX="14.0" layoutY="53.0" textFill="#fffafb">
-                     <font>
-                        <Font name="Roboto Medium" size="18.0" />
-                     </font>
-                  </Label>
-               </children></Pane>
             <Button alignment="BASELINE_LEFT" graphicTextGap="10.0" mnemonicParsing="false" onMouseClicked="#home" prefHeight="50.0" prefWidth="255.0" style="-fx-cursor: hand;" text="Home" textFill="WHITE">
                <font>
                   <Font name="Roboto Medium" size="16.0" />
                </font>
                <VBox.margin>
-                  <Insets />
+                  <Insets top="200.0" />
                </VBox.margin>
                <graphic>
                   <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
@@ -133,6 +101,9 @@
                <padding>
                   <Insets left="20.0" right="20.0" />
                </padding>
+               <VBox.margin>
+                  <Insets top="149.0" />
+               </VBox.margin>
             </Button>
          </children>
       </VBox>
@@ -140,21 +111,31 @@
    <center>
       <AnchorPane fx:id="ap" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffff;" BorderPane.alignment="CENTER">
          <children>
-            <Pane layoutX="-2.0" prefHeight="81.0" prefWidth="699.0" style="-fx-background-color: AA336A;" />
-            <Text layoutX="20.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Events">
-               <font>
-                  <Font size="35.0" />
-               </font>
-            </Text>
-            <ScrollPane layoutX="25.0" layoutY="160.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
-               <content>
-                  <GridPane fx:id="eventGrid">
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                  </GridPane>
-               </content>
-            </ScrollPane>
+            <Pane layoutX="-2.0" prefHeight="75.0" prefWidth="700.0" style="-fx-background-color: AA336A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+               <children>
+                  <Label prefHeight="30.0" prefWidth="110.0" text="Welcome" textFill="#fffafb">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="time" alignment="CENTER" prefHeight="21.0" prefWidth="73.0" textFill="#fffafb">
+                     <font>
+                        <Font name="Roboto" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="username" textFill="#fffafb">
+                     <font>
+                        <Font name="Roboto Medium" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="firstLastName" textFill="#fffafb">
+                     <font>
+                        <Font name="Roboto Medium" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
    </center>

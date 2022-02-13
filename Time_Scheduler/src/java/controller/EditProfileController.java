@@ -61,10 +61,10 @@ public class EditProfileController {
         }
         else{
 
-        loggedUser.setEmail(emailText.getText());
-        loggedUser.setFirstname(firstnameText.getText());
-        loggedUser.setLastname(lastnameText.getText());
-        loggedUser.setUsername(usernameText.getText());
+            loggedUser.setEmail(emailText.getText());
+            loggedUser.setFirstname(firstnameText.getText());
+            loggedUser.setLastname(lastnameText.getText());
+            loggedUser.setUsername(usernameText.getText());
 
             if(!Database.isTaken(loggedUser)) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -76,8 +76,6 @@ public class EditProfileController {
         if(!passwordTxt.getText().isBlank()) {
             loggedUser.setPassword(PasswordEncryption.createHash(passwordTxt.getText()));
         }
-
-        Database.editUser(loggedUser, loggedUser.getId());
 
         if(Database.editProfile(loggedUser)) {
 

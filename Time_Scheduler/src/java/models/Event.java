@@ -186,6 +186,17 @@ public class Event {
     }
 
 
+    public Event(int id, String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, Priority priority, Reminder reminder) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+        this.priority = priority;
+        this.reminder = reminder;
+    }
+
     public Event(String name, LocalDate date, LocalTime startTime, LocalTime endTime, String location, Reminder reminder, Priority priority) {
         this.name = name;
         this.date = date;
@@ -248,7 +259,23 @@ public class Event {
         priority = other.priority;
         attachments = other.attachments;
         reminder = other.reminder;
+        description = other.description;
 
         Database.editEvent(this);
+    }
+
+    /**
+     * Method to remove participants
+     * @param user
+     * @return
+     */
+    public boolean removeParticipant(User user) {
+        if(participants.contains(user)) {
+            participants.remove(user);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

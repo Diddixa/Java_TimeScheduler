@@ -434,27 +434,27 @@ import models.User;
         String sql = "UPDATE events SET name = ? , reminder = ? , priority = ? , date = ? , startTime = ? , endTime = ? , location = ?,  eventhost_id = ?, description = ? WHERE events_id = ? ";
         Connection connection = getConnection();
 
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, event.getName());
-            ps.setString(2, event.getReminder().name());
-            ps.setString(3, event.getPriority().name());
-            ps.setDate(4, Date.valueOf(event.getDate()));
-            ps.setTime(5, Time.valueOf(event.getStartTime()));
-            ps.setTime(6, Time.valueOf(event.getEndTime()));
-            ps.setString(7, event.getLocation());
-            ps.setInt(8, event.getEventHostId());
-            ps.setInt(9, event.getId());
-            ps.setString(10, event.getDescription());
-            ps.executeUpdate();
-            ps.close();
-            return true;
-        } catch (SQLException var5) {
-            var5.printStackTrace();
-            var5.getErrorCode();
-            return false;
+            try {
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setString(1, event.getName());
+                ps.setString(2, event.getReminder().name());
+                ps.setString(3, event.getPriority().name());
+                ps.setDate(4, Date.valueOf(event.getDate()));
+                ps.setTime(5, Time.valueOf(event.getStartTime()));
+                ps.setTime(6, Time.valueOf(event.getEndTime()));
+                ps.setString(7, event.getLocation());
+                ps.setInt(8, event.getEventHostId());
+                ps.setInt(9, event.getId());
+                ps.setString(10, event.getDescription());
+                ps.executeUpdate();
+                ps.close();
+                return true;
+            } catch (SQLException var5) {
+                var5.printStackTrace();
+                var5.getErrorCode();
+                return false;
+            }
         }
-    }
 
         /**
          * delete event from events table
@@ -509,7 +509,7 @@ import models.User;
      * @param eventId eventid of the event you want the participants from
      * @return the participants
      */
-        private static ArrayList<User> getParticipants(int eventId) {
+    public static ArrayList<User> getParticipants(int eventId) {
         String queryParticipants = "SELECT * FROM user LEFT JOIN user_Events ON user_Events.user_id = user.user_id WHERE user_Events.event_id = ? ";
         Connection connection = getConnection();
         ArrayList participants = new ArrayList();

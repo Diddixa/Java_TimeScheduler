@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -7,81 +9,143 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="register" prefHeight="547.0" prefWidth="520.0" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
+<AnchorPane id="register" prefHeight="560.0" prefWidth="520.0" style="-fx-background-color: #FFFFFF;" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegisterController">
    <children>
-      <AnchorPane prefHeight="82.0" prefWidth="520.0" style="-fx-background-color: AA336A;" styleClass="header">
+      <AnchorPane prefHeight="75.0" prefWidth="520.0" style="-fx-background-color: AA336A;" styleClass="header" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="shieldImageView" fitHeight="42.0" fitWidth="69.0" layoutX="14.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="shieldImageView" fitWidth="25.0" layoutX="20.0" layoutY="26.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../images/time.png" />
+                  <Image url="@../../../images/add-user.png" />
                </image>
+               <viewport>
+                  <Rectangle2D height="35.0" width="35.0" />
+               </viewport>
             </ImageView>
-            <Label layoutX="86.0" layoutY="24.0" text="User Registration" textFill="WHITE">
+            <Label layoutX="53.0" layoutY="23.0" text="REGISTRATION" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <Label layoutX="82.0" layoutY="100.0" text="Email">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="emailTxt" layoutX="82.0" layoutY="120.0" prefHeight="25.0" prefWidth="336.0" promptText="Email" />
-      <Label layoutX="82.0" layoutY="155.0" text="Firstname">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="firstnameTxt" layoutX="81.0" layoutY="175.0" prefHeight="25.0" prefWidth="336.0" promptText="Firstname" />
-      <Label layoutX="82.0" layoutY="209.0" text="Lastname">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="lastnameTxt" layoutX="82.0" layoutY="229.0" prefHeight="25.0" prefWidth="336.0" promptText="Lastname" />
-      <Label layoutX="82.0" layoutY="262.0" text="Username">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="usernameTxt" layoutX="82.0" layoutY="282.0" prefHeight="25.0" prefWidth="336.0" promptText="Username " />
-      <Label layoutX="82.0" layoutY="314.0" text="Password">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="setPassword" layoutX="82.0" layoutY="334.0" prefHeight="25.0" prefWidth="336.0" promptText="Password should contain atleast 6 characters" />
-      <Label layoutX="82.0" layoutY="368.0" text="Confirm Password">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <TextField fx:id="confirmPasswordTxt" layoutX="82.0" layoutY="388.0" prefHeight="25.0" prefWidth="336.0" promptText="Confirm Password" />
-      <Button fx:id="registerButton" layoutX="78.0" layoutY="457.0" mnemonicParsing="false" onAction="#registerButton" prefHeight="25.0" prefWidth="342.0" style="-fx-cursor: hand;" text="Register" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="closeButton" layoutX="79.0" layoutY="503.0" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="25.0" prefWidth="342.0" style="-fx-cursor: hand;" text="Back" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Button>
-      <PasswordField fx:id="setPWD" layoutX="82.0" layoutY="334.0" prefHeight="25.0" prefWidth="336.0" promptText="Password" />
-      <PasswordField fx:id="confirmPWD" layoutX="82.0" layoutY="388.0" prefHeight="25.0" prefWidth="336.0" promptText="Confirm Password" />
-      <Label fx:id="passwordLabel" layoutX="181.0" layoutY="313.0" prefHeight="22.0" prefWidth="240.0" textFill="#b90000">
-         <font>
-            <Font name="Arial Black" size="14.0" />
-         </font>
-      </Label>
-      <Label fx:id="registerLabel" layoutX="82.0" layoutY="425.0" prefHeight="22.0" prefWidth="336.0" textFill="#ab0303">
-         <font>
-            <Font name="Arial Black" size="14.0" />
-         </font>
-      </Label>
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+         <children>
+            <Label text="Username">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="110.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="usernameTxt" maxWidth="255.0" prefHeight="25.0" promptText="Username ">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="110.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Email">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="110.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="emailTxt" maxWidth="255.0" prefHeight="25.0" promptText="Email">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="110.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Firstname">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="110.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="firstnameTxt" maxWidth="255.0" prefHeight="25.0" promptText="Firstname">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="110.0" />
+               </VBox.margin>
+            </TextField>
+            <Label text="Lastname">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="110.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="lastnameTxt" maxWidth="255.0" prefHeight="25.0" promptText="Lastname">
+               <VBox.margin>
+                  <Insets left="110.0" />
+               </VBox.margin>
+            </TextField>
+            <Label fx:id="passwordLabel" prefHeight="22.0" prefWidth="240.0" textFill="#b90000">
+               <font>
+                  <Font name="Arial Black" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="110.0" top="5.0" />
+               </VBox.margin>
+            </Label>
+            <Label text="Password">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="110.0" />
+               </VBox.margin>
+            </Label>
+            <PasswordField fx:id="setPWD" maxWidth="255.0" prefHeight="27.0" promptText="Password should contain atleast 6 characters">
+               <VBox.margin>
+                  <Insets bottom="20.0" left="110.0" />
+               </VBox.margin>
+            </PasswordField>
+            <Label text="Confirm Password">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="2.0" left="110.0" />
+               </VBox.margin>
+            </Label>
+            <PasswordField fx:id="confirmPWD" maxWidth="255.0" prefHeight="25.0" promptText="Confirm Password">
+               <VBox.margin>
+                  <Insets left="110.0" />
+               </VBox.margin>
+            </PasswordField>
+            <Label fx:id="registerLabel" prefHeight="22.0" prefWidth="336.0" textFill="#ab0303">
+               <font>
+                  <Font name="Arial Black" size="14.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="110.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" spacing="20.0">
+               <children>
+                  <Button fx:id="registerButton" alignment="CENTER" mnemonicParsing="false" onAction="#registerButton" prefHeight="25.0" prefWidth="150.0" style="-fx-cursor: hand;" text="Register" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="closeButton" alignment="CENTER" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="25.0" prefWidth="150.0" style="-fx-cursor: hand;" styleClass="button-back" text="Back" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>

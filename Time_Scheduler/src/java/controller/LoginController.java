@@ -77,7 +77,7 @@ public class LoginController implements Initializable {
 
         if(usernameTxt.getText().isBlank() || enterPassword.getText().isBlank()){
             loginMsgLabel.setTextFill(Color.RED);
-            loginMsgLabel.setText("*either username or password is missing");
+            loginMsgLabel.setText("*something is missing...");
         }
         else{
         if (!usernameTxt.getText().isBlank() && !enterPassword.getText().isBlank()) {
@@ -102,7 +102,9 @@ public class LoginController implements Initializable {
                     }
                     else{
                     loginMsgLabel.setTextFill(Color.RED);
-                    loginMsgLabel.setText("*sadly invalid, maybe try to register?"); }}
+                    loginMsgLabel.setText("*sadly invalid, maybe try to register?");
+                    }
+            }
                 catch(SQLException | MessagingException sqlException){
                 sqlException.printStackTrace();}
             }

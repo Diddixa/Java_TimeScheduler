@@ -7,6 +7,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import models.Event;
+import models.User;
+
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * DialogDeleteUser is a controller utility class that deals with adding users to the admin view
@@ -21,15 +28,24 @@ public class DialogDeleteUserController {
 
     int userID;
 
+    Event event;
+
+    User user;
+
     /**
      * Deletes a certain user when clicked on the confirm button.
      * Needs to enter the user ID to delete the user.
-     * @param event
+     * @param me
      */
-    public void delete(MouseEvent event) {
+    public void delete(MouseEvent me) {
         buttonDelete.setOnAction(e -> {
             String deleteUser = textFieldID.getText();
             int deleteUserId = Integer.valueOf(deleteUser);
+            try {
+                user = Database.getUser(deleteUserId);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             ButtonType buttonYes = new ButtonType("yes");
@@ -42,6 +58,23 @@ public class DialogDeleteUserController {
             alert.setContentText("Are you sure you want to delete the user?");
             alert.showAndWait();
             if(alert.getResult() == buttonYes) {
+                // ArrayList<Event> allEvents = Database.getEventsFromUser(deleteUserId);
+                ArrayList<Event> allEvents = user.getEvents();
+                for (Event event : allEvents) {
+                    if (deleteUserId == event.getEventHostId()) {
+                        try {
+                            user.deleteEvent(event);
+                        } catch (MessagingException ex) {
+                            ex.printStackTrace();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    else {
+                        Database.deleteUserEvents(deleteUserId, event.getId());
+                        event.removeParticipant(user);
+                    }
+                }
                 Database.deleteUser(deleteUserId);
 
                 Alert alertInfo = new Alert(Alert.AlertType.INFORMATION);

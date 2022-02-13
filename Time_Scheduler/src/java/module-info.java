@@ -7,6 +7,7 @@ module com.javaproject.time_scheduler {
     requires com.calendarfx.view;
     requires activation;
     requires javax.mail.api;
+    requires itextpdf;
 
     opens com.javaproject.time_scheduler to javafx.fxml;
     exports com.javaproject.time_scheduler;

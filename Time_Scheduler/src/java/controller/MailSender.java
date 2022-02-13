@@ -94,8 +94,8 @@ public class MailSender {
         MimeBodyPart attachment = new MimeBodyPart();
         if(!event.getAttachments().isEmpty())
         {
-        attachment.attachFile((event.getAttachments().get(0)));
-        multipart.addBodyPart(attachment);
+            attachment.attachFile((event.getAttachments().get(0)));
+            multipart.addBodyPart(attachment);
 
         }
 
@@ -116,13 +116,13 @@ public class MailSender {
                 e.printStackTrace();
             }
         }
-            mimeMessage.setSubject(event.getName() + " " + event.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + event.getStartTime() + "-" + event.getEndTime() + " " + event.getLocation());
-           // mimeMessage.setText(MailSender.eventMessage(event, status),null, "html");
-            text.setContent(MailSender.eventMessage(event, status), "text/HTML; charset=UTF-8");
-             multipart.addBodyPart(text);
+        mimeMessage.setSubject(event.getName() + " " + event.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " " + event.getStartTime() + "-" + event.getEndTime() + " " + event.getLocation());
+        // mimeMessage.setText(MailSender.eventMessage(event, status),null, "html");
+        text.setContent(MailSender.eventMessage(event, status), "text/HTML; charset=UTF-8");
+        multipart.addBodyPart(text);
 
-            mimeMessage.setContent(multipart);
-        }
+        mimeMessage.setContent(multipart);
+    }
 
     /**
      * Drafts the reminder mail layout
@@ -167,7 +167,7 @@ public class MailSender {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-       // properties.put("mail.smtp.starttls.required", "true");
+        // properties.put("mail.smtp.starttls.required", "true");
         newSession = Session.getDefaultInstance(properties, null);
     }
 

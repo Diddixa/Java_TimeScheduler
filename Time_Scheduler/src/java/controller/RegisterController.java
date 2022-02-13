@@ -26,11 +26,7 @@ import java.util.ResourceBundle;
 public class RegisterController{
 
     @FXML
-    public TextField confirmPasswordTxt;
-    @FXML
     public Button registerButton;
-    @FXML
-    public TextField setPassword;
     @FXML
     public TextField usernameTxt;
     @FXML
