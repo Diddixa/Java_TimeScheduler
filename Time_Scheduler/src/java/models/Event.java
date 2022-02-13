@@ -1,5 +1,5 @@
-package models;
 
+package models;
 import controller.Database;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class Event {
 
     public ArrayList<File> getAttachments() {
         return attachments;
-        }
+    }
 
     public void setAttachments(ArrayList<File> attachments) {
         this.attachments = attachments;

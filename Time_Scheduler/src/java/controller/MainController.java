@@ -1,34 +1,34 @@
 package controller;
 
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import models.Event;
-import models.User;
+        import javafx.application.Platform;
+        import javafx.collections.FXCollections;
+        import javafx.collections.ObservableList;
+        import javafx.event.ActionEvent;
+        import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.fxml.Initializable;
+        import javafx.geometry.Insets;
+        import javafx.scene.Parent;
+        import javafx.scene.control.Button;
+        import javafx.scene.control.Label;
+        import javafx.scene.input.MouseEvent;
+        import javafx.scene.layout.AnchorPane;
+        import javafx.scene.layout.BorderPane;
+        import javafx.scene.layout.GridPane;
+        import javafx.scene.layout.VBox;
+        import models.Event;
+        import models.User;
 
-import javax.mail.MessagingException;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+        import javax.mail.MessagingException;
+        import java.io.IOException;
+        import java.net.URL;
+        import java.sql.Connection;
+        import java.sql.ResultSet;
+        import java.sql.SQLException;
+        import java.text.SimpleDateFormat;
+        import java.util.*;
+        import java.util.logging.Level;
+        import java.util.logging.Logger;
 
 /**
  * Main dashobard scene also deals with switching scenes between side navigation panel
@@ -112,8 +112,8 @@ public class MainController implements Initializable  {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getClassLoader().getResource(page + ".fxml"));
                 root = loader.load();
-               CreateEventController controller = loader.getController();
-               controller.retrieveUser(this.user); // currently logged in user
+                CreateEventController controller = loader.getController();
+                controller.retrieveUser(this.user); // currently logged in user
             }
             else if(Objects.equals(page, "EventSchedule")){
                 FXMLLoader loader = new FXMLLoader();

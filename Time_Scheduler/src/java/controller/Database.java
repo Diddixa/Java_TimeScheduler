@@ -385,8 +385,11 @@ import models.User;
      * @param userId is used to find the relative data
      * @return a list of the events the user is in
      */
+
         public static ArrayList<Event> getEventsFromUser(int userId) {
         String sql = "SELECT * FROM events LEFT JOIN user_Events ON user_Events.event_id = events.events_id WHERE user_Events.user_id = ?";
+
+
         Connection connection = getConnection();
         ArrayList events = new ArrayList();
 
