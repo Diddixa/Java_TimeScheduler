@@ -295,9 +295,12 @@ public class Event {
 
     public ArrayList<String> getParticipantsFullNames() {
         ArrayList<String> fullNames = new ArrayList<>();
-        for (User user: this.participants) {
-            fullNames.add(user.getFirstname() + " " + user.getLastname());
+        if (this.participants != null){
+            for (User user: this.participants) {
+                fullNames.add(user.getFirstname() + " " + user.getLastname());
+            }
         }
+
         return fullNames;
     }
 }
