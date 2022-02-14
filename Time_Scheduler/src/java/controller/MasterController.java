@@ -78,6 +78,11 @@ public class MasterController implements Initializable {
                         resultSet.getString("email")
                 ));
                 tableView.setItems(observableList);
+                for (int i=0; i< tableView.getItems().size(); i++) {
+                    if (tableView.getItems().get(i).getId() == 35) {
+                        tableView.getItems().remove(i);
+                    }
+                }
             }
         } catch (SQLException e) {
             Logger.getLogger(MasterController.class.getName()).log(Level.SEVERE, null, e);
@@ -184,18 +189,17 @@ public class MasterController implements Initializable {
      */
     @FXML
     public void buttonLogout(ActionEvent event) throws IOException {
-        JavaFxUtil.sceneSwitcher("Login.fxml", logoutButton, 520, 580 );
+        JavaFxUtil.sceneSwitcher("Login.fxml", logoutButton, 700, 400 );
     }
 
     void handleNoUserSelected(User user) throws IOException {
         if(user == null) {
-            Parent parent = FXMLLoader.load(getClass().getClassLoader().getResource("DialogWarning.fxml"));
-            Scene scene = new Scene(parent);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            scene.getStylesheets().add(JavaFxUtil.class.getResource("/main.css").toExternalForm());
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
+            Alert alertInfo = new Alert(Alert.AlertType.WARNING);
+            alertInfo.setTitle("No user selected!");
+            alertInfo.setGraphic(null);
+            alertInfo.setHeaderText(null);
+            alertInfo.setContentText("You need to select a user!");
+            alertInfo.showAndWait();
         }
     }
 }
