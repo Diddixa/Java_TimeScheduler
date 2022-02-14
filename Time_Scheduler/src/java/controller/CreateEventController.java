@@ -253,6 +253,8 @@ public class CreateEventController implements Initializable {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Missing entry");
                 errorAlert.setContentText("Please fill in all entries");
+                errorAlert.setGraphic(null);
+                errorAlert.setHeaderText(null);
                 errorAlert.showAndWait();
             }
            else if (chosenStartTime.isAfter(chosenEndTime)){
@@ -265,6 +267,8 @@ public class CreateEventController implements Initializable {
                     Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
                     errorAlert.setTitle("Event scheduled");
                     errorAlert.setContentText("Successfully created event");
+                    errorAlert.setGraphic(null);
+                    errorAlert.setHeaderText(null);
                     errorAlert.showAndWait();
 
                     // Clear the textfields
@@ -273,7 +277,6 @@ public class CreateEventController implements Initializable {
                     description.clear();
                     participants.clear();
                     remindChoice.setValue(null);
-                    participants.clear();
                     addedUsers.setTextFill(Color.TRANSPARENT);
                     attachmentText.clear();
            }
@@ -284,6 +287,8 @@ public class CreateEventController implements Initializable {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Missing entry");
                 errorAlert.setContentText("Please fill in all entries");
+                errorAlert.setGraphic(null);
+                errorAlert.setHeaderText(null);
                 errorAlert.showAndWait();
             }
             else if (chosenStartTime.isAfter(chosenEndTime)){
@@ -301,12 +306,21 @@ public class CreateEventController implements Initializable {
                 this.event.setDescription(description.getText());
 
                 this.event.editEvent(this.event);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Event update");
+                alert.setContentText("Successfully updated the event!");
+                alert.setGraphic(null);
+                alert.setHeaderText(null);
+                alert.showAndWait();
+                close(e);
 
             }}
             else{
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("No Permission");
             errorAlert.setContentText("You are not allowed to edit this event!");
+            errorAlert.setGraphic(null);
+            errorAlert.setHeaderText(null);
             errorAlert.showAndWait();
         }
     }}
@@ -348,6 +362,8 @@ public class CreateEventController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Export Event");
             alert.setContentText("Please select an event to export!");
+            alert.setGraphic(null);
+            alert.setHeaderText(null);
             alert.showAndWait();
             return;
         }
@@ -368,6 +384,8 @@ public class CreateEventController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Export Event successful");
         alert.setContentText("Successfully exported events");
+        alert.setGraphic(null);
+        alert.setHeaderText(null);
         alert.showAndWait();
 
         //File selectedFile = fileChooser.showOpenDialog(stage);
@@ -381,39 +399,8 @@ public class CreateEventController implements Initializable {
      */
     @FXML
     public void btnExportToPDFOnAction(ActionEvent e) throws IOException, DocumentException {
-        // Get selected row
-        //Event event = this.event;
 
         saveFile(buttonExportEvent, this.event.toString());
-/*
-        Document document = new Document();
-        try
-        {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("myEvents.pdf"));
-            document.open();
-            document.add(new Paragraph(event.getName()));
-            document.add(new Paragraph(event.getDate().toString()));
-            document.add(new Paragraph(event.getStartTime().toString()));
-            document.add(new Paragraph(event.getEndTime().toString()));
-            document.add(new Paragraph(event.getLocation()));
-            for (int i = 0; i < event.getParticipants().size(); i++) {
-                document.add(new Paragraph(event.getParticipants().get(i).getUsername()));
-            }
-            document.add(new Paragraph(event.getPriority().toString()));
-            document.add(new Paragraph(event.getDescription()));
-            document.close();
-            writer.close();
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Export Event successful");
-            alert.setContentText("Successfully exported events");
-            alert.showAndWait();
-
-        } catch (DocumentException ex) {
-            ex.printStackTrace();
-        } catch (FileNotFoundException ex){
-            ex.printStackTrace();
-        }*/
     }
 
     private boolean update;
@@ -431,10 +418,30 @@ public class CreateEventController implements Initializable {
         buttonDeleteEvent.setOnAction(e -> {
             try {
                 if(this.user.getId() == event.getEventHostId()){
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    ButtonType buttonYes = new ButtonType("yes");
+                    ButtonType buttonNo = new ButtonType("no");
+                    alert.getButtonTypes().removeAll(ButtonType.OK, ButtonType.CANCEL);
+                    alert.getButtonTypes().addAll(buttonYes, buttonNo);
+                    alert.setTitle("Warning!");
+                    alert.setGraphic(null);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Are you sure you want to delete the event?");
+                    alert.showAndWait();
                     this.user.deleteEvent(event);
                 }
                 else{
                     this.user.removeEvent(event);
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    ButtonType buttonYes = new ButtonType("yes");
+                    ButtonType buttonNo = new ButtonType("no");
+                    alert.getButtonTypes().removeAll(ButtonType.OK, ButtonType.CANCEL);
+                    alert.getButtonTypes().addAll(buttonYes, buttonNo);
+                    alert.setTitle("Warning!");
+                    alert.setGraphic(null);
+                    alert.setHeaderText(null);
+                    alert.setContentText("Are you sure you want to delete the event?");
+                    alert.showAndWait();
                 }
             } catch (MessagingException ex) {
                 ex.printStackTrace();

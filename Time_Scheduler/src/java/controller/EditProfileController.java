@@ -57,6 +57,8 @@ public class EditProfileController {
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setTitle("Missing entry");
             errorAlert.setContentText("Please fill in all fields");
+            errorAlert.setGraphic(null);
+            errorAlert.setHeaderText(null);
             errorAlert.showAndWait();
         }
         else{
@@ -70,6 +72,8 @@ public class EditProfileController {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Please check email or username!");
                 errorAlert.setContentText("Either email or username already registered");
+                errorAlert.setGraphic(null);
+                errorAlert.setHeaderText(null);
                 errorAlert.showAndWait();
             }
 
@@ -82,6 +86,8 @@ public class EditProfileController {
             Alert errorAlert = new Alert(Alert.AlertType.CONFIRMATION);
             errorAlert.setTitle("User information updated");
             errorAlert.setContentText("Successfully updated user");
+            errorAlert.setGraphic(null);
+            errorAlert.setHeaderText(null);
             errorAlert.showAndWait();
         }
 

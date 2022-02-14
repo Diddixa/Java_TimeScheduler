@@ -19,12 +19,15 @@
 
 <AnchorPane id="createEvent" fx:id="ap" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: ffff;" stylesheets="@../main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateEventController">
    <children>
-      <Button fx:id="buttonCancel" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="25.0" maxWidth="25.0" mnemonicParsing="false" onAction="#close" text="Button" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Button fx:id="buttonCancel" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" maxHeight="25.0" maxWidth="25.0" mnemonicParsing="false" onAction="#close" style="-fx-background-color: transparent;" text="Button" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <graphic>
-            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../images/cancel.png" />
                </image>
+               <viewport>
+                  <Rectangle2D height="25.0" width="25.0" />
+               </viewport>
             </ImageView>
          </graphic>
       </Button>
@@ -120,8 +123,11 @@
                            <graphic>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../images/add.png" />
+                                    <Image url="@../../../images/add_participant.png" />
                                  </image>
+                                 <viewport>
+                                    <Rectangle2D height="35.0" minX="-2.0" minY="-1.0" width="35.0" />
+                                 </viewport>
                               </ImageView>
                            </graphic>
                         </Button>
@@ -208,6 +214,9 @@
                                  <image>
                                     <Image url="@../../../images/attachment.png" />
                                  </image>
+                                 <viewport>
+                                    <Rectangle2D height="35.0" minX="-2.0" minY="-2.0" width="35.0" />
+                                 </viewport>
                               </ImageView>
                            </graphic>
                         </Button>

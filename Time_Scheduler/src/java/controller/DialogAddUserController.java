@@ -1,12 +1,18 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.User;
+
+import java.io.IOException;
 
 /**
  * DialogAddUser is a controller utility class that deals with adding users to the admin view
@@ -33,7 +39,7 @@ public class DialogAddUserController {
      * Creates a new user when all needed information are entered and clicked on the confirm button.
      * @param event
      */
-    public void confirm(MouseEvent event) {
+    public void confirm(MouseEvent event) throws IOException {
 
         String username = textFieldUsername.getText();
         String firstName = textFieldFirstname.getText();
@@ -72,7 +78,7 @@ public class DialogAddUserController {
      * Method to determine whether a user will be added or updated.
      * @param user
      */
-    public void getQuery(User user) {
+    public void getQuery(User user) throws IOException {
         if(update == false) {
             String password = PasswordEncryption.createHash(textFieldPassword.getText());
             user.setPassword(password);

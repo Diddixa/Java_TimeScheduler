@@ -46,8 +46,6 @@ public class MainController implements Initializable  {
 
     @FXML
     private Label username;
-    @FXML
-    private Label firstLastName;
 
     @FXML
     private Label time;
@@ -64,7 +62,6 @@ public class MainController implements Initializable  {
 
         this.user  = user;
         username.setText(this.user.getUsername());
-        //firstLastName.setText(this.user.getFirstname() + " " + this.user.getLastname());
     }
 
     @FXML
@@ -92,7 +89,7 @@ public class MainController implements Initializable  {
 
     public void logoutToLogin(ActionEvent e) throws IOException {
 
-        JavaFxUtil.sceneSwitcher("Login.fxml", logout, 520, 580 );
+        JavaFxUtil.sceneSwitcher("Login.fxml", logout, 700, 400 );
 
     }
 
