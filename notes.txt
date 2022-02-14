@@ -1,0 +1,86 @@
+Meetings hatten den Zweck
+- Aktuellen Fortschritt jedes Mitglieds
+- Fragen untereinander zu beantworten
+- Requirements besprechen:
+	- Wie sind sie realisierbar?
+	- Mögliche Probleme + mögliche Lösungen
+	- Falls nötig: Entfernt
+- Neue Aufgabenverteilung
+- Vorbereitung auf den Unterricht
+
+
+Jedes der Meetings wurde protokolliert, falls ein Mitglied abwesend sein sollte, sodass es im Nachhinein die besprochenen Themen nachvollziehen kann.
+
+
+Präsentation
+Table of contents:
+
+1. Introduction
+	- Welcome to our presentation
+	- we are Group 3:
+		- First Name Last Name
+2. Project Description
+	- Time Scheduler Project Description
+	- Goal
+3. Planning
+	- Estimated Project Time
+	- UML Diagrams (Use Case Diagram)
+		- User
+		- Admin
+	- Model-View-Controller
+4. Database:
+	- Why MySQL?
+	- What is JDBC?
+	- How connected?
+	- Workbench
+	- Why did we choose this?
+5. UI
+	- created with JavaFX
+	- User + Admin
+	
+6. Demo (ca. 10 min) Ablauf:
+- Neuer User wird registriert --> zeigen was passiert, wenn nicht alle Felder ausgefüllt werden
+- User loggt sich ein
+- User zeigt Side Bar --> einmal durchklicken
+- Ändert seine Settings
+- Dashboard --> noch keine Events
+- Erstellt ein Event --> lädt einen bereits vorhanden User2 als Participant ein
+- Zurück zu Dashboard --> geht auf Event --> kann es im Nachhinein bearbeiten
+- Zeigt Email
+- Logout
+
+- User 2 logt sich ein --> hat mehrere Events
+- Zeigt Event von User1 --> nicht bearbeitbar
+- Email
+- Logout
+
+- Admin Login
+- Tabelle mit Usern
+- Add User
+- Refresh
+- Edit User
+- Delete User
+- Logout
+
+7. Retrospective/Conclusion:
+	- Was wir vom Projekt mitgenommen haben
+	- Future works
+8. Bye bye:
+	- Thank you for your attention
+	- Any questions?
+9. References:
+10. Figure-References:
+
+oller
+4. Database:
+	- Why MySQL?
+	- What is JDBC?
+	- How connected?
+	- Workbench
+	- Why did we choose this?
+5. UI
+	- created with JavaFX
+	- User + Admin
+	
+6. Demo (ca. 10 min) Ablauf:
+- Neuer User wird registriert --> zeigen was pass

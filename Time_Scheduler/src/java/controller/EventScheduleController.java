@@ -89,12 +89,22 @@ public class EventScheduleController implements Initializable {
      * @param e
      */
     @FXML
-    public void btnExportWeeklyToPDFOnAction(ActionEvent e) throws IOException {
+    public void btnExportWeeklyToPDFOnAction(ActionEvent e) throws IOException, DocumentException {
         // Get selected row
         ArrayList<Event> currentWeekEvents = new ArrayList<>();
 
         try {
             Connection connection = Database.getConnection();
+
+                /*
+                String sql = "SELECT * " +
+                    "FROM user_Events " +
+                    "LEFT JOIN events ON " +
+                    "user_Events.event_id = events.events_id " +
+                    "LEFT JOIN user ON " +
+                    "user.user_id = user_Events.user_id" +
+                    "WHERE YEARWEEK(date ,1) = YEARWEEK(CURDATE(), 1) " +
+                    "and events.eventhost_id  =  " + this.user.getId();*/
 
             ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM events where YEARWEEK(date , 1) = YEARWEEK(CURDATE(), 1) and eventhost_id = " + this.user.getId() );
 
@@ -115,9 +125,16 @@ public class EventScheduleController implements Initializable {
             Logger.getLogger(MasterController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        String weeklyEventToString = "";
+        for(Event event: currentWeekEvents){
+            weeklyEventToString += event.toString() + "\n\n";
+        }
+
+        saveFile(btnExportWeeklyToPDFOnAction, weeklyEventToString);
 
 
 
+/*
         if (currentWeekEvents.size() == 0){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Export Current Week Event");
@@ -160,7 +177,40 @@ public class EventScheduleController implements Initializable {
             ex.printStackTrace();
         } catch (FileNotFoundException ex){
             ex.printStackTrace();
+        }*/
+    }
+
+    private void saveFile(Button btn, String content) throws IOException, DocumentException {
+        // If content is empty
+        if (content.trim().length() == 0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Export Event");
+            alert.setContentText("Please select an event to export!");
+            alert.showAndWait();
+            return;
         }
+
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PDF Files (.pdf)", ".pdf"));
+        File file = fileChooser.showSaveDialog(stage);
+
+        Document document = new Document();
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file.getAbsolutePath()));
+        document.open();
+        document.add(new Paragraph(content));
+        document.close();
+        writer.close();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Export Event successful");
+        alert.setContentText("Successfully exported events");
+        alert.showAndWait();
+
+        //File selectedFile = fileChooser.showOpenDialog(stage);
+
+        stage.centerOnScreen();
     }
 
     @Override

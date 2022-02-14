@@ -341,7 +341,16 @@ public class CreateEventController implements Initializable {
         }
 
     }
+
     private void saveFile(Button btn, String content) throws IOException, DocumentException {
+        // If content is empty
+        if (content.trim().length() == 0){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Export Event");
+            alert.setContentText("Please select an event to export!");
+            alert.showAndWait();
+            return;
+        }
 
         Stage stage = new Stage();
         FileChooser fileChooser = new FileChooser();
@@ -373,19 +382,10 @@ public class CreateEventController implements Initializable {
     @FXML
     public void btnExportToPDFOnAction(ActionEvent e) throws IOException, DocumentException {
         // Get selected row
-        Event event = this.event;
+        //Event event = this.event;
 
-        // Ask to select an event if none is selected
-        if (event == null){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Export Event");
-            alert.setContentText("Please select an event to export!");
-            alert.showAndWait();
-            return;
-        }
-
-        saveFile(buttonExportEvent, event.toString());
-
+        saveFile(buttonExportEvent, this.event.toString());
+/*
         Document document = new Document();
         try
         {
@@ -413,7 +413,7 @@ public class CreateEventController implements Initializable {
             ex.printStackTrace();
         } catch (FileNotFoundException ex){
             ex.printStackTrace();
-        }
+        }*/
     }
 
     private boolean update;

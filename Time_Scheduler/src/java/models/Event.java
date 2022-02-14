@@ -1,5 +1,5 @@
-package models;
 
+package models;
 import controller.Database;
 
 import java.io.File;
@@ -61,7 +61,7 @@ public class Event {
 
     public ArrayList<File> getAttachments() {
         return attachments;
-        }
+    }
 
     public void setAttachments(ArrayList<File> attachments) {
         this.attachments = attachments;
@@ -277,5 +277,30 @@ public class Event {
         else {
             return false;
         }
+    }
+
+    public String toString() {
+        String str = "Id: " + this.id + "\n" +
+                "Name: " + this.name + "\n" +
+                "Date: " + this.date + "\n" +
+                "StartTime: " + this.startTime + "\n" +
+                "EndTime: " + this.endTime + "\n" +
+                "Location: " + this.location + "\n" +
+                "Participants: " + String.join(", ", this.getParticipantsFullNames()) + "\n" +
+                "Priority: " + this.priority + "\n" +
+                "Reminder: " + this.reminder + "\n" ;
+
+        return str;
+    }
+
+    public ArrayList<String> getParticipantsFullNames() {
+        ArrayList<String> fullNames = new ArrayList<>();
+        if (this.participants != null){
+            for (User user: this.participants) {
+                fullNames.add(user.getFirstname() + " " + user.getLastname());
+            }
+        }
+
+        return fullNames;
     }
 }
