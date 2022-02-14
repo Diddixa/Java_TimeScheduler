@@ -60,7 +60,7 @@ public class RegisterController{
      */
     public void switchToLogin(ActionEvent e) throws Exception {
 
-        JavaFxUtil.sceneSwitcher("Login.fxml", closeButton, 520, 560);
+        JavaFxUtil.sceneSwitcher("Login.fxml", closeButton, 700, 400);
 
     }
 
@@ -88,21 +88,26 @@ public class RegisterController{
             registerLabel.setText("*one of the required fields is missing");
         }
         else{
+            registerLabel.setText("");
         if(setPWD.getText().equals(confirmPWD.getText())){
+            passwordLabel.setText("");
             if(valMail(emailTxt.getText())){
+                registerLabel.setText("");
 
             String encryptPass = PasswordEncryption.createHash(setPWD.getText());
             User user = new User(usernameTxt.getText(), firstnameTxt.getText(), lastnameTxt.getText(), encryptPass, emailTxt.getText());
 
             if(!Database.isTaken(user))
             {
+                registerLabel.setText("");
                 registerLabel.setText("*username or email already taken");
                 return;
             }
             Database.registerUser(user);
 
-            JavaFxUtil.sceneSwitcher("Login.fxml", registerButton, 520, 560); }
+            JavaFxUtil.sceneSwitcher("Login.fxml", registerButton, 700, 400); }
             else{
+                registerLabel.setText("");
                 registerLabel.setText("*mail is not in valid email format");
             }
 

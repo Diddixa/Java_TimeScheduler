@@ -4,6 +4,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -18,7 +19,7 @@
             <TextField fx:id="textFieldUsername" maxWidth="310.0" promptText="Username" />
             <TextField fx:id="textFieldFirstname" maxWidth="310.0" promptText="First name" />
             <TextField fx:id="textFieldLastname" maxWidth="310.0" promptText="Last name" />
-            <TextField fx:id="textFieldPassword" maxWidth="310.0" promptText="Password" />
+            <PasswordField fx:id="textFieldPassword" promptText="Password" />
             <TextField fx:id="textFieldEmail" maxWidth="310.0" promptText="Email" />
             <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>

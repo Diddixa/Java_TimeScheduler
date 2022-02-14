@@ -1,12 +1,16 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import models.Event;
 import models.User;
 
@@ -98,6 +102,7 @@ public class DialogDeleteUserController {
         String stringID = String.valueOf(userID);
         textFieldID.setText(stringID);
     }
+
 
     /**
      * Closes the dialog when clicking on the cancel button.

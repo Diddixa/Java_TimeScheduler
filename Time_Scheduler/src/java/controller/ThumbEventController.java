@@ -83,7 +83,7 @@ public class ThumbEventController {
 
         for (int i = 0; i < p.size(); i++) {
             if(i == 0) {
-                userP += p.get(i).getUsername() + "(Host)";
+                userP += p.get(i).getUsername() + " (Host)";
             }
             else {
                 userP += ", "+ p.get(i).getUsername();

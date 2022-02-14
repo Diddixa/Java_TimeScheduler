@@ -1,8 +1,11 @@
 
 package models;
 import controller.Database;
+import controller.MailSender;
 
+import javax.mail.MessagingException;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -249,7 +252,7 @@ public class Event {
      * method to edit the event information
      * @param other - Event to be copied from
      */
-    public void editEvent(Event other) {
+    public void editEvent(Event other) throws MessagingException, IOException {
         name = other.name;
         date = other.date;
         startTime = other.startTime;
@@ -262,6 +265,9 @@ public class Event {
         description = other.description;
 
         Database.editEvent(this);
+        if(!(this.getParticipants().isEmpty())) {
+            MailSender.sendEventMail(this, MailStatus.EDITED);
+        }
     }
 
     /**

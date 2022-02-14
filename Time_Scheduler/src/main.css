@@ -64,6 +64,24 @@
     -fx-background-color: #ff7979;
 }
 
+/* CONFIRM */
+#confirm .label {
+    -fx-text-fill: #656565;
+}
+#confirm .confirm-headline {
+    -fx-font-family: "Roboto";
+	-fx-font-weight: 700;
+    -fx-font-size: 20px;
+    -fx-text-fill: #65F093;
+}
+#confirm .button {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #65F093;
+}
+#confirm .button:hover {
+    -fx-background-color: #65F093AA;
+}
+
 /* LOGIN */
 #login .button-register {
     -fx-background-color: transparent;
@@ -81,6 +99,17 @@
 /* EDIT PROFILE */
 
 /* USER VIEW */
+.dashboard .label {
+    -fx-text-fill: #AA336A;
+}
+.dashboard .username {
+	-fx-font-weight: 700;
+    -fx-font-size: 24px;
+}
+.dashboard .clock {
+    -fx-text-fill: #FFFFFF;
+}
+
 .user-sidebar .button {
     -fx-background-color: #AA336A;
 }

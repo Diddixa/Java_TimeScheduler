@@ -17,7 +17,7 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
         stage.initStyle(StageStyle.UNDECORATED);
-        Scene scene = (new Scene(root, 520, 520));
+        Scene scene = (new Scene(root, 700, 400));
         scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
         stage.setScene(scene);
         stage.show();

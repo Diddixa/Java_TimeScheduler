@@ -453,7 +453,7 @@ import models.User;
                 ps.executeUpdate();
                 ps.close();
 
-                System.out.println("user updated");
+                System.out.println("Event updated");
                 return true;
             } catch (SQLException var5) {
                 var5.printStackTrace();

@@ -96,19 +96,10 @@ public class EventScheduleController implements Initializable {
         try {
             Connection connection = Database.getConnection();
 
-                /*
-                String sql = "SELECT * " +
-                    "FROM user_Events " +
-                    "LEFT JOIN events ON " +
-                    "user_Events.event_id = events.events_id " +
-                    "LEFT JOIN user ON " +
-                    "user.user_id = user_Events.user_id" +
-                    "WHERE YEARWEEK(date ,1) = YEARWEEK(CURDATE(), 1) " +
-                    "and events.eventhost_id  =  " + this.user.getId();*/
-
             ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM events where YEARWEEK(date , 1) = YEARWEEK(CURDATE(), 1) and eventhost_id = " + this.user.getId() );
 
             while (resultSet.next()) {
+
                 currentWeekEvents.add(new Event(
                         resultSet.getInt("events_id"),
                         resultSet.getString("name"),
@@ -116,68 +107,29 @@ public class EventScheduleController implements Initializable {
                         resultSet.getObject("startTime", LocalTime.class),
                         resultSet.getObject("endTime", LocalTime.class),
                         resultSet.getString("location"),
-                        //(ArrayList<User>) resultSet.getArray("participants"),
                         Priority.valueOf(resultSet.getString("priority")),
                         Reminder.valueOf(resultSet.getString("reminder"))
                 ));
+
+
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(MasterController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        String userP = "";
         String weeklyEventToString = "";
         for(Event event: currentWeekEvents){
-            weeklyEventToString += event.toString() + "\n\n";
+            for(int i = 0; i < currentWeekEvents.size(); i++) {
+                userP = this.user.getEvents().get(i).getParticipantsFullNames().toString();
+            }
+            weeklyEventToString += event.toString() + userP + "\n\n";
+
         }
 
         saveFile(btnExportWeeklyToPDFOnAction, weeklyEventToString);
 
-
-
-/*
-        if (currentWeekEvents.size() == 0){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Export Current Week Event");
-            alert.setContentText("No event for this week to export!");
-            alert.showAndWait();
-        }
-        //CreateEventController.saveFile(btnExportWeeklyToPDFOnAction, currentWeekEvents.toString());
-
-        Document document = new Document();
-        try
-        {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("myWeeklyEvents.pdf"));
-            document.open();
-            for(int i = 0; i < currentWeekEvents.size(); i++) {
-                document.add(new Paragraph("Event name: "+currentWeekEvents.get(i).getName() + "\n"));
-                document.add(new Paragraph("Date: "+currentWeekEvents.get(i).getDate().toString() + "\n"));
-                document.add(new Paragraph("Start time: "+currentWeekEvents.get(i).getStartTime().toString() + "\t\t End time: "+currentWeekEvents.get(i).getEndTime().toString() + "\n"));
-                document.add(new Paragraph("Location: "+currentWeekEvents.get(i).getLocation() + "\n"));
-                ArrayList<User> pList = currentWeekEvents.get(i).getParticipants();
-                if(pList != null) {
-                    document.add(new Paragraph("Participants: "));
-                    for (int j = 0; j < pList.size(); j++) {
-                        document.add(new Paragraph(pList.get(j).getUsername() + "\n"));
-                    }
-                }
-                document.add(new Paragraph("Priority: "+currentWeekEvents.get(i).getPriority().toString() + "\n"));
-                if(pList != null) {
-                    document.add(new Paragraph("Description: "+currentWeekEvents.get(i).getDescription() + "\n"));
-                }
-            }
-            document.close();
-            writer.close();
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Export weekly events");
-            alert.setContentText("Successfully exported current week events");
-            alert.showAndWait();
-
-        } catch (DocumentException ex) {
-            ex.printStackTrace();
-        } catch (FileNotFoundException ex){
-            ex.printStackTrace();
-        }*/
     }
 
     private void saveFile(Button btn, String content) throws IOException, DocumentException {
@@ -186,6 +138,8 @@ public class EventScheduleController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Export Event");
             alert.setContentText("Please select an event to export!");
+            alert.setGraphic(null);
+            alert.setHeaderText(null);
             alert.showAndWait();
             return;
         }
@@ -206,6 +160,8 @@ public class EventScheduleController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Export Event successful");
         alert.setContentText("Successfully exported events");
+        alert.setGraphic(null);
+        alert.setHeaderText(null);
         alert.showAndWait();
 
         //File selectedFile = fileChooser.showOpenDialog(stage);
